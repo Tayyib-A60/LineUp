@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { PerfectScrollbarModule } from "ngx-perfect-scrollbar";
 import { CommonModule } from "@angular/common";
+import { NgSelectModule } from '@ng-select/ng-select';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -12,6 +13,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { SpacesModule } from './spaces/spaces.module';
 import { HomeComponent } from './home/home.component';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -25,6 +27,9 @@ import { HomeComponent } from './home/home.component';
     BrowserModule,
     BrowserAnimationsModule,
     CommonModule,
+    FormsModule,
+    NgSelectModule,
+    ReactiveFormsModule,
     NgbModule.forRoot(),
     PerfectScrollbarModule,
     SpacesModule,

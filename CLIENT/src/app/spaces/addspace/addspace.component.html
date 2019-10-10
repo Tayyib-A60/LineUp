@@ -53,7 +53,7 @@
 										<fieldset class="form-group">
 											<p>Select Amenities</p>
 											<div *ngFor="let amenity of amenities; let i = index" 		class="custom-control custom-checkbox">
-												<input type="checkbox" class="custom-control-input" [id]="amenity.name">
+												<input (change)='toggleCheckbox($event)' type="checkbox" class="custom-control-input" [value]='amenity.name' [id]="amenity.name">
 												<label class="custom-control-label" [for]="amenity.name">{{amenity.name}}</label>
 											</div>
 										</fieldset>                                

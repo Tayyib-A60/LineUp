@@ -24,7 +24,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent" [ngbCollapse]="isCollapsed">
                 <ul class="navbar-nav">
                     <li class="nav-item" ngbDropdown [placement]="placement">
-                        <a class="nav-link position-relative"><span class="nav-name">List your Space</span></a>
+                        <a [routerLink]="['/admin']" class="nav-link position-relative"><span class="nav-name">List your Space</span></a>
                     </li>
                     <li class="nav-item" ngbDropdown [placement]="placement">
                         <a class="nav-link position-relative"><span class="nav-name">Sign up</span></a>

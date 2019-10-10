@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NgbCarouselConfig } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-home',
@@ -7,8 +8,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
   hideSidebar: boolean;
-
-  constructor() { }
+  cities = [
+    {id: 1, name: 'Vilnius'},
+    {id: 2, name: 'Kaunas'},
+    {id: 3, name: 'Pavilnys', disabled: true},
+    {id: 4, name: 'Pabradė'},
+    {id: 5, name: 'Klaipėda'}
+];
+  selectedCity: any;
+  constructor(private carouselConfig: NgbCarouselConfig) {
+    carouselConfig.showNavigationArrows = false;
+    carouselConfig.interval = 4000;
+  }
 
   ngOnInit() {
   }

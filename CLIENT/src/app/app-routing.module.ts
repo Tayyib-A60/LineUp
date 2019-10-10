@@ -17,7 +17,7 @@ const routes: Routes = [
     { path: 'manage-bookings', component: ManagebookingsComponent },
     { path: 'manage-enquiries', component: ManageenquiriesComponent }
   ]},
-  { path: 'home', component: HomeComponent }
+  { path: '', component: HomeComponent }
 ];
 
 @NgModule({

@@ -1,0 +1,41 @@
+.img_banner {
+    height: 90vh !important;
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+  }
+.caption_container {
+  top: 30vh !important; 
+}
+
+  .homepage_captions {
+    font-size: 4.2rem;
+    font-weight: 600;
+    margin-top: -6rem;
+
+      @media only screen and (max-width: 600px) {
+        font-size: 2.7rem;
+        font-weight: 400;
+        margin-top: -3rem;
+    }
+  }
+
+  .lineup_custom_input {
+    font-size: 1.2rem;
+    font-family: inherit;
+    color: #000 !important;
+    padding: .5rem .7rem;
+    border-radius: 2px;
+    border: none;
+    border-bottom: .5px solid #234234;
+    width: 90%;
+    display: block;
+    transition: all .3s;
+  }
+
+  .remove_table_border_top {
+    border: none !important;
+  }
