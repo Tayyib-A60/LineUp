@@ -7,15 +7,18 @@ import { ManagespacesComponent } from './spaces/managespaces/managespaces.compon
 import { ManagereservationsComponent } from './spaces/managereservations/managereservations.component';
 import { ManagebookingsComponent } from './spaces/managebookings/managebookings.component';
 import { ManageenquiriesComponent } from './spaces/manageenquiries/manageenquiries.component';
+import { AddPropsComponent } from './spaces/add-props/add-props.component';
 
 
 const routes: Routes = [
   { path: 'admin', component: AdminComponent, children: [
     { path: 'add-space', component: AddspaceComponent },
+    { path: 'edit-space/:id', component: AddspaceComponent },
     { path: 'manage-space', component: ManagespacesComponent },
     { path: 'manage-reservations', component: ManagereservationsComponent },
     { path: 'manage-bookings', component: ManagebookingsComponent },
-    { path: 'manage-enquiries', component: ManageenquiriesComponent }
+    { path: 'manage-enquiries', component: ManageenquiriesComponent },
+    { path: 'create-addons', component: AddPropsComponent }
   ]},
   { path: '', component: HomeComponent }
 ];
