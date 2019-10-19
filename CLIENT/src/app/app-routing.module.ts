@@ -10,6 +10,7 @@ import { ManageenquiriesComponent } from './spaces/manageenquiries/manageenquiri
 import { SignInComponent } from './sign-in/sign-in.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { ListYourSpaceComponent } from './list-your-space/list-your-space.component';
+import { ProfileComponent } from './profile/profile.component';
 
 
 const routes: Routes = [
@@ -23,7 +24,8 @@ const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'sign-in', component: SignInComponent },
   { path: 'sign-up', component: SignUpComponent },
-  { path: 'list-your-space', component: ListYourSpaceComponent }
+  { path: 'list-your-space', component: ListYourSpaceComponent },
+  { path: 'profile', component: ProfileComponent }
 
 ];
 

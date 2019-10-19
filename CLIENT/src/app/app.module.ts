@@ -16,6 +16,8 @@ import { HomeComponent } from './home/home.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { ListYourSpaceComponent } from './list-your-space/list-your-space.component';
+import { FooterComponent } from './footer/footer.component';
+import { ProfileComponent } from './profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +26,9 @@ import { ListYourSpaceComponent } from './list-your-space/list-your-space.compon
     SignUpComponent,
     HomeComponent,
     SignInComponent,
-    ListYourSpaceComponent
+    ListYourSpaceComponent,
+    FooterComponent,
+    ProfileComponent
   ],
   imports: [
     AppRoutingModule,
