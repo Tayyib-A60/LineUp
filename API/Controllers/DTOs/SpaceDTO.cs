@@ -12,7 +12,7 @@ namespace API.Controllers.DTOs
         public string Name { get; set; }
         public string Location { get; set; }   
         public string Description { get; set; }
-        public int Size { get; set; }
+        public string Size { get; set; }
         public SpaceType Type { get; set; }
         public double Price { get; set; }
         public ICollection<Photo> Photos { get; set; }

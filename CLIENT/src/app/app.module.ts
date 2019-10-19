@@ -1,3 +1,4 @@
+import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
@@ -18,6 +19,10 @@ import { SignInComponent } from './sign-in/sign-in.component';
 import { ListYourSpaceComponent } from './list-your-space/list-your-space.component';
 import { FooterComponent } from './footer/footer.component';
 import { ProfileComponent } from './profile/profile.component';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { environment } from 'src/environments/environment';
+import { HttpClientModule } from '@angular/common/http';
+import { SignInComponent } from './sign-in/sign-in.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +33,8 @@ import { ProfileComponent } from './profile/profile.component';
     SignInComponent,
     ListYourSpaceComponent,
     FooterComponent,
-    ProfileComponent
+    ProfileComponent,
+    SignInComponent
   ],
   imports: [
     AppRoutingModule,
@@ -37,11 +43,18 @@ import { ProfileComponent } from './profile/profile.component';
     CommonModule,
     FormsModule,
     NgSelectModule,
+    HttpClientModule,
     ReactiveFormsModule,
     NgbModule.forRoot(),
     PerfectScrollbarModule,
     SpacesModule,
-    StoreModule.forRoot({})
+    StoreModule.forRoot({}),
+    EffectsModule.forRoot([]),
+    StoreDevtoolsModule.instrument({
+      name: '234 Spaces',
+      maxAge: 25,
+      logOnly: environment.production
+    })
   ],
   exports: [
   ],

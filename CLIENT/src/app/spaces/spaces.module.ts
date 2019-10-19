@@ -1,3 +1,4 @@
+import { StoreModule } from '@ngrx/store';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
@@ -17,6 +18,11 @@ import { ManagereservationsComponent } from './managereservations/managereservat
 import { ManagebookingsComponent } from './managebookings/managebookings.component';
 import { ManageenquiriesComponent } from './manageenquiries/manageenquiries.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { EffectsModule } from '@ngrx/effects';
+import { SpaceEffects } from './state/space.effects';
+import { reducer } from './state/space.reducers';
+import { AddPropsComponent } from './add-props/add-props.component';
+import { NgSelectModule } from '@ng-select/ng-select';
  
 
 @NgModule({
@@ -32,7 +38,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     ManagespacesComponent,
     ManagereservationsComponent,
     ManagebookingsComponent,
-    ManageenquiriesComponent
+    ManageenquiriesComponent,
+    AddPropsComponent
   ],
   imports: [
     AppRoutingModule,
@@ -40,7 +47,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     NgxDatatableModule,
     TagInputModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    StoreModule.forFeature('spaces', reducer),
+    EffectsModule.forFeature([SpaceEffects]),
+    NgSelectModule
   ],
   providers: [SidebarDirective]
 })

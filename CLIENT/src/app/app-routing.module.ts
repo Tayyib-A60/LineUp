@@ -11,15 +11,18 @@ import { SignInComponent } from './sign-in/sign-in.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { ListYourSpaceComponent } from './list-your-space/list-your-space.component';
 import { ProfileComponent } from './profile/profile.component';
+import { AddPropsComponent } from './spaces/add-props/add-props.component';
 
 
 const routes: Routes = [
   { path: 'admin', component: AdminComponent, children: [
     { path: 'add-space', component: AddspaceComponent },
+    { path: 'edit-space/:id', component: AddspaceComponent },
     { path: 'manage-space', component: ManagespacesComponent },
     { path: 'manage-reservations', component: ManagereservationsComponent },
     { path: 'manage-bookings', component: ManagebookingsComponent },
-    { path: 'manage-enquiries', component: ManageenquiriesComponent }
+    { path: 'manage-enquiries', component: ManageenquiriesComponent },
+    { path: 'create-addons', component: AddPropsComponent }
   ]},
   { path: '', component: HomeComponent },
   { path: 'sign-in', component: SignInComponent },

@@ -1,0 +1,62 @@
+<div class="row text-left">
+	<div class="col-sm-12">
+		<div class="content-header">Add Space type</div>
+	</div>
+</div>
+<div class="row text-left">
+		<div class="col-md-8">
+			<div class="card">
+				<div class="card-content">
+					<div class="px-3">
+						<form novalidate (ngSubmit)='createSpaceType()' [formGroup]="spaceTypeForm" class="form">
+							<div class="form-body">
+								<div class="row">
+									<div class="col-xl-6 col-lg-6 col-md-12 mb-1">
+										<fieldset class="form-group">
+											<label for="spaceTypeName">SpaceType</label>
+											<input formControlName="type" type="text" class="form-control" placeholder="Space type (required)" name="spaceTypeName" id="spaceTypeName" >
+										</fieldset>
+										<button [disabled]='!spaceTypeForm.valid || !spaceTypeForm.dirty' type="submit" class="btn btn-raised mr-1 btn-round btn-primary btn-sm">Create Space type</button>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+<div class="row text-left">
+	<div class="col-sm-12">
+		<div class="content-header">Add Amenity</div>
+	</div>
+</div>
+<div class="row text-left">
+		<div class="col-md-8">
+			<div class="card">
+				<div class="card-content">
+					<div class="px-3">
+						<form novalidate (ngSubmit)='createAmenity()' [formGroup]="amenityForm" class="form">
+							<div class="form-body">
+								<div class="row">
+									<div class="col-xl-6 col-lg-6 col-md-12 mb-1">
+										<fieldset class="form-group">
+											<label for="amenity">Amenity</label>
+											<input formControlName="name" type="text" class="form-control" placeholder="Amenity (required)" name="amenity" id="amenity" >
+										</fieldset>
+										<button [disabled]='!amenityForm.valid || !amenityForm.dirty' type="submit" class="btn btn-raised mr-1 btn-round btn-primary btn-sm">Create Amenity</button>
+									</div>
+									<div class="col-xl-6 col-lg-6 col-md-12 mb-1">
+										<fieldset class="form-group">
+											<label for="price">Price</label>
+											<input formControlName="price" type='number' class="form-control" placeholder="Price (required)" name="price" id="price" >
+										</fieldset>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
