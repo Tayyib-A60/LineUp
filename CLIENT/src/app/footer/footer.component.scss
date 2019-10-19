@@ -1,0 +1,32 @@
+.home-footer {
+    padding: 5rem 3rem 1rem 3rem;
+    opacity: 0.9;
+    background-image: linear-gradient(to right top, rgba(0, 0, 0, 0.1), #000), url(../../assets/img/photos/space5.jpg);
+    background-size: cover;
+    background-position: top;
+    position: relative;
+    color: #fff;
+    font-size: .8rem;
+    vertical-align: bottom;
+  
+    &-head {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+    &-text {
+      a{
+        color: #fff;
+      }
+      a:hover {
+        color: rgba(255, 255, 255, 0.5);
+      }
+    }
+    &-icon-style {
+      font-size: 2rem !important;
+      margin-top: 1rem;
+      margin-right: 2rem;
+      color: #fff;
+    }
+  }
+  

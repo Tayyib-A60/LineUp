@@ -15,6 +15,10 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { SpacesModule } from './spaces/spaces.module';
 import { HomeComponent } from './home/home.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { SignInComponent } from './sign-in/sign-in.component';
+import { ListYourSpaceComponent } from './list-your-space/list-your-space.component';
+import { FooterComponent } from './footer/footer.component';
+import { ProfileComponent } from './profile/profile.component';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from 'src/environments/environment';
 import { HttpClientModule } from '@angular/common/http';
@@ -26,6 +30,10 @@ import { SignInComponent } from './sign-in/sign-in.component';
     NavbarComponent,
     SignUpComponent,
     HomeComponent,
+    SignInComponent,
+    ListYourSpaceComponent,
+    FooterComponent,
+    ProfileComponent,
     SignInComponent
   ],
   imports: [

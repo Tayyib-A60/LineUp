@@ -7,6 +7,10 @@ import { ManagespacesComponent } from './spaces/managespaces/managespaces.compon
 import { ManagereservationsComponent } from './spaces/managereservations/managereservations.component';
 import { ManagebookingsComponent } from './spaces/managebookings/managebookings.component';
 import { ManageenquiriesComponent } from './spaces/manageenquiries/manageenquiries.component';
+import { SignInComponent } from './sign-in/sign-in.component';
+import { SignUpComponent } from './sign-up/sign-up.component';
+import { ListYourSpaceComponent } from './list-your-space/list-your-space.component';
+import { ProfileComponent } from './profile/profile.component';
 import { AddPropsComponent } from './spaces/add-props/add-props.component';
 
 
@@ -20,7 +24,12 @@ const routes: Routes = [
     { path: 'manage-enquiries', component: ManageenquiriesComponent },
     { path: 'create-addons', component: AddPropsComponent }
   ]},
-  { path: '', component: HomeComponent }
+  { path: '', component: HomeComponent },
+  { path: 'sign-in', component: SignInComponent },
+  { path: 'sign-up', component: SignUpComponent },
+  { path: 'list-your-space', component: ListYourSpaceComponent },
+  { path: 'profile', component: ProfileComponent }
+
 ];
 
 @NgModule({

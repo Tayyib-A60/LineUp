@@ -1,0 +1,120 @@
+<app-navbar (toggleHideSidebar)="toggleHideSidebar($event)"></app-navbar>
+<div style="background-color: #fff;" class="profile-container">
+  <div class="container-fluid">
+    <div class="row text-left">
+      <!--Nav orientation Starts-->
+      <div class="col-md-12 col-lg-12">
+        <div class="card">
+          <!-- <div class="card-header">
+            <h4 class="card-title">Nav orientation</h4>
+          </div> -->
+          <div class="card-content">
+            <div class="card-body">
+              <ngb-tabset type="pills" [orientation]="currentOrientation">
+                <ngb-tab title="Profile">
+                  <ng-template ngbTabContent>
+                    <div class="container-fluid">
+                      <div class="row">
+                        <div  class="col-lg-4 col-md-12 col-sm-12">
+                            <div class="profile_card">
+                                <div class="form-group">
+                                    <label for="userinput1">First name</label>
+                                    <input type="text" id="userinput1" class="form-control" name="name" placeholder="Kayode">
+                                  </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-12 col-sm-12">
+                            <div class="profile_card">
+                                <div class="form-group">
+                                    <label for="userinput1">Last name</label>
+                                    <input type="text" id="userinput1" class="form-control" name="name" placeholder="Kayode">
+                                  </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-12 col-sm-12">
+                            <div class="profile_card">
+                                <div class="form-group">
+                                    <label for="userinput1">Email Address</label>
+                                    <input type="text" id="userinput1" class="form-control" name="name" placeholder="">
+                                  </div>
+                            </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                          <div class="col-lg-4 col-md-12 col-sm-12">
+                              <div class="profile_card">
+                                  <div class="form-group">
+                                      <label for="userinput1">Contact Number</label>
+                                      <input type="text" id="userinput1" class="form-control" name="name" placeholder="">
+                                    </div>
+                              </div>
+                          </div>
+                          <div class="col-lg-4 col-md-12 col-sm-12">
+                              <div class="profile_card">
+                                  <div class="form-group">
+                                      <label for="projectinput6">Gender</label>
+                                      <select id="projectinput6" name="budget" class="form-control">
+                                        <option value="0" selected="" disabled="">Select Gender</option>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                      </select>
+                                    </div>
+                              </div>
+                          </div>
+                          <hr/>
+                        </div>
+                    </div>
+                  </ng-template>
+                </ngb-tab>
+                <ngb-tab>
+                  <ng-template ngbTabTitle>Your Spaces</ng-template>
+                  <ng-template ngbTabContent>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid.
+                    <p>Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table
+                    craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl
+                    cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar helvetica VHS salvia
+                    yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes anderson 8-bit, sustainable jean
+                    shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party scenester stumptown, tumblr butcher vero
+                    sint qui sapiente accusamus tattooed echo park.</p>
+                  </ng-template>
+                </ngb-tab>
+                <ngb-tab>
+                  <ng-template ngbTabTitle>Messages</ng-template>
+                  <ng-template ngbTabContent>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid.
+                    <p>Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table
+                    craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl
+                    cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar helvetica VHS salvia
+                    yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes anderson 8-bit, sustainable jean
+                    shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party scenester stumptown, tumblr butcher vero
+                    sint qui sapiente accusamus tattooed echo park.</p>
+                  </ng-template>
+                </ngb-tab>
+                <ngb-tab>
+                  <ng-template ngbTabTitle>Your Bookings</ng-template>
+                  <ng-template ngbTabContent>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid.
+                    <p>Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table
+                    craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl
+                    cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar helvetica VHS salvia
+                    yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes anderson 8-bit, sustainable jean
+                    shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party scenester stumptown, tumblr butcher vero
+                    sint qui sapiente accusamus tattooed echo park.</p>
+                  </ng-template>
+                </ngb-tab>
+                
+              </ngb-tabset>
+    
+              <div class="btn-group btn-group-toggle" ngbRadioGroup [(ngModel)]="currentOrientation">
+                <label ngbButtonLabel class="btn-outline-primary btn-sm">
+                  <input ngbButton type="radio" value="horizontal">Horizontal
+                </label>
+                <label ngbButtonLabel class="btn-outline-primary btn-sm">
+                  <input ngbButton type="radio" value="vertical">Vertical
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--Nav orientation Ends-->
+    </div>
+  </div>
+</div>

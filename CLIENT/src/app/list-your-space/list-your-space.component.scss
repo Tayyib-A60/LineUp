@@ -1,0 +1,76 @@
+.caption_container {
+    background-image: url(../../assets/img/photos/space2.jpg);
+    background-position: cover;
+    height: 60vh;
+}
+
+.main_caption {
+    font-size: 4rem;
+    font-weight: 500;
+    padding-top: 8rem;
+    color: #fff;
+    text-align: center;
+  
+    @media only screen and (max-width: 600px) {
+        font-size: 2.7rem;
+        font-weight: 400;
+        padding-top: 3rem;
+    }
+}
+.sub_caption {
+    font-size: 1.6rem;
+    font-weight: 200;
+    color: #fff;
+    text-align: center;
+}
+.spaces {
+    background-color: rgba(#aaa, 0.1);
+    padding-top: 3rem;
+    padding: 3rem;
+    text-align: center;
+
+    &_head{
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+        font-weight: 800;
+    }
+
+    &_content {
+        position: relative;
+        border-radius: 5px;
+        width: 100%;
+        height: auto;
+        background-color: rgba(#aaa, 0.1);
+        
+    }
+    &_img {
+        border-radius: 3px;
+    }
+    &_text {
+        
+        font-size: 2rem;
+        font-weight: 500;
+        display: block;
+        color: #fff;
+        position: absolute;
+        width: 100%;
+        padding-top: 10rem;
+        text-align: center;
+    }
+
+    &_form {
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+                  
+        &-bg {
+            border: 1px solid #000;
+            background-color: #000;
+            color: #fff;
+            padding: .8rem 2rem;
+            border-radius: 25px;
+              
+        }
+          
+    }
+    
+}
