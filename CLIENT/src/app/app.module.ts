@@ -14,13 +14,17 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { SpacesModule } from './spaces/spaces.module';
 import { HomeComponent } from './home/home.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { SignInComponent } from './sign-in/sign-in.component';
+import { ListYourSpaceComponent } from './list-your-space/list-your-space.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
     SignUpComponent,
-    HomeComponent
+    HomeComponent,
+    SignInComponent,
+    ListYourSpaceComponent
   ],
   imports: [
     AppRoutingModule,

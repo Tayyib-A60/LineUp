@@ -1,4 +1,4 @@
-.signUp {
+.signIn {
     background-image: url(../../assets/img/photos/space5.jpg);
     background-position: cover;
     height: 100vh;
@@ -14,13 +14,13 @@
     }
 
     &-btn {
+        // border: 1px solid #000;
         background-color: #000;
         color: #fff;
         padding: .9rem 2.5rem !important;
         border-radius: 25px;
     }
 }
-
 .form-data {
     border: 1px solid #aaa; 
     padding: .2rem 1rem; 

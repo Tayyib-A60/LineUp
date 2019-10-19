@@ -68,28 +68,342 @@
                     </div>
                 </div>
               </div>
-              <!-- <div class="center align-content-center">
-                <div class="col-md-8 col-sm-12">
-                  <div class="card card-inverse bg-primary text-center">
-                    <div class="card-content">
-                      <div class="card-body pt-3">
-                        <div class="row d-flex">
-                          <div class="col ">
-                            <h3>What</h3>
-                            <input placeholder='e.g "Office or event space"' class="lineup_custom_input">
+              <div class="row full-height m-0">
+                <div class="col-12 d-flex align-items-center justify-content-center explore_spaces">
+                  <button type="button" class="btn btn-raised px-4 mb-0  explore_spaces-icon">
+                    <i class="ft ft-search d-lg-none d-lg-inline-block"></i>
+                    <span class="d-lg-inline-block d-none ml-1">EXPLORE SPACES</span>
+                  </button>
+                </div>
+              </div>
+              <div class="row no-gutters justify-content-center HowItWorks" matchHeight="card">
+                  <div class="col-sm-12">
+                      <p style="font-size: 5rem;" class="text-bold-100">-</p>
+                      <h1 class="HowItWorks_head">How it works.</h1>
+                      <div style="line-height: .5;">
+                        <p>Lorem ipsum is placeholder text commonly</p>
+                        <p>used in the graphic, print, and publishing industries</p>
+                        <p>for previewing layouts and visual mockups.</p>
+                      </div>
+                    </div>
+                  <div class="card-container">
+                    <div class="container-fluid">
+                      <div class="row text-center" matchHeight="card">
+                        <div class="d-flex flex-row">
+                          <div class="card-body HowItWorks-body">
+                            <div class="HowItWorks-head">
+                              <span class="HowItWorks-format">1</span>
+                            </div>
+                            <h3 class="text-center text-bold-500">Seach</h3>
+                            <p class="content-sub-header">Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups.</p>
                           </div>
-                          <div class="col align-self-end">
-                            <h3>Where</h3>
-                            <input placeholder='e.g "Lagos"' class="lineup_custom_input">
+                          <div class="card-body HowItWorks-body">
+                            <div class="HowItWorks-head">
+                              <span class="HowItWorks-format">2</span>
+                            </div>
+                            <h3 class="text-center text-bold-500">Book</h3>
+                            <p class="content-sub-header">Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups.</p>
                           </div>
-                          <div class="col align-self-end">
-                            <h3>When</h3>
-                            <input placeholder='e.g "Today"' class="lineup_custom_input">
+                          <div class="card-body HowItWorks-body">
+                            <div class="HowItWorks-head">
+                              <span class="HowItWorks-format">3</span>
+                            </div>
+                            <h3 class="text-center text-bold-500">Experience</h3>
+                            <p class="content-sub-header">Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups.</p>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </div> -->
+                  
+              </div>
+              <div class="card-container">
+                  <div class="container-fluid">
+                      <div class="row">
+                          <div class="col-10 mt-5 mb-3">
+                            <div class="content-header lead text-bold-500">Discover Spaces We Love.</div>
+                          </div>
+                          <div class="col-2 mt-5 mb-3">
+                              <a href="#" class="content-link text-bold-500">View more</a>
+                           </div>
+                      </div>        
+                    </div>
+                    <div class="container-fluid">
+                    <div class="row text-left" matchHeight="card">
+                          <div class="col-lg-4 col-md-12 col-sm-12">
+                            <div class="card">
+                              <div class="card-content card-bg">
+                                <div class="card-img">
+                                  <img class="card-img-top img-fluid card-radius" src="assets/img/photos/14.jpg" alt="Card image cap">
+                                  <h4 class="card-title home-card-title">NGN 3,000 per day</h4>
+                                  <a class="btn btn-floating halfway-fab bg-warning"><i class="ft-heart"></i></a>
+                                </div>
+                                <div style="padding: 1.8rem .5rem 1rem .5rem;" class="card-body">
+                                  <div class="row justify-content-between">
+                                    <div class="col-6">
+                                        <h3 class="home-card-text">Landmark Towers</h3>
+                                    </div>
+                                        <div class="col-3">
+                                          <ngb-rating max="5" [(rate)]="currentRate"></ngb-rating>
+                                        </div>
+                                        <div class="col-3">
+                                            <p><b>{{currentRate}}</b></p>
+                                        </div>
+                                  </div>
+                                  <p class="card-text">Creative workspace in Lekki overlooking the atlantic ocean.</p>
+                                  <div style="padding: 1rem 0 0 0;" class="card-footer">
+                                      <div class="row">
+                                          <div class="col-5">
+                                            <i class="fa fa-users"></i>
+                                            <span>&nbsp;Fits 25 guests</span>
+                                          </div>
+                                          <div class="col-7">
+                                            <i class="fa fa-map-marker"></i>
+                                            <span>&nbsp;Lekki Admiralty road</span>
+                                          </div>
+                                        </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-lg-4 col-md-12 col-sm-12">
+                              <div class="card">
+                                <div class="card-content card-bg hct">
+                                  <div class="card-img">
+                                    <img class="card-img-top img-fluid card-radius" src="assets/img/photos/14.jpg" alt="Card image cap">
+                                    <h4 class="card-title home-card-title">NGN 3,000 per day</h4>
+                                    <a class="btn btn-floating halfway-fab bg-warning"><i class="ft-heart"></i></a>
+                                  </div>
+                                  <div style="padding: 1.8rem .5rem 1rem .5rem;" class="card-body">
+                                    <div class="row justify-content-between">
+                                      <div class="col-6">
+                                          <h3 class="home-card-text">Landmark Towers</h3>
+                                      </div>
+                                          <div class="col-3">
+                                            <ngb-rating max="5" [(rate)]="firstRating"></ngb-rating>
+                                          </div>
+                                          <div class="col-3">
+                                              <p><b>{{firstRating}}</b></p>
+                                          </div>
+                                    </div>
+                                    <p class="card-text">Creative workspace in Lekki overlooking the atlantic ocean.</p>
+                                    <div style="padding: 1rem 0 0 0;" class="card-footer">
+                                        <div class="row">
+                                            <div class="col-5">
+                                              <i class="fa fa-users"></i>
+                                              <span>&nbsp;Fits 25 guests</span>
+                                            </div>
+                                            <div class="col-7">
+                                              <i class="fa fa-map-marker"></i>
+                                              <span>&nbsp;Lekki Admiralty road</span>
+                                            </div>
+                                          </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-lg-4 col-md-12 col-sm-12">
+                                <div class="card">
+                                  <div class="card-content card-bg">
+                                    <div class="card-img">
+                                      <img class="card-img-top img-fluid card-radius" src="assets/img/photos/14.jpg" alt="Card image cap">
+                                      <h4 class="card-title home-card-title">NGN 3,000 per day</h4>
+                                      <a class="btn btn-floating halfway-fab bg-warning"><i class="ft-heart"></i></a>
+                                    </div>
+                                    <div style="padding: 1.8rem .5rem 1rem .5rem;" class="card-body">
+                                      <div class="row justify-content-between">
+                                        <div class="col-6">
+                                            <h3 class="home-card-text">Landmark Towers</h3>
+                                        </div>
+                                            <div class="col-3">
+                                              <ngb-rating max="5" [(rate)]="secondRating"></ngb-rating>
+                                            </div>
+                                            <div class="col-3">
+                                                <p><b>{{secondRating}}</b></p>
+                                            </div>
+                                      </div>
+                                      <p class="card-text">Creative workspace in Lekki overlooking the atlantic ocean.</p>
+                                      <div style="padding: 1rem 0 0 0;" class="card-footer">
+                                          <div class="row">
+                                              <div class="col-5">
+                                                <i class="fa fa-users"></i>
+                                                <span>&nbsp;Fits 25 guests</span>
+                                              </div>
+                                              <div class="col-7">
+                                                <i class="fa fa-map-marker"></i>
+                                                <span>&nbsp;Lekki Admiralty road</span>
+                                              </div>
+                                            </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                    </div>
+                    <div class="row text-left" matchHeight="card">
+                        <div class="col-lg-4 col-md-12 col-sm-12">
+                          <div class="card">
+                            <div class="card-content card-bg">
+                              <div class="card-img">
+                                <img class="card-img-top img-fluid card-radius" src="assets/img/photos/14.jpg" alt="Card image cap">
+                                <h4 class="card-title home-card-title">NGN 3,000 per day</h4>
+                                <a class="btn btn-floating halfway-fab bg-warning"><i class="ft-heart"></i></a>
+                              </div>
+                              <div style="padding: 1.8rem .5rem 1rem .5rem;" class="card-body">
+                                <div class="row justify-content-between">
+                                  <div class="col-6">
+                                      <h3 class="home-card-text">Landmark Towers</h3>
+                                  </div>
+                                      <div class="col-3">
+                                        <ngb-rating max="5" [(rate)]="thirdRating"></ngb-rating>
+                                      </div>
+                                      <div class="col-3">
+                                          <p><b>{{thirdRating}}</b></p>
+                                      </div>
+                                </div>
+                                <p class="card-text">Creative workspace in Lekki overlooking the atlantic ocean.</p>
+                                <div style="padding: 1rem 0 0 0;" class="card-footer">
+                                    <div class="row">
+                                        <div class="col-5">
+                                          <i class="fa fa-users"></i>
+                                          <span>&nbsp;Fits 25 guests</span>
+                                        </div>
+                                        <div class="col-7">
+                                          <i class="fa fa-map-marker"></i>
+                                          <span>&nbsp;Lekki Admiralty road</span>
+                                        </div>
+                                      </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-lg-4 col-md-12 col-sm-12">
+                            <div class="card">
+                              <div class="card-content card-bg">
+                                <div class="card-img">
+                                  <img class="card-img-top img-fluid card-radius" src="assets/img/photos/14.jpg" alt="Card image cap">
+                                  <h4 class="card-title home-card-title">NGN 3,000 per day</h4>
+                                  <a class="btn btn-floating halfway-fab bg-warning"><i class="ft-heart"></i></a>
+                                </div>
+                                <div style="padding: 1.8rem .5rem 1rem .5rem;" class="card-body">
+                                  <div class="row justify-content-between">
+                                    <div class="col-6">
+                                        <h3 class="home-card-text">Landmark Towers</h3>
+                                    </div>
+                                        <div class="col-3">
+                                          <ngb-rating max='5' [(rate)]="forthRating"></ngb-rating>
+                                        </div>
+                                        <div class="col-3">
+                                            <p><b>{{forthRating}}</b></p>
+                                        </div>
+                                  </div>
+                                  <p class="card-text">Creative workspace in Lekki overlooking the atlantic ocean.</p>
+                                  <div style="padding: 1rem 0 0 0;" class="card-footer">
+                                      <div class="row">
+                                          <div class="col-5">
+                                            <i class="fa fa-users"></i>
+                                            <span>&nbsp;Fits 25 guests</span>
+                                          </div>
+                                          <div class="col-7">
+                                            <i class="fa fa-map-marker"></i>
+                                            <span>&nbsp;Lekki Admiralty road</span>
+                                          </div>
+                                        </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-lg-4 col-md-12 col-sm-12">
+                              <div class="card">
+                                <div class="card-content card-bg">
+                                  <div class="card-img">
+                                    <img class="card-img-top img-fluid card-radius" src="assets/img/photos/14.jpg" alt="Card image cap">
+                                    <h4 class="card-title home-card-title">NGN 3,000 per day</h4>
+                                    <a class="btn btn-floating halfway-fab"><i class="ft-heart"></i></a>
+                                  </div>
+                                  <div style="padding: 1.8rem .5rem 1rem .5rem;" class="card-body">
+                                    <div class="row justify-content-between">
+                                      <div class="col-6">
+                                          <h3 class="home-card-text">Landmark Towers</h3>
+                                      </div>
+                                          <div class="col-3">
+                                            <ngb-rating max="5" [(rate)]="fifthRating"></ngb-rating>
+                                          </div>
+                                          <div class="col-3">
+                                              <p><b>{{fifthRating}}</b></p>
+                                          </div>
+                                    </div>
+                                    <p class="card-text">Creative workspace in Lekki overlooking the atlantic ocean.</p>
+                                    <div style="padding: 1rem 0 0 0;" class="card-footer">
+                                        <div class="row">
+                                            <div class="col-5">
+                                              <i class="fa fa-users"></i>
+                                              <span>&nbsp;Fits 25 guests</span>
+                                            </div>
+                                            <div class="col-7">
+                                              <i class="fa fa-map-marker"></i>
+                                              <span>&nbsp;Lekki Admiralty road</span>
+                                            </div>
+                                          </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                  </div>
+                  </div>
+              </div>
+              <div class="home-footer">
+                  <div class="container-fluid">
+                      <div class="row full-height"  matchHeight="card">
+                        <div class="col-3">
+                          <h2 class="home-footer-head">234Spaces</h2>
+                          <p class="home-footer-text">Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups.</p>
+                        </div>
+                        <div class="col-2">
+                            <h5 style="margin-bottom: 1rem;" class="text-bold-500">Discover Spaces</h5>
+                            <p class="home-footer-text"><a href="#" class="home-footer-text">Co-working space</a></p>
+                            <p class="home-footer-text"><a href="#" class="home-footer-text">Meeting Rooms</a></p>
+                            <p class="home-footer-text"><a href="#" class="home-footer-text">Business Meetings</a></p>
+                            <p class="home-footer-text"><a href="#" class="home-footer-text">Conference Rooms</a></p>
+                            <p class="home-footer-text"><a href="#" class="home-footer-text">Annual General Meetings</a></p>
+                            <p class="home-footer-text"><a href="#" class="home-footer-text">Serviced Offices</a></p>
+                        </div>
+                        <div class="col-2">
+                            <h5 style="margin-bottom: 1rem;" class="text-bold-500">Locations</h5>
+                            <p class="home-footer-text"><a href="#" class="home-footer-text">Lagos</a></p>
+                            <p class="home-footer-text"><a href="#" class="home-footer-text">Abuja</a></p>
+                            <p class="home-footer-text"><a href="#" class="home-footer-text">Kaduna</a></p>
+                            <p class="home-footer-text"><a href="#" class="home-footer-text">Port-Harcourt</a></p>
+                            <p class="home-footer-text"><a href="#" class="home-footer-text">Owerri</a></p>
+                            <p class="home-footer-text"><a href="#" class="home-footer-text">Kano</a></p>
+                        </div>
+                        <div class="col-2">
+                            <h5 style="margin-bottom: 1rem;" class="text-bold-500">Company</h5>
+                            <p class="home-footer-text"><a href="#">About us</a></p>
+                            <p class="home-footer-text"><a href="#">Contact us</a></p>
+                            <p class="home-footer-text"><a href="#">Policies</a></p>
+                            <p class="home-footer-text"><a href="#">Privacy</a></p>
+                        </div>
+                        <div class="col-3">
+                            <h5 style="margin-bottom: 1rem;">Connect with us</h5>
+                            <div class="d-flex flex-row">
+                              <a href="" class="home-footer-icon-style"><i class="fa fa-linkedin"></i></a>
+                              <a href="" class="home-footer-icon-style"><i class="fa fa-google-plus"></i></a>
+                              <a href="" class="home-footer-icon-style"><i class="fa fa-twitter"></i></a>
+                              <a href="" class="home-footer-icon-style"><i class="fa fa-facebook"></i></a>
+                              <a href="" class="home-footer-icon-style"><i class="fa fa-instagram"></i></a>
+                            </div>
+                        </div>
+                      </div>
+                  </div>
+                  <p style="border-top: 1px solid rgba(255, 255, 255, 0.2)" class="card-footer copyright text-right">
+                      &copy;2019 234Spaces.Alright rights reserved.LLC
+                      <!-- {new Date().getFullYear()} -->
+                  </p>
+              </div>
             </div>

@@ -7,6 +7,9 @@ import { ManagespacesComponent } from './spaces/managespaces/managespaces.compon
 import { ManagereservationsComponent } from './spaces/managereservations/managereservations.component';
 import { ManagebookingsComponent } from './spaces/managebookings/managebookings.component';
 import { ManageenquiriesComponent } from './spaces/manageenquiries/manageenquiries.component';
+import { SignInComponent } from './sign-in/sign-in.component';
+import { SignUpComponent } from './sign-up/sign-up.component';
+import { ListYourSpaceComponent } from './list-your-space/list-your-space.component';
 
 
 const routes: Routes = [
@@ -17,7 +20,11 @@ const routes: Routes = [
     { path: 'manage-bookings', component: ManagebookingsComponent },
     { path: 'manage-enquiries', component: ManageenquiriesComponent }
   ]},
-  { path: '', component: HomeComponent }
+  { path: '', component: HomeComponent },
+  { path: 'sign-in', component: SignInComponent },
+  { path: 'sign-up', component: SignUpComponent },
+  { path: 'list-your-space', component: ListYourSpaceComponent }
+
 ];
 
 @NgModule({
