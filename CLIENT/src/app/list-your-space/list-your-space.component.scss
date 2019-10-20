@@ -29,12 +29,21 @@
     padding: 3rem;
     text-align: center;
 
+    &_bg-special {
+        background-color: #fff;
+    }
+
     &_head{
         font-size: 1.5rem;
         margin-bottom: 1.5rem;
         font-weight: 800;
     }
-
+    &_sub_head {
+        line-height: .5;
+    }
+    &_dash {
+        font-size: 5rem;
+    }
     &_content {
         position: relative;
         border-radius: 5px;
@@ -57,6 +66,9 @@
         padding-top: 10rem;
         text-align: center;
     }
+    &_width_special {
+        max-width: 800px;
+    }
 
     &_form {
         margin-top: 2rem;
@@ -70,7 +82,24 @@
             border-radius: 25px;
               
         }
-          
+        &-align {
+            text-align: left !important;
+        }
+        &-margin {
+            margin-bottom: 2rem;
+        }  
     }
+
+    &_card {
+
+        &-border {
+            border: 1px solid #aaa;
+        }
+
+        &-pad {
+            padding-top: 2.5rem;
+        }
+    }
+    
     
 }
