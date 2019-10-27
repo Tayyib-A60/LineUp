@@ -42,6 +42,7 @@ namespace API.Controllers {
         public async Task<IActionResult> UpdateSpace(int spaceId, [FromBody] SpaceDTO spaceDTO)
         {
             var space = await _lineUpRepository.GetSpace(spaceId);
+            // _lineUpRepository.Delete(space.Amenities);
             var spaceToUpdate = _mapper.Map<SpaceDTO, Space>(spaceDTO,space);
             if(spaceToUpdate == null)
                 return BadRequest("Space cannot be null");
@@ -54,13 +55,13 @@ namespace API.Controllers {
         }
 
         [HttpDelete("deleteSpace/{spaceId}")]
-        public IActionResult DeleteSpace(int spaceId)
+        public async Task<IActionResult> DeleteSpace(int spaceId)
         {
-            var spaceToDispose = _lineUpRepository.GetSpace(spaceId);
+            var spaceToDispose = await _lineUpRepository.GetSpace(spaceId);
             if(spaceToDispose != null) {
                 _lineUpRepository.Delete(spaceToDispose);
-                _lineUpRepository.SaveAllChanges();
-                return Ok();
+                await _lineUpRepository.SaveAllChanges();
+                return Ok(spaceId);
             }
             return NotFound();
         }
@@ -72,6 +73,7 @@ namespace API.Controllers {
             var spacesQueryResult = await _lineUpRepository.GetSpaces(query);
             return spacesQueryResult;
         }
+
         [HttpGet("getSpaceTypes")]
         public async Task<IEnumerable<SpaceType>> GetSpaceTypes()
         {

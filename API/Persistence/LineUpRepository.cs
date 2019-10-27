@@ -93,6 +93,8 @@ namespace API.Persistence
         {
             var spaces =  _context.Spaces
                                     .Where(sp => sp.UserId == query.UserId)
+                                    .Include(sp => sp.Type)
+                                    // .Include(sp => sp.Photos.Where(p => p.IsMain == true))
                                     .AsQueryable();
             spaces = FilterSpaces(query, spaces);
             int count = spaces.Count();

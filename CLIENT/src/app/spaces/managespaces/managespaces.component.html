@@ -2,7 +2,6 @@
 <div class="row text-left">
     <div class="col-12">
       <div class="content-header">My Spaces</div>
-      <p class="content-sub-header">Make changes to your spaces here</p>
     </div>
 </div>
   <!--Shopping cart starts-->
@@ -11,7 +10,7 @@
       <div class="col-sm-12">
         <div class="card">
           <div class="card-header">
-            <h4 class="card-title">My Spaces</h4>
+            <h4 class="card-title">Make changes to your spaces here</h4>
           </div>
           <div class="card-content">
             <div class="card-body">
@@ -28,18 +27,18 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor='let space of data'>
+                  <tr *ngFor='let space of spaceQueryResult.items'>
                     <td>{{space.id}}</td>
-                    <td><img class="media-object round-media" [src]="space.image" alt="Generic placeholder image"style="height: 75px;" /></td>
+                    <td><img class="media-object round-media" src="assets/img/elements/01.png" alt="Generic placeholder image"style="height: 75px;" /></td>
                     <td>{{space.name}}</td>
                     <td>{{space.location}}</td>
-                    <td>{{space.price}}</td>
+                    <td> {{ space.price | currency : 'NGN' : 'symbol-narrow' }}</td>
                     <td>{{space.size}}</td>
                     <td>
-                        <a [routerLink]="['/space/edit/' + space.id]" class="success p-0" data-original-title="" title="">
+                        <a [routerLink]="['../edit-space/' + space.id]" class="success p-0" data-original-title="" title="">
                             <i class="ft-edit-2 font-medium-3 mr-2"></i>
                         </a>
-                        <a [routerLink]="['/space/delete/' + space.id]" class="danger p-0" data-original-title="" title="">
+                        <a (click)='deleteSpace(space.id)' class="danger p-0" data-original-title="" title="">
                           <i class="ft-x font-medium-3 mr-2"></i>
                         </a>
                     </td>

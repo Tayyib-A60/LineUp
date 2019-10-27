@@ -26,22 +26,28 @@
                     <li class="nav-item" ngbDropdown [placement]="placement">
                         <a [routerLink]="['/admin']" class="nav-link position-relative"><span class="nav-name">List your Space</span></a>
                     </li>
-                    <li class="nav-item" ngbDropdown [placement]="placement">
+                    <li *ngIf='!anyUserIsAuthenticated()' class="nav-item" ngbDropdown [placement]="placement">
                         <a [routerLink]="['/sign-in']" class="nav-link position-relative"><span class="nav-name">Sign in</span></a>
                     </li>
-                    <li class="nav-item" ngbDropdown [placement]="placement">
+                    <li *ngIf='!anyUserIsAuthenticated()' class="nav-item" ngbDropdown [placement]="placement">
                         <a [routerLink]="['/sign-up']" class="nav-link position-relative"><span class="nav-name">Sign up</span></a>
+                    </li>
+                    <li *ngIf='!anyUserIsAuthenticated()' class="nav-item" ngbDropdown [placement]="placement">
+                        <a [routerLink]="['/sign-up-as-merchant']" class="nav-link position-relative"><span class="nav-name">Merchant sign-up</span></a>
+                    </li>
+                    <li *ngIf='anyUserIsAuthenticated()' class="nav-item" ngbDropdown [placement]="placement">
+                        <a (click)='signOut()' class="nav-link position-relative"><span class="nav-name">Sign out</span></a>
                     </li>
                     <li class="nav-item" ngbDropdown [placement]="placement">
                         <a [routerLink]="['/list-your-space']" class="nav-link position-relative"><span class="nav-name">View Spaces</span></a>
                     </li>
-                    <li class="nav-item" ngbDropdown [placement]="placement">
+                    <li *ngIf='anyUserIsAuthenticated()' class="nav-item" ngbDropdown [placement]="placement">
                         <a [routerLink]="['/profile']" class="nav-link position-relative"><span class="nav-name">Profile</span></a>
                     </li>
                     <li class="nav-item" ngbDropdown [placement]="placement">
                         <a class="nav-link position-relative"><span class="nav-name">Favorites</span></a>
                     </li>
-                    <li class="nav-item" ngbDropdown [placement]="placement">
+                    <li *ngIf='anyUserIsAuthenticated()' class="nav-item" ngbDropdown [placement]="placement">
                         <a class="nav-link position-relative"><span class="nav-name">My account</span></a>
                     </li>
                     <!-- <li class="nav-item" ngbDropdown [placement]="placement">

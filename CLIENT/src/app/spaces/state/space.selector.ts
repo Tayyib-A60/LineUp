@@ -23,3 +23,8 @@ export const getError = createSelector(
     getSpaceFeatureState,
     spaceState => spaceState.error
 );
+
+export const getSpaceQueryResult = createSelector(
+    getSpaceFeatureState,
+    spaceState => spaceState.spaceQueryResult
+);

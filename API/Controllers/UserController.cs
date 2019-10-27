@@ -15,7 +15,7 @@ using SendGrid.Helpers.Mail;
 using Microsoft.Extensions.Primitives;
 
 namespace API.Controllers {
-    [Route ("api/user")]
+    [Route ("api/lineUp/user")]
     [ApiController]
     public class UserController : ControllerBase {
         private IUserRepository _userRepository { get; }
@@ -49,14 +49,15 @@ namespace API.Controllers {
         public async Task<IActionResult> ForgotPassword ([FromBody] UserDTO userResource) {
             var user = _mapper.Map<User>(userResource);
             var token = _userRepository.CreateToken (user);
-
+            StringValues origin;
+            Request.Headers.TryGetValue("Origin", out origin);
             var apiKey = _configuration.GetSection ("234SpacesSendGridApiKey").Value;
             var sendGridclient = new SendGridClient (apiKey);
             var from = new EmailAddress ("info@234spaces.com", "234Spaces");
             var subject = "Reset your password";
             var to = new EmailAddress (user.Email, user.Name);
-            var plainTextContent1 = $"<strong>http://localhost:4200/user/resetPassword?token={token}</strong>";
-            var htmlContent = $"http://localhost:4200/user/resetpassword?token={token}";
+            var plainTextContent1 = $"<strong>http://localhost:4200/resetPassword?token={token}</strong>";
+            var htmlContent = $"{origin}/reset-password?token={token}";
             var msg = MailHelper.CreateSingleEmail (from, to, subject, plainTextContent1, htmlContent);
             var response = await sendGridclient.SendEmailAsync (msg);
             return Ok ();
@@ -76,7 +77,7 @@ namespace API.Controllers {
                 if(userCreated.Email == user.Email) {
                     StringValues origin;
                     var token = _userRepository.CreateToken(user);
-                    Request.Headers.TryGetValue("Referer", out origin);
+                    Request.Headers.TryGetValue("Origin", out origin);
                     Message message = new Message();
                     message.Subject = "Account Confirmation";
                     message.FromEmail = "noreply@234spaces.com";
@@ -84,10 +85,10 @@ namespace API.Controllers {
                     message.ToName = user.Name;
                     message.ToEmail = user.Email;
                     message.PlainContent = null;
-                    message.HtmlContent = MailString("origin", token);
+                    message.HtmlContent = MailString(origin, token);
                     _userRepository.EmailSender(message);
                 }
-                return Ok ($"User with email {user.Email} Created");
+                return Ok ();
             } catch (Exception ex) {
                 return BadRequest (ex.Message);
             }
@@ -107,7 +108,7 @@ namespace API.Controllers {
                 if(userCreated.Email == user.Email) {
                     StringValues origin;
                     var token = _userRepository.CreateToken(user);
-                    Request.Headers.TryGetValue("Referer", out origin);
+                    Request.Headers.TryGetValue("Origin", out origin);
                     Message message = new Message();
                     message.Subject = "Account Confirmation";
                     message.FromEmail = "noreply@234spaces.com";
@@ -115,10 +116,10 @@ namespace API.Controllers {
                     message.ToName = user.Name;
                     message.ToEmail = user.Email;
                     message.PlainContent = null;
-                    message.HtmlContent = MailString("origin", token);
+                    message.HtmlContent = MailString(origin, token);
                     _userRepository.EmailSender(message);
                 }
-                return Ok ($"User with email {user.Email} Created");
+                return Ok ();
             } catch (Exception ex) {
                 return BadRequest (ex.Message);
             }
@@ -137,7 +138,7 @@ namespace API.Controllers {
                 if(userCreated.Email == user.Email) {
                     StringValues origin;
                     var token = _userRepository.CreateToken(user);
-                    Request.Headers.TryGetValue("Referer", out origin);
+                    Request.Headers.TryGetValue("Origin", out origin);
                     Message message = new Message();
                     message.Subject = "Account Confirmation";
                     message.FromEmail = "noreply@234spaces.com";
@@ -145,10 +146,10 @@ namespace API.Controllers {
                     message.ToName = user.Name;
                     message.ToEmail = user.Email;
                     message.PlainContent = null;
-                    message.HtmlContent = MailString("origin", token);
+                    message.HtmlContent = MailString(origin, token);
                     _userRepository.EmailSender(message);
                 }
-                return Ok ($"User with email {user.Email} Created");
+                return Ok ();
             } catch (Exception ex) {
                 return BadRequest (ex.Message);
             }
@@ -174,7 +175,7 @@ namespace API.Controllers {
                 message.PlainContent = null;
                 message.HtmlContent = MailString("origin", token);
                 _userRepository.EmailSender(message);
-                return Ok("Email sent");
+                return Ok();
             }
             return BadRequest("An unexpected error occured");
 
@@ -190,7 +191,7 @@ namespace API.Controllers {
                 return BadRequest("User does not exist");
             userToVerifyEmail.EmailVerified = true;
             _userRepository.VerifyUserEmail(userToVerifyEmail);
-            return Ok("Your account has been verified");
+            return Ok();
         }
 
         [HttpGet]
@@ -228,7 +229,7 @@ namespace API.Controllers {
                 return NotFound("User does not exist");
              _mapper.Map<UserDTO, User> (userResource, userToUpdate);
              _userRepository.UpdateUser(userResource.Password, userToUpdate);
-             return Ok("User update was succesfull");
+             return Ok();
         }
 
         [HttpDelete ("{id}")]
@@ -239,7 +240,7 @@ namespace API.Controllers {
         }
         private string MailString(string origin, string token)
         {
-            return $"<br/><br/><div style='background-color: #FFEFD5; height: 60% !important;'><h2 style='text-align: center; padding-top: 15px;'><strong>Welcome to 234Spaces</strong></h2><p>A transaction was initiated to verify your email, Click the button below to verify your email</p> <br> <a class='resetBtn' href='{origin.ToString()}/verifyEmail?token={token}' style='background-color: #00FF7F; color: #0c0b0b; padding: 6px; border-radius: 3px; text-decoration: none;'>Verify Email</a><br><p>&nbsp;<p></div>";
+            return $"<br/><br/><div style='background-color: #FFEFD5; height: 60% !important;'><h2 style='text-align: center; padding-top: 15px;'><strong>Welcome to 234Spaces</strong></h2><p>To verify your email, please click the button or link below to verify your email</p> <br> <a class='resetBtn' href='{origin.ToString()}/verifyEmail?token={token}' style='background-color: #00FF7F; color: #0c0b0b; padding: 6px; border-radius: 3px; text-decoration: none;'>Verify Email</a><br><p>&nbsp;<p><p>{origin.ToString()}/verifyEmail?token={token}</p></div>";
         }
     }
 }

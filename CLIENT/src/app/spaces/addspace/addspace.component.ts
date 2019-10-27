@@ -3,9 +3,7 @@ import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@ang
 import { Store, select } from '@ngrx/store';
 import * as spaceReducer from '../state/space.reducers';
 import * as spaceActions from '../state/space.actions';
-import* as spaceSelectors from '../state/space.selector';
-import { NumberValidators } from '../../shared/validators/number.validator';
-import { SpaceService } from '../space.service';
+import * as spaceSelectors from '../state/space.selector';
 import { Params, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { SpaceType } from '../models/spaceType.model';
@@ -28,8 +26,7 @@ export class AddspaceComponent implements OnInit {
   spaceTypes: SpaceType[];
   spaceToEdit: Space;
     constructor(private formBuilder: FormBuilder,
-                private store: Store<spaceReducer.AppState>,
-                private spaceService: SpaceService,
+                private store: Store<spaceReducer.SpaceState>,
                 private route: ActivatedRoute) { }
                 
     ngOnInit() {

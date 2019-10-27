@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, OnDestroy, ElementRef, Renderer2, AfterViewInit } from "@angular/core";
+import { Component, OnInit, ViewChild, OnDestroy, ElementRef, Renderer2 } from "@angular/core";
 
 import { Router, ActivatedRoute } from "@angular/router";
 import { ConfigService } from '../services/config.service';
@@ -11,7 +11,7 @@ import { customAnimations } from '../helpers/animations/custom.animation';
   templateUrl: "./side-bar.component.html",
   animations: customAnimations
 })
-export class SideBarComponent implements OnInit, AfterViewInit, OnDestroy {
+export class SideBarComponent implements OnInit, OnDestroy {
 
   @ViewChild('toggleIcon', {static: false}) toggleIcon: ElementRef;
   public menuItems =  [{
@@ -102,27 +102,6 @@ export class SideBarComponent implements OnInit, AfterViewInit, OnDestroy {
 
   }
 
-  ngAfterViewInit() {
-
-    // setTimeout(() => {
-    //   if (this.config.layout.sidebar.collapsed != undefined) {
-    //     if (this.config.layout.sidebar.collapsed === true) {
-    //       this.expanded = false;
-    //       this.renderer.addClass(this.toggleIcon.nativeElement, 'ft-toggle-left');
-    //       this.renderer.removeClass(this.toggleIcon.nativeElement, 'ft-toggle-right');
-    //       this.nav_collapsed_open = true;
-    //     }
-    //     else if (this.config.layout.sidebar.collapsed === false) {
-    //       this.expanded = true;
-    //       this.renderer.removeClass(this.toggleIcon.nativeElement, 'ft-toggle-left');
-    //       this.renderer.addClass(this.toggleIcon.nativeElement, 'ft-toggle-right');
-    //       this.nav_collapsed_open = false;
-    //     }
-    //   }
-    // }, 0);
-
-
-  }
 
   ngOnDestroy() {
     if (this.layoutSub) {

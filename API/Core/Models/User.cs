@@ -14,7 +14,6 @@ namespace API.Core.Models
         [Required]
         [StringLength(50)]
         public string Email { get; set; }
-        [Required]
         [StringLength(30)]
         public string ContactNo { get; set; }
         [StringLength(30)]

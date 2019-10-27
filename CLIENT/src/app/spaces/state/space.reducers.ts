@@ -1,19 +1,13 @@
-import { AppState } from '../../state/app.state';
 import { Space } from '../models/space.model';
 import { SpaceType } from '../models/spaceType.model';
 import { SpaceActions } from './space.actions';
 import { SpaceActionTypes } from './space.action.types';
 import { Amenity } from '../models/amenity.model';
-import { CreateAmenityFailure, GetSingleSpaceFailure } from './space.actions';
-import { act } from '@ngrx/effects';
-
-
-export interface AppState extends AppState {
-    spaces: SpaceState;
-}
+import { SpaceQueryResult } from '../models/spaceQueryResult';
 
 export interface SpaceState {
     spaces: Space[];
+    spaceQueryResult: SpaceQueryResult;
     spaceTypes: SpaceType[];
     currentSpaceId: number;
     amenities: Amenity[];
@@ -24,6 +18,7 @@ export interface SpaceState {
 
 const INITIAL_STATE: SpaceState = {
     spaces: [],
+    spaceQueryResult: <SpaceQueryResult>{},
     spaceTypes: [],
     currentSpaceId: null,
     error: '',
@@ -60,12 +55,27 @@ export function reducer(state = INITIAL_STATE, action: SpaceActions): SpaceState
                 error: action.payload
             };
         case SpaceActionTypes.DeleteSpaceSuccess:
+            const items = state.spaceQueryResult.items.filter(sp => sp.id !== action.payload);
             return {
                 ...state,
-                spaces: state.spaces.filter(space => space.id !== action.payload),
+                spaceQueryResult: { 
+                    totalItems: state.spaceQueryResult.totalItems-1,
+                    items 
+                },
                 error: ''
             };
         case SpaceActionTypes.DeleteSpaceFailure:
+            return {
+                ...state,
+                error: action.payload
+            };
+        case SpaceActionTypes.GetSpacesSuccess:
+            return {
+                ...state,
+                spaceQueryResult: action.payload,
+                error: ''
+            };
+        case SpaceActionTypes.GetSpacesFailure:
             return {
                 ...state,
                 error: action.payload

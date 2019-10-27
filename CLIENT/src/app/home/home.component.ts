@@ -1,5 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbCarouselConfig } from '@ng-bootstrap/ng-bootstrap';
+import { Store, select } from '@ngrx/store';
+import * as spaceReducer from '../spaces/state/space.reducers';
+import * as spaceActions from '../spaces/state/space.actions';
+import * as spaceSelectors from '../spaces/state/space.selector';
+import { takeWhile } from 'rxjs/operators';
+import { SpaceQueryResult } from '../spaces/models/spaceQueryResult';
 
 @Component({
   selector: 'app-home',
@@ -16,12 +22,22 @@ export class HomeComponent implements OnInit {
     {id: 5, name: 'Klaipėda'}
 ];
   selectedCity: any;
-  constructor(private carouselConfig: NgbCarouselConfig) {
-    carouselConfig.showNavigationArrows = false;
-    carouselConfig.interval = 4000;
+  spaceQueryResult: SpaceQueryResult;
+  componentActive = true;
+  constructor(private carouselConfig: NgbCarouselConfig, private store: Store<spaceReducer.SpaceState>) 
+  {
+      carouselConfig.showNavigationArrows = false;
+      carouselConfig.interval = 4000;
   }
-
+  
   ngOnInit() {
+    this.store.dispatch(new spaceActions.GetSpaces());
+
+    this.store.pipe(select(spaceSelectors.getSpaceQueryResult),
+    takeWhile(() => this.componentActive))
+    .subscribe(spaceQR => {
+      this.spaceQueryResult = spaceQR
+    });
   }
 
   toggleHideSidebar($event: boolean): void {

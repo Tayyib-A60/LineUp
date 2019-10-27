@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { SpaceType } from './models/spaceType.model';
 import { Observable, throwError } from 'rxjs';
-import { tap, catchError } from 'rxjs/operators';
+import { tap, catchError, filter } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { Amenity } from './models/amenity.model';
 import { Space } from './models/space.model';
@@ -50,15 +50,30 @@ export class SpaceService {
     const url = this.url + '/lineUp/getSpaceTypes';
     return this.httpClient.get(url, { headers });
   }
-  // createProduct(product: Product): Observable<Product> {
-  //   const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-  //   product.id = null;
-  //   return this.http.post<Product>(this.productsUrl, product, { headers })
-  //     .pipe(
-  //       tap(data => console.log('createProduct: ' + JSON.stringify(data))),
-  //       catchError(this.handleError)
-  //     );
-  // }
+  
+  getSpaces(filter?: any) {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    const url = this.url + '/lineUp/getSpaces?' + this.toQueryString(filter);
+    return this.httpClient.get(url, { headers });
+  }
+
+  deleteSpace(id: number): Observable<any> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    const url = this.url + '/lineUp/deleteSpace/' + id;
+    return this.httpClient.delete(url, { headers });
+  }
+
+  private toQueryString(obj) {
+    const parts = [];
+    for (const property in obj) {
+      const value = obj[property];
+      if (value != null && value !== undefined) {
+        parts.push(encodeURIComponent(property) + '=' + encodeURIComponent(value));
+      }
+    }
+    return parts.join('&');
+  }
+
   private handleError(err) {
     // in a real world app, we may send the server to some remote logging infrastructure
     // instead of just logging it to the console

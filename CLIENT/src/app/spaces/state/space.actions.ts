@@ -3,6 +3,7 @@ import { SpaceActionTypes } from './space.action.types';
 import { Space } from '../models/space.model';
 import { SpaceType } from '../models/spaceType.model';
 import { Amenity } from '../models/amenity.model';
+import { SpaceQueryResult } from '../models/spaceQueryResult';
 
 export class CreateSpace implements Action {
     readonly type = SpaceActionTypes.CreateSpace;
@@ -82,7 +83,7 @@ export class GetSpaces implements Action {
 export class GetSpacesSuccess implements Action {
     readonly type = SpaceActionTypes.GetSpacesSuccess;
 
-    constructor(public payload: Space[]) {
+    constructor(public payload: SpaceQueryResult) {
         this.type = SpaceActionTypes.GetSpacesSuccess;
     }
 }

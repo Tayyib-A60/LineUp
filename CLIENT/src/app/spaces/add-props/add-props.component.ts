@@ -16,7 +16,7 @@ export class AddPropsComponent implements OnInit {
   spaceTypeForm: FormGroup;
   
     constructor(private formBuilder: FormBuilder,
-                private store: Store<spaceReducer.AppState>,
+                private store: Store<spaceReducer.SpaceState>,
                 private spaceService: SpaceService) { }
 
   ngOnInit() {

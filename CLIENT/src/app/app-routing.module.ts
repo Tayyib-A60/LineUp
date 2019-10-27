@@ -12,10 +12,12 @@ import { SignUpComponent } from './sign-up/sign-up.component';
 import { ListYourSpaceComponent } from './list-your-space/list-your-space.component';
 import { ProfileComponent } from './profile/profile.component';
 import { AddPropsComponent } from './spaces/add-props/add-props.component';
+import { MerchantAuthGuardService } from './services/merchantAuthGuardService';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 
 const routes: Routes = [
-  { path: 'admin', component: AdminComponent, children: [
+  { path: 'admin', component: AdminComponent, canActivate: [ MerchantAuthGuardService ], children: [
     { path: 'add-space', component: AddspaceComponent },
     { path: 'edit-space/:id', component: AddspaceComponent },
     { path: 'manage-space', component: ManagespacesComponent },
@@ -27,8 +29,13 @@ const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'sign-in', component: SignInComponent },
   { path: 'sign-up', component: SignUpComponent },
+  { path: 'sign-up-as-merchant', component: SignUpComponent },
+  { path: 'forgot-password', component: ResetPasswordComponent },
+  { path: 'reset-password', component: ResetPasswordComponent },
+  { path: 'confirm-email', component: ResetPasswordComponent },
   { path: 'list-your-space', component: ListYourSpaceComponent },
-  { path: 'profile', component: ProfileComponent }
+  { path: 'profile', component: ProfileComponent },
+  { path: '**', redirectTo: '' }
 
 ];
 

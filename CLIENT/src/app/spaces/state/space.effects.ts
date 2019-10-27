@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Actions, Effect, ofType, EffectsModule } from '@ngrx/effects';
+import { Actions, Effect, ofType } from '@ngrx/effects';
 import { SpaceService } from '../space.service';
 import { SpaceActionTypes } from './space.action.types';
 import * as spaceActions from './space.actions';
@@ -9,13 +9,18 @@ import { of, Observable } from 'rxjs';
 import { Action } from '@ngrx/store';
 import { Amenity } from '../models/amenity.model';
 import { Space } from '../models/space.model';
-import { GetSingleSpaceSuccess, UpdateSpace } from './space.actions';
+import { SpaceQueryResult } from '../models/spaceQueryResult';
 
 @Injectable()
 export class SpaceEffects {
-
+    query = {
+        userId: 3,
+        currentPage: 1,
+        pageSize: 10
+    };
     constructor(private action$: Actions,
                 private spaceService: SpaceService) { }
+    
     
     @Effect()
     createSpaceType$: Observable<Action> = this.action$.pipe(
@@ -87,4 +92,28 @@ export class SpaceEffects {
             ) 
         )
     );
+
+    @Effect()
+    getSpaces$: Observable<Action> = this.action$.pipe(
+        ofType(SpaceActionTypes.GetSpaces),
+        mergeMap((action: spaceActions.GetSpaces) => this.spaceService.getSpaces(this.query)
+            .pipe(
+                map((spaceQueryResult: SpaceQueryResult) => new spaceActions.GetSpacesSuccess(spaceQueryResult)),
+                catchError(err => of(new spaceActions.GetSpacesFailure(err)))
+            )
+        )
+    );
+
+    @Effect()
+    deleteSpace$: Observable<Action> = this.action$.pipe(
+        ofType(SpaceActionTypes.DeleteSpace),
+        map((action: spaceActions.DeleteSpace) => action.payload),
+        mergeMap((id: number) => 
+            this.spaceService.deleteSpace(id).pipe(
+                map((response: number) => new spaceActions.DeleteSpaceSuccess(response)),
+                catchError(err => of(new spaceActions.DeleteSpaceFailure(err)))
+            )
+        )
+    );
+    
 }

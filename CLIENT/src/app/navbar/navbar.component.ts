@@ -1,8 +1,11 @@
+import { AuthGuardService } from './../services/authguard.service';
 import { Component, Output, EventEmitter, OnDestroy, OnInit, AfterViewInit } from '@angular/core';
 // import { TranslateService } from '@ngx-translate/core';
 import { LayoutService } from '../services/layout.service';
 import { Subscription } from 'rxjs';
 import { ConfigService } from '../services/config.service';
+import { MerchantAuthGuardService } from '../services/merchantAuthGuardService';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: "app-navbar",
@@ -21,27 +24,39 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public config: any = {};
 
-  constructor(
-    // public translate: TranslateService,
-              private layoutService: LayoutService,
-              private configService:ConfigService
-              ) {
-    // const browserLang: string = translate.getBrowserLang();
-    // translate.use(browserLang.match(/en|es|pt|de/) ? browserLang : "en");
+  constructor(private layoutService: LayoutService,
+              private configService:ConfigService,
+              private authGuard: AuthGuardService,
+              private merchantAuthGuard: MerchantAuthGuardService,
+              private router: Router,
+              private route: ActivatedRoute) {
 
-    this.layoutSub = layoutService.changeEmitted$.subscribe(
-      direction => {
-        const dir = direction.direction;
-        if (dir === "rtl") {
-          this.placement = "bottom-left";
-        } else if (dir === "ltr") {
-          this.placement = "bottom-right";
-        }
-      });
+      this.layoutSub = layoutService.changeEmitted$.subscribe(
+        direction => {
+          const dir = direction.direction;
+          if (dir === "rtl") {
+            this.placement = "bottom-left";
+          } else if (dir === "ltr") {
+            this.placement = "bottom-right";
+          }
+        });
   }
 
   ngOnInit() {
     this.config = this.configService.templateConf;
+  }
+
+  merchantIsAuthenticated() {    
+    return localStorage.getItem('currentUser')['roles'] === 'Merchant'? true: false;
+  }
+
+  signOut() {
+    localStorage.removeItem('currentUser');
+    this.router.navigate(['']);
+  }
+
+  anyUserIsAuthenticated() {
+    return localStorage.getItem('currentUser')? true: false;
   }
 
   ngAfterViewInit() {
@@ -54,7 +69,6 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
           this.placement = "bottom-right";
         }
       }, 0);
-     
     }
   }
 

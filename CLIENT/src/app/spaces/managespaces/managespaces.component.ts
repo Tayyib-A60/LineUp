@@ -1,6 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DatatableComponent } from '@swimlane/ngx-datatable/release'
 
+import * as spaceActions from './../state/space.actions';
+import * as spaceReducer from './../state/space.reducers';
+import * as spaceSelectors from './../state/space.selector';
+import { Store, select } from '@ngrx/store';
+import { takeWhile } from 'rxjs/operators';
+import { SpaceQueryResult } from '../models/spaceQueryResult';
+
 @Component({
   selector: 'app-managespaces',
   templateUrl: './managespaces.component.html',
@@ -8,46 +15,26 @@ import { DatatableComponent } from '@swimlane/ngx-datatable/release'
 })
 export class ManagespacesComponent implements OnInit {
 
-  data = [
-    {
-      id: 1,
-      image: 'assets/img/elements/01.png',
-      name: "Ethel Price",
-      location: "V.I",
-      price: "200,000",
-      size: 200
-    },
-    {
-      id: 1,
-      image: 'assets/img/elements/02.png',
-      name: "Ethel Price",
-      location: "V.I",
-      price: "200,000",
-      size: 200
-    },
-    {
-      id: 1,
-      image: 'assets/img/elements/03.png',
-      name: "Ethel Price",
-      location: "V.I",
-      price: "200,000",
-      size: 200
-    },
-    {
-      id: 1,
-      image: 'assets/img/elements/04.png',
-      name: "Ethel Price",
-      location: "V.I",
-      price: "200,000",
-      size: 200
-    },
-  ];
-    @ViewChild(DatatableComponent, {static: false}) table: DatatableComponent;
-
-    constructor() {
+  @ViewChild(DatatableComponent, {static: false}) table: DatatableComponent;
+  spaceQueryResult: SpaceQueryResult;
+  componentActive = true;
+  
+    constructor(private store: Store<spaceReducer.SpaceState>) {
     }
-    ngOnInit() {
 
+    ngOnInit() {
+      this.store.dispatch(new spaceActions.GetSpaces());
+
+      this.store.pipe(select(spaceSelectors.getSpaceQueryResult),
+      takeWhile(() => this.componentActive))
+      .subscribe(spaceQR => {
+        this.spaceQueryResult = spaceQR
+        console.log(this.spaceQueryResult);
+      });
+    }
+
+    deleteSpace(id: number) {
+      this.store.dispatch(new spaceActions.DeleteSpace(id));
     }
 
 }

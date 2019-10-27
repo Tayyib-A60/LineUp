@@ -22,19 +22,17 @@ import { ProfileComponent } from './profile/profile.component';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from 'src/environments/environment';
 import { HttpClientModule } from '@angular/common/http';
-import { SignInComponent } from './sign-in/sign-in.component';
+import { UserModule } from './state/user.module';
+import { UserEffects } from './state/user.effects';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
-    SignUpComponent,
     HomeComponent,
-    SignInComponent,
     ListYourSpaceComponent,
     FooterComponent,
-    ProfileComponent,
-    SignInComponent
+    ProfileComponent
   ],
   imports: [
     AppRoutingModule,
@@ -48,8 +46,9 @@ import { SignInComponent } from './sign-in/sign-in.component';
     NgbModule.forRoot(),
     PerfectScrollbarModule,
     SpacesModule,
+    UserModule,
     StoreModule.forRoot({}),
-    EffectsModule.forRoot([]),
+    EffectsModule.forRoot([UserEffects]),
     StoreDevtoolsModule.instrument({
       name: '234 Spaces',
       maxAge: 25,
