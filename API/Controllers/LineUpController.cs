@@ -28,33 +28,42 @@ namespace API.Controllers {
                 return BadRequest("Space has already been created");
             _lineUpRepository.Add(spaceToCreate);
             await _lineUpRepository.SaveAllChanges();
-            return Ok("Space creation was successful");
+            return Ok();
+        }
+        [HttpGet("getSpace/{spaceId}")]
+        public async Task<IActionResult> GetSpace(int spaceId)
+        {
+            var space = await _lineUpRepository.GetSpace(spaceId);
+            if(space == null)
+                return NotFound("Space does not exist");
+            return Ok(_mapper.Map<SpaceDTO>(space));
         }
         [HttpPut("updateSpace/{spaceId}")]
         public async Task<IActionResult> UpdateSpace(int spaceId, [FromBody] SpaceDTO spaceDTO)
         {
             var space = await _lineUpRepository.GetSpace(spaceId);
+            // _lineUpRepository.Delete(space.Amenities);
             var spaceToUpdate = _mapper.Map<SpaceDTO, Space>(spaceDTO,space);
             if(spaceToUpdate == null)
                 return BadRequest("Space cannot be null");
             if(await _lineUpRepository.EntityExists(spaceToUpdate)) {
                 _lineUpRepository.Update(spaceToUpdate);
                 await _lineUpRepository.SaveAllChanges();
-                return Ok("Space update was successful");
+                return Ok();
             }
-            return BadRequest("You are trying to update a space that doesn't exist");
+            return BadRequest();
         }
 
         [HttpDelete("deleteSpace/{spaceId}")]
-        public IActionResult DeleteSpace(int spaceId)
+        public async Task<IActionResult> DeleteSpace(int spaceId)
         {
-            var spaceToDispose = _lineUpRepository.GetSpace(spaceId);
+            var spaceToDispose = await _lineUpRepository.GetSpace(spaceId);
             if(spaceToDispose != null) {
                 _lineUpRepository.Delete(spaceToDispose);
-                _lineUpRepository.SaveAllChanges();
-                return Ok("Space disposal was successful");
+                await _lineUpRepository.SaveAllChanges();
+                return Ok(spaceId);
             }
-            return NotFound("Space not found");
+            return NotFound();
         }
 
         [HttpGet("getSpaces")]
@@ -65,6 +74,12 @@ namespace API.Controllers {
             return spacesQueryResult;
         }
 
+        [HttpGet("getSpaceTypes")]
+        public async Task<IEnumerable<SpaceType>> GetSpaceTypes()
+        {
+            var spaceTypes = await _lineUpRepository.GetSpaceTypes();
+            return spaceTypes;
+        } 
         [HttpPost("createSpaceType")]
         public async Task<IActionResult> CreateSpaceType([FromBody] SpaceTypeDTO spaceTypeDTO)
         {
@@ -75,7 +90,7 @@ namespace API.Controllers {
                 return BadRequest("Space type already exists");
             _lineUpRepository.Add(spaceTypeToCreate);
             await _lineUpRepository.SaveAllChanges();
-            return Ok("Space type creation was successful");
+            return Ok();
         }
 
         [HttpPut("updateSpaceType/{spaceTypeId}")]
@@ -89,7 +104,7 @@ namespace API.Controllers {
                 return BadRequest("Spacetype does not exist");
             _lineUpRepository.Update(spaceTypeToUpdate);
             await _lineUpRepository.SaveAllChanges();
-            return Ok("Spacetype update was successful");
+            return Ok();
         }
 
         [HttpDelete("deleteSpaceType/{spaceTypeId}")]
@@ -99,22 +114,22 @@ namespace API.Controllers {
             if(spaceTypeToDispose != null) {
                 _lineUpRepository.Delete(spaceTypeToDispose);
                 _lineUpRepository.SaveAllChanges();
-                return Ok("Spacetype delete was successful");
+                return Ok();
             }
-            return NotFound("Spacetype not found");
+            return NotFound();
         }
 
         [HttpPost("createAmenity")]
         public async Task<IActionResult> CreateAmenity([FromBody] AmenityDTO amenityDTO)
         {
-            var amenityToCreate = _mapper.Map<AmenityDTO>(amenityDTO);
+            var amenityToCreate = _mapper.Map<Amenity>(amenityDTO);
             if(amenityToCreate == null)
                 return BadRequest("Amenity cannot be null");
             if(await _lineUpRepository.EntityExists(amenityToCreate))
                 return BadRequest("Amenity already exists");
             _lineUpRepository.Add(amenityToCreate);
             await _lineUpRepository.SaveAllChanges();
-            return Ok("Amenity creation was successful");
+            return Ok();
         }
 
         [HttpPut("updateAmenity/{amenityId}")]
@@ -127,7 +142,7 @@ namespace API.Controllers {
             if(await _lineUpRepository.EntityExists(amenityToUpdate) == false)
                 return BadRequest("Amenity does not exist");
             _lineUpRepository.Update(amenityToUpdate);
-            return Ok("Amenity update was successful");
+            return Ok();
         }
 
         [HttpPost("createBooking")]
@@ -141,7 +156,7 @@ namespace API.Controllers {
             bookingToCreate.Status = BookingStatus.Reserved;
             _lineUpRepository.Add(bookingToCreate);
             await _lineUpRepository.SaveAllChanges();
-            return Ok("Booking creation was successful");
+            return Ok();
         }
 
         [HttpPost("updateBooking/{bookingId}")]
@@ -155,7 +170,7 @@ namespace API.Controllers {
                 return BadRequest("Booking does not exist");
             _lineUpRepository.Update(bookingToUpdate);
             await _lineUpRepository.SaveAllChanges();
-            return Ok("Booking update was successful");
+            return Ok();
         }
 
         [HttpPost("createEnquiry")]
@@ -168,7 +183,7 @@ namespace API.Controllers {
                 return BadRequest("Enquiry already exists");
             _lineUpRepository.Add(enquiryToCreate);
             await _lineUpRepository.SaveAllChanges();
-            return Ok("Enquiry creation was successful");
+            return Ok();
         }
 
         [HttpDelete("deleteEnquiry/{enquiryId}")]
@@ -178,9 +193,9 @@ namespace API.Controllers {
             if(enquiryToDispose != null) {
                 _lineUpRepository.Delete(enquiryToDispose);
                 _lineUpRepository.SaveAllChanges();
-                return Ok("Enquiry delete was successful");
+                return Ok();
             }
-            return NotFound("Operation could not be completed");
+            return NotFound();
         }
 
         [HttpPut("addMessageToBooking/{spaceId}")]
@@ -193,7 +208,7 @@ namespace API.Controllers {
             chatMessage.Time = DateTime.Now;
             booking.Chat.ChatMessages.Add(chatMessage);
             await _lineUpRepository.SaveAllChanges();
-            return Ok("Your message was sent");
+            return Ok();
         }
         [HttpPost("acceptBooking/{bookingId}")]
         public async Task<IActionResult> AcceptBooking(int bookingId)
@@ -202,7 +217,7 @@ namespace API.Controllers {
             if(booking == null)
                 return BadRequest("Booking not found");
             booking.Status = BookingStatus.Booked;
-            return Ok("Booking Accepted");
+            return Ok();
         }
     }
 }

@@ -85,12 +85,16 @@ namespace API.Persistence
         public async Task<Space> GetSpace(int spaceId)
         {
             return await _context.Spaces
+                            .Include(space => space.Type)
+                            .Include(space => space.Amenities)
                             .FirstOrDefaultAsync(s => s.Id == spaceId);
         }
         public async Task<QueryResult<Space>> GetSpaces(SpaceQuery query)
         {
             var spaces =  _context.Spaces
                                     .Where(sp => sp.UserId == query.UserId)
+                                    .Include(sp => sp.Type)
+                                    // .Include(sp => sp.Photos.Where(p => p.IsMain == true))
                                     .AsQueryable();
             spaces = FilterSpaces(query, spaces);
             int count = spaces.Count();
@@ -103,14 +107,14 @@ namespace API.Persistence
         }
         private IQueryable<Space> FilterSpaces(SpaceQuery query, IQueryable<Space> spaces)
         {
-            if(query.Price.HasValue)
+            if(query.Price > 0)
                 spaces = spaces.Where(sp => sp.Price <= query.Price);
             if(!string.IsNullOrWhiteSpace(query.Location))
                 spaces = spaces.Where(sp => sp.Location.ToLower().Contains(query.Location));
             if(!string.IsNullOrWhiteSpace(query.SearchString))
                 spaces = spaces.Where(sp => sp.Location.ToLower().StartsWith(query.SearchString) || sp.Location.ToLower().Contains(query.SearchString) || sp.Name.StartsWith(query.SearchString) || sp.Name.ToLower().Contains(query.SearchString) || sp.Description.Contains(query.SearchString));
-            if(query.Size.HasValue)
-                spaces = spaces.Where(sp => sp.Size <= query.Size);
+            if(query.Size > 0)
+                spaces = spaces.Where(sp => Convert.ToInt64(sp.Size) <= query.Size);
             if(!string.IsNullOrWhiteSpace(query.SpaceType))
                 spaces = spaces.Where(sp => sp.Type.ToString().ToLower() == query.SpaceType.ToLower());
             return spaces;            

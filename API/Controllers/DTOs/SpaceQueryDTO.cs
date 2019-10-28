@@ -3,9 +3,9 @@ namespace API.Controllers.DTOs
     public class SpaceQueryDTO
     {
         public int UserId { get; set; }
-        public string? SearchString { get; set; }
-        public string? SpaceType { get; set; }
-        public string? Location { get; set; }
+        public string SearchString { get; set; }
+        public string SpaceType { get; set; }
+        public string Location { get; set; }
         public int? Size { get; set; }
         public double? Price { get; set; }
         public string SortBy { get; set; }

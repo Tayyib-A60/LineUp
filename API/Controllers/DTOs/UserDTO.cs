@@ -15,6 +15,7 @@ namespace API.Controllers.DTOs
         public string Facebook { get; set; }
         public string Instagram { get; set; }
         public string Twitter { get; set; }
+        public Role Role { get; set; }
         public string Whatsapp { get; set; }
         public string LinkedIn { get; set; }
         public Photo Photo { get; set; }

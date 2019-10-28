@@ -56,7 +56,7 @@ namespace api.Migrations
 
                     b.Property<double>("TotalPrice");
 
-                    b.Property<int?>("UserId");
+                    b.Property<int>("UserId");
 
                     b.Property<DateTime>("UsingFrom");
 
@@ -90,11 +90,9 @@ namespace api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("By");
+
                     b.Property<int?>("ChatId");
-
-                    b.Property<int>("ClientId");
-
-                    b.Property<int>("MerchantId");
 
                     b.Property<string>("Message");
 
@@ -172,7 +170,7 @@ namespace api.Migrations
 
                     b.Property<int?>("TypeId");
 
-                    b.Property<int?>("UserId");
+                    b.Property<int>("UserId");
 
                     b.HasKey("Id");
 
@@ -203,7 +201,6 @@ namespace api.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ContactNo")
-                        .IsRequired()
                         .HasMaxLength(30);
 
                     b.Property<DateTime>("DateRegistered");
@@ -267,7 +264,8 @@ namespace api.Migrations
 
                     b.HasOne("API.Core.Models.User")
                         .WithMany("Bookings")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("API.Core.Models.ChatMessage", b =>
@@ -306,7 +304,8 @@ namespace api.Migrations
 
                     b.HasOne("API.Core.Models.User")
                         .WithMany("Spaces")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

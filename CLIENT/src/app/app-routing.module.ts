@@ -14,24 +14,34 @@ import { ProfileComponent } from './profile/profile.component';
 import { BookingRequestComponent } from './booking-request/booking-request.component';
 import { BookingRequestTwoComponent } from './booking-request-two/booking-request-two.component';
 import { SpaceDisplayComponent } from './space-display/space-display.component';
+import { AddPropsComponent } from './spaces/add-props/add-props.component';
+import { MerchantAuthGuardService } from './services/merchantAuthGuardService';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 
 const routes: Routes = [
-  { path: 'admin', component: AdminComponent, children: [
+  { path: 'admin', component: AdminComponent, canActivate: [ MerchantAuthGuardService ], children: [
     { path: 'add-space', component: AddspaceComponent },
+    { path: 'edit-space/:id', component: AddspaceComponent },
     { path: 'manage-space', component: ManagespacesComponent },
     { path: 'manage-reservations', component: ManagereservationsComponent },
     { path: 'manage-bookings', component: ManagebookingsComponent },
-    { path: 'manage-enquiries', component: ManageenquiriesComponent }
+    { path: 'manage-enquiries', component: ManageenquiriesComponent },
+    { path: 'create-addons', component: AddPropsComponent }
   ]},
   { path: '', component: HomeComponent },
   { path: 'sign-in', component: SignInComponent },
   { path: 'sign-up', component: SignUpComponent },
+  { path: 'sign-up-as-merchant', component: SignUpComponent },
+  { path: 'forgot-password', component: ResetPasswordComponent },
+  { path: 'reset-password', component: ResetPasswordComponent },
+  { path: 'confirm-email', component: ResetPasswordComponent },
   { path: 'list-your-space', component: ListYourSpaceComponent },
   { path: 'profile', component: ProfileComponent },
   { path: 'booking-request', component: BookingRequestComponent },
   { path: 'booking-request-two', component: BookingRequestTwoComponent },
-  { path: 'space-display', component: SpaceDisplayComponent }
+  { path: 'space-display', component: SpaceDisplayComponent },
+  { path: '**', redirectTo: '' }
 
 ];
 

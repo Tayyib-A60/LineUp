@@ -13,5 +13,9 @@ namespace API.Persistence
         public DbSet<Space> Spaces { get; set; }
         public DbSet<Amenity> Amenities { get; set; }
         public DbSet<SpaceType> SpaceTypes { get; set; }
+
+         protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+        }
     }
 }
