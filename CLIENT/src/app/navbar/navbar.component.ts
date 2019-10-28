@@ -6,6 +6,9 @@ import { Subscription } from 'rxjs';
 import { ConfigService } from '../services/config.service';
 import { MerchantAuthGuardService } from '../services/merchantAuthGuardService';
 import { Router, ActivatedRoute } from '@angular/router';
+import * as userReducer from '../state/user.reducers';
+import * as userActions from '../state/user.actions';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: "app-navbar",
@@ -29,7 +32,8 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
               private authGuard: AuthGuardService,
               private merchantAuthGuard: MerchantAuthGuardService,
               private router: Router,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              private store: Store<userReducer.UserState>) {
 
       this.layoutSub = layoutService.changeEmitted$.subscribe(
         direction => {
@@ -52,6 +56,7 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
 
   signOut() {
     localStorage.removeItem('currentUser');
+    this.store.dispatch(new userActions.SignOutUser());
     this.router.navigate(['']);
   }
 

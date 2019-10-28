@@ -8,7 +8,7 @@ export interface UserState {
 }
 
 const INITIAL_STATE: UserState = {
-    currentUser: {},
+    currentUser: null,
     error: '',
     response: null
 };
@@ -28,9 +28,17 @@ export function reducer(state = INITIAL_STATE, action: UserActions) {
                 response: null
             };
         case UserActionTypes.SignInUserSuccess:
+            localStorage.setItem('currentUser', JSON.stringify(action.payload));
             return {
                 ...state,
                 currentUser: action.payload,
+                error: ''
+            };
+        case UserActionTypes.SignOutUser:
+            localStorage.removeItem('currentUser');
+            return {
+                ...state,
+                currentUser: null,
                 error: ''
             };
         case UserActionTypes.SignInUserFailure:

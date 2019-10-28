@@ -39,8 +39,8 @@ export class SignInComponent implements OnInit {
     this.store.pipe(select(userSelectors.getCurrentUser),
     takeWhile(() => this.componentActive))
     .subscribe(currentUser => {
-      localStorage.setItem('currentUser', JSON.stringify(currentUser));
-      this.router.navigate(['../'], {relativeTo: this.route});
+      if(currentUser)
+        this.router.navigate(['../'], {relativeTo: this.route});
     });  
   }
 

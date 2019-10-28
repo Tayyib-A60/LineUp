@@ -58,6 +58,13 @@ export class SignInUser implements Action {
         this.type = UserActionTypes.SignInUser;
     }
 }
+export class SignOutUser implements Action {
+    readonly type = UserActionTypes.SignOutUser;
+
+    constructor() {
+        this.type = UserActionTypes.SignOutUser;
+    }
+}
 
 export class SignInUserSuccess implements Action {
     readonly type = UserActionTypes.SignInUserSuccess;
@@ -124,6 +131,6 @@ export class ResetPasswordFailure implements Action {
 }
 
 export type UserActions = CreateUser | CreateUserSuccess | CreateUserFailure
-| CreateMerchantUser | SignInUser | SignInUserSuccess | SignInUserFailure
+| CreateMerchantUser | SignInUser | SignInUserSuccess | SignInUserFailure | SignOutUser
 | ResetPassword | ResetPasswordSuccess | ResetPasswordFailure | ForgotPassword
 | ForgotPasswordSuccess | ForgotPasswordFailure;
