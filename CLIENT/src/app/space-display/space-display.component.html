@@ -1,0 +1,382 @@
+<app-navbar (toggleHideSidebar)="toggleHideSidebar($event)"></app-navbar>
+<div class="space">
+    <div>
+      <div class="d-flex justify-content-between caption_tab">
+          <a href="#Overview">Overview</a>
+          <a href="#About">About</a>
+          <a href="#Amenities">Amenities</a>
+          <a href="#Location">Location</a>
+          <a href="#Similar-Spaces">Similar Spaces</a>
+        </div>
+        <ngb-carousel>
+          <ng-template ngbSlide>
+            <img class='img_banner' src="assets/img/photos/space2.jpg" alt="Random first slide">
+            <div class="caption_container">
+                <h4 class="caption_text">NGN 3,000 per day</h4>
+                <i class="fa fa-users"></i>
+                <span>&nbsp;25 People</span>
+            </div>
+          </ng-template>
+          <ng-template ngbSlide>
+            <img class='img_banner' src="assets/img/photos/space3.jpg" alt="Random first slide">
+            <!-- <div class="d-flex justify-content-between caption_tab">
+                <a href="#Overview">Overview</a>
+                <a href="#About">About</a>
+                <a href="#Amenities">Amenities</a>
+                <a href="#Location">Location</a>
+                <a href="#Similar-Spaces">Similar Spaces</a>
+              </div> -->
+            <div class="caption_container">
+                <h4 class="caption_text">NGN 3,000 per day</h4>
+                <i class="fa fa-users"></i>
+                <span>&nbsp;25 People</span>
+            </div>
+          </ng-template>
+          <ng-template ngbSlide>
+            <img class='img_banner' src="assets/img/photos/space5.jpg" alt="Random first slide">
+            <!-- <div class="d-flex justify-content-between caption_tab">
+                <a href="#Overview">Overview</a>
+                <a href="#About">About</a>
+                <a href="#Amenities">Amenities</a>
+                <a href="#Location">Location</a>
+                <a href="#Similar-Spaces">Similar Spaces</a>
+              </div> -->
+            <div class="caption_container">
+                <h4 class="caption_text">NGN 3,000 per day</h4>
+                <i class="fa fa-users"></i>
+                <span>&nbsp;25 People</span>
+            </div>
+          </ng-template>
+        </ngb-carousel>
+      </div>
+      <div class="container-fluid space_container mt-4">
+          <div class="row">
+            <div class="col-sm-12 mb-2">
+              <p class="text-bold-200 space_dash">-</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-8">
+                <h1 class="space_head">Landmark Towers</h1>
+                <div class="row lead">
+                  <div class="col-md-3">
+                    <p>Lagos, Victoria Island.</p>
+                  </div>
+                  <div class="col-md-5">
+                    <p>Paramount 1-5 Persons</p>
+                  </div>
+                  <div class="col-md-4">
+                    <i class="fa fa-heart"></i>
+                    <span class="fav_size">&nbsp; <a href="">Add to my favorites</a></span>
+                  </div>
+                </div>
+                <div class="d-flex">
+                  <ngb-rating max="5" [(rate)]="currentRate"></ngb-rating>
+                  <p><b>&nbsp; {{currentRate}}</b></p>
+                </div>
+                <div class="d-flex flex-column align-content-center" id="About">
+                  <h3 class="lead text-bold-700 mb-3 mt-4">About this Space</h3>
+                  <p class="align-self-center">Lorem ipsum dolor sit amet, consectetur adipiscing elit donec consectetur semper nunc in molestie. Sed velilectus, porttitor eu convallis sit amet, semper eget mauris. Integer in pulvinar mauris. Donec facilisis cerat magna sed cursus. Mauris vel tristique arcu. Duis congue orci id libero dictum sollicitudin.Curabitur dapibus arcu leo, condimentum tempus augue condimentum sed. Aliquam sed auctor ex. Nunc quis eros dictum scelerisque ut ac urna. Etiam vel felis molestie, malesuada neque tempus, bibendu maurisNullam sit amet rhoncus nisl. Quisque non vehicula dui. Vestibulum neque tortor, placerat sit amet condimentum euismod, suscipit lobortis diam. Sed varius elit non erat dignissim vulputate.
+                  </p>
+                </div>
+                <div id="Amenities">
+                    <h3 class="lead text-bold-700 mb-3 mt-4">Amenities</h3>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-md-4 col-sm-12">    
+                      <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input lead" id="defaultUnchecked">
+                        <label class="custom-control-label text-bold-600" for="defaultUnchecked">&nbsp; Free Wifi</label>
+                      </div>
+                    </div>
+                    <div class="col-md-4 col-sm-12">    
+                      <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="defaultUnchecked">
+                        <label class="custom-control-label text-bold-600" for="defaultUnchecked">&nbsp; Dedicated Telephone</label>
+                      </div>
+                    </div>
+                    <div class="col-md-4 col-sm-12">    
+                      <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="defaultUnchecked">
+                        <label class="custom-control-label text-bold-600" for="defaultUnchecked">&nbsp; Projector Machine</label>
+                      </div>
+                    </div>
+                    
+                </div>
+                <div class="row mb-4">
+                    <div class="col-md-4 col-sm-12">    
+                      <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input lead" id="defaultUnchecked">
+                        <label class="custom-control-label text-bold-600" for="defaultUnchecked">&nbsp; Fax</label>
+                      </div>
+                    </div>
+                    <div class="col-md-4 col-sm-12">    
+                      <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="defaultUnchecked">
+                        <label class="custom-control-label text-bold-600" for="defaultUnchecked">&nbsp; White Board</label>
+                      </div>
+                    </div>
+                    <div class="col-md-4 col-sm-12">    
+                      <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="defaultUnchecked">
+                        <label class="custom-control-label text-bold-600" for="defaultUnchecked">&nbsp; Printer/Photocopier</label>
+                      </div>
+                    </div>
+                    
+                </div>
+                <div class="row mb-4">
+                    <div class="col-md-4 col-sm-12">    
+                      <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input lead" id="defaultUnchecked">
+                        <label class="custom-control-label text-bold-600" for="defaultUnchecked">&nbsp; Kichenette</label>
+                      </div>
+                    </div>
+                    <div class="col-md-4 col-sm-12">    
+                      <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="defaultUnchecked">
+                        <label class="custom-control-label text-bold-600" for="defaultUnchecked">&nbsp; Front Desk</label>
+                      </div>
+                    </div>
+                    <div class="col-md-4 col-sm-12">    
+                      <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="defaultUnchecked">
+                        <label class="custom-control-label text-bold-600" for="defaultUnchecked">&nbsp; Coffee/Tea</label>
+                      </div>
+                    </div>   
+                </div>
+                <div class="d-flex flex-column" id="Location">
+                    <h3 class="lead text-bold-700 mb-3 mt-4">Location</h3>
+                    <!-- <section id="map">
+                        <div class="row text-left">
+                            <div class="col-sm-12">
+                                <div class="content-header">Google Map</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="card">
+                                    <div class="card-content">
+                                        <div class="card-body mt-2">
+                                            <agm-map [latitude]="lat" [longitude]="lng">
+                                                <agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
+                                            </agm-map>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section> -->
+                </div>
+            </div>
+            <div class="col-md-4">
+              <div class="space_bg">
+                <div class="option_input">
+                    <div class="row">
+                        <div class="col-7">
+                          <p>I need this space on</p>
+                        </div>
+                        <div class="col-5">
+                          <p>For</p>
+                        </div>  
+                    </div>
+                    <div class="d-flex justify-content-between">
+                      <select name="choice" class="lineup_custom_input">
+                          <option value="" disabled selected hidden><p>Date</p></option>
+                          <option value="second">Date</option>
+                          <option value="third">Date</option>
+                      </select>
+                      <select class="lineup_custom_input">
+                          <option value="" disabled selected hidden><p>No of Persons</p></option>
+                          <option value="second">Date</option>
+                          <option value="third">Date</option>
+                      </select>
+                    </div>
+                </div>
+                <div class="option_input mt-4">
+                    <div class="row">
+                        <div class="col-7">
+                          <p>From</p>
+                        </div>
+                        <div class="col-5">
+                          <p>To</p>
+                        </div>  
+                    </div>
+                    <div class="d-flex justify-content-between">
+                      <select name="choice" class="lineup_custom_input">
+                          <option value="" disabled selected hidden><p>Date & Time</p></option>
+                          <option value="second">Date</option>
+                          <option value="third">Date</option>
+                      </select>
+                      <select class="lineup_custom_input">
+                          <option value="" disabled selected hidden><p>Date & Time</p></option>
+                          <option value="second">Date</option>
+                          <option value="third">Date</option>
+                      </select>
+                    </div>
+                </div>
+                <div class="mt-2">
+                  <i class="fa fa-plus-circle"></i>
+                  <span>&nbsp; <a href="">Add more date and time</a></span>
+                </div>
+                <div class="mb-3 mt-4">
+                  <p class="space_text">Space Availability</p>
+                  <div class="d-flex justify-content-between">
+                    <div>
+                      <i class="fa fa-clock"></i>
+                      <span>&nbsp; 8:30AM</span>
+                    </div>
+                    <div class="card_time_format">
+                      <span>11:30AM</span>
+                    </div>
+                    <div>
+                      <span>12:00AM</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <button type="button" class="btn btn-raised px-2 mb-0">
+                          <span class="d-lg-inline-block d-none space_btn">BOOK NOW</span>
+                        </button>
+                      </div>
+                      <div>
+                          <button type="button" class="btn btn-raised px-2 mb-0">
+                            <span class="d-lg-inline-block d-none space_btn">RESERVE SPACE</span>
+                          </button>
+                        </div>
+                </div>
+              </div>
+              <div class="space_bg">
+                <h3 class="lead text-bold-700 mb-3 mt-4">Cancellation Rules</h3>
+              </div>
+          </div>
+      </div>
+      <div class="d-flex flex-column" id="Similar-Spaces">
+        <h3 class="lead text-bold-700 mb-3 mt-4">Similar Spaces</h3>
+        <div class="card-container">
+            <div class="row text-left" matchHeight="card">
+                <div class="col-lg-4 col-md-12 col-sm-12">
+                    <div class="card">
+                      <div class="card-content card-bg hct">
+                        <div class="card-img">
+                          <img class="card-img-top img-fluid card-radius" src="assets/img/photos/14.jpg" alt="Card image cap">
+                          <h4 class="card-title home-card-title">NGN 3,000 per day</h4>
+                          <a class="btn btn-floating halfway-fab bg-warning"><i class="ft-heart"></i></a>
+                        </div>
+                        <div class="card-body card-body-pad">
+                          <div class="row justify-content-between">
+                            <div class="col-6">
+                                <h3 class="home-card-text">Landmark Towers</h3>
+                            </div>
+                                <div class="col-3">
+                                  <ngb-rating max="5" [(rate)]="firstRating"></ngb-rating>
+                                </div>
+                                <div class="col-3">
+                                    <p><b>{{firstRating}}</b></p>
+                                </div>
+                          </div>
+                          <p class="card-text">Creative workspace in Lekki overlooking the atlantic ocean.</p>
+                          <div class="card-footer card-footer-pad">
+                              <p class="space_text">Space Availability</p>
+                              <div class="d-flex justify-content-between">
+                                <div>
+                                  <i class="fa fa-clock"></i>
+                                   <span>&nbsp; 8:30AM</span>
+                                </div>
+                                <div class="card_time_format">
+                                  <span>11:30AM</span>
+                                </div>
+                                <div>
+                                  <span>12:00AM</span>
+                                </div>
+                              </div>    
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-12 col-sm-12">
+                    <div class="card">
+                      <div class="card-content card-bg hct">
+                        <div class="card-img">
+                          <img class="card-img-top img-fluid card-radius" src="assets/img/photos/14.jpg" alt="Card image cap">
+                          <h4 class="card-title home-card-title">NGN 3,000 per day</h4>
+                          <a class="btn btn-floating halfway-fab bg-warning"><i class="ft-heart"></i></a>
+                        </div>
+                        <div class="card-body card-body-pad">
+                          <div class="row justify-content-between">
+                            <div class="col-6">
+                                <h3 class="home-card-text">Landmark Towers</h3>
+                            </div>
+                                <div class="col-3">
+                                  <ngb-rating max="5" [(rate)]="firstRating"></ngb-rating>
+                                </div>
+                                <div class="col-3">
+                                    <p><b>{{firstRating}}</b></p>
+                                </div>
+                          </div>
+                          <p class="card-text">Creative workspace in Lekki overlooking the atlantic ocean.</p>
+                          <div class="card-footer card-footer-pad">
+                              <p class="space_text">Space Availability</p>
+                              <div class="d-flex justify-content-between">
+                                <div>
+                                  <i class="fa fa-clock"></i>
+                                   <span>&nbsp; 8:30AM</span>
+                                </div>
+                                <div class="card_time_format">
+                                  <span>11:30AM</span>
+                                </div>
+                                <div>
+                                  <span>12:00AM</span>
+                                </div>
+                              </div>    
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-12 col-sm-12">
+                    <div class="card">
+                      <div class="card-content card-bg hct">
+                        <div class="card-img">
+                          <img class="card-img-top img-fluid card-radius" src="assets/img/photos/14.jpg" alt="Card image cap">
+                          <h4 class="card-title home-card-title">NGN 3,000 per day</h4>
+                          <a class="btn btn-floating halfway-fab bg-warning"><i class="ft-heart"></i></a>
+                        </div>
+                        <div class="card-body card-body-pad">
+                          <div class="row justify-content-between">
+                            <div class="col-6">
+                                <h3 class="home-card-text">Landmark Towers</h3>
+                            </div>
+                                <div class="col-3">
+                                  <ngb-rating max="5" [(rate)]="firstRating"></ngb-rating>
+                                </div>
+                                <div class="col-3">
+                                    <p><b>{{firstRating}}</b></p>
+                                </div>
+                          </div>
+                          <p class="card-text">Creative workspace in Lekki overlooking the atlantic ocean.</p>
+                          <div class="card-footer card-footer-pad">
+                              <p class="space_text">Space Availability</p>
+                              <div class="d-flex justify-content-between">
+                                <div>
+                                  <i class="fa fa-clock"></i>
+                                   <span>&nbsp; 8:30AM</span>
+                                </div>
+                                <div class="card_time_format">
+                                  <span>11:30AM</span>
+                                </div>
+                                <div>
+                                  <span>12:00AM</span>
+                                </div>
+                              </div>    
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+      </div>
+</div>
+<app-footer></app-footer>

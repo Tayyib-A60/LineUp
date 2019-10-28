@@ -99,9 +99,9 @@
       background-color: transparent;
     }
   }
-.home-card-title {
-  font-size: .8rem !important;
-}
+// .home-card-title {
+//   font-size: .8rem !important;
+// }
 
 .card .btn-floating {
   background-color: #fff !important;
@@ -123,7 +123,9 @@
     font-size: .9rem !important;
   
   }
-
+  &-margin {
+    margin-top: -5em !important;
+  }
   &-text {
     font-size: 1rem;
     font-weight: bold;
@@ -149,3 +151,21 @@
   }
 }
 
+.home {
+  &_dash {
+    font-size: 5rem;
+    
+  }
+  &_sub-head {
+    line-height: .5;
+  }
+  &_body-pad {
+    padding: 1.8rem .5rem 1rem .5rem;
+    
+    
+  }
+  &_card-footer {
+    padding: 1rem 0 0 0;
+  }
+
+}

@@ -19,6 +19,9 @@ import { SignInComponent } from './sign-in/sign-in.component';
 import { ListYourSpaceComponent } from './list-your-space/list-your-space.component';
 import { FooterComponent } from './footer/footer.component';
 import { ProfileComponent } from './profile/profile.component';
+import { BookingRequestComponent } from './booking-request/booking-request.component';
+import { BookingRequestTwoComponent } from './booking-request-two/booking-request-two.component';
+import { SpaceDisplayComponent } from './space-display/space-display.component';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from 'src/environments/environment';
 import { HttpClientModule } from '@angular/common/http';
@@ -32,7 +35,10 @@ import { UserEffects } from './state/user.effects';
     HomeComponent,
     ListYourSpaceComponent,
     FooterComponent,
-    ProfileComponent
+    ProfileComponent,
+    BookingRequestComponent,
+    BookingRequestTwoComponent,
+    SpaceDisplayComponent
   ],
   imports: [
     AppRoutingModule,

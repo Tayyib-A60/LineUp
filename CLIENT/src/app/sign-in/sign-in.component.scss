@@ -20,6 +20,27 @@
         padding: .9rem 2.5rem !important;
         border-radius: 25px;
     }
+
+    &_text {
+        font-size: 1.5rem;
+    }
+    &_dash {
+        font-size: 1rem; 
+        margin-left: 2rem;
+    }
+    &_col {
+        background-color: #fff; 
+        padding: 8rem 2rem;
+    }
+    &_sub-head {
+        line-height: .6;
+    }
+    &_form {
+        box-shadow: 0 25px 25px -38px #aaa;
+    }
+    &_data {
+        border-left: 3px solid #000;
+    }
 }
 .form-data {
     border: 1px solid #aaa; 
