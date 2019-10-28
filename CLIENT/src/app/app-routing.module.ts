@@ -11,6 +11,9 @@ import { SignInComponent } from './sign-in/sign-in.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { ListYourSpaceComponent } from './list-your-space/list-your-space.component';
 import { ProfileComponent } from './profile/profile.component';
+import { BookingRequestComponent } from './booking-request/booking-request.component';
+import { BookingRequestTwoComponent } from './booking-request-two/booking-request-two.component';
+import { SpaceDisplayComponent } from './space-display/space-display.component';
 
 
 const routes: Routes = [
@@ -25,7 +28,10 @@ const routes: Routes = [
   { path: 'sign-in', component: SignInComponent },
   { path: 'sign-up', component: SignUpComponent },
   { path: 'list-your-space', component: ListYourSpaceComponent },
-  { path: 'profile', component: ProfileComponent }
+  { path: 'profile', component: ProfileComponent },
+  { path: 'booking-request', component: BookingRequestComponent },
+  { path: 'booking-request-two', component: BookingRequestTwoComponent },
+  { path: 'space-display', component: SpaceDisplayComponent }
 
 ];
 

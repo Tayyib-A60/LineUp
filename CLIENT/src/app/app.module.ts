@@ -18,6 +18,9 @@ import { SignInComponent } from './sign-in/sign-in.component';
 import { ListYourSpaceComponent } from './list-your-space/list-your-space.component';
 import { FooterComponent } from './footer/footer.component';
 import { ProfileComponent } from './profile/profile.component';
+import { BookingRequestComponent } from './booking-request/booking-request.component';
+import { BookingRequestTwoComponent } from './booking-request-two/booking-request-two.component';
+import { SpaceDisplayComponent } from './space-display/space-display.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +31,10 @@ import { ProfileComponent } from './profile/profile.component';
     SignInComponent,
     ListYourSpaceComponent,
     FooterComponent,
-    ProfileComponent
+    ProfileComponent,
+    BookingRequestComponent,
+    BookingRequestTwoComponent,
+    SpaceDisplayComponent
   ],
   imports: [
     AppRoutingModule,
