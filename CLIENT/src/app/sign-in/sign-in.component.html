@@ -1,19 +1,31 @@
 <div class="row text-left justify-content-center">
   <div class="col-7 signIn">
     <div class="d-flex justify-content-between signIn-nav">
+      <a class="signIn_text" href="">234Spaces<span class="signIn_dash">|</span></a>
       <a style="font-size: 1.5rem;" [routerLink]="['/']" routerLinkActive="router-link-active" >234Spaces<span style="font-size: 1rem; margin-left: 2rem;">|</span></a>
+
       <a href="">Favorites</a>
       <a href="">Sign In</a>
       <a href="">Sign Up</a>
     </div>
   </div>
-  <div style="background-color: #fff; padding: 8rem 2rem;" class="col-5">
+  <div class="col-5 signIn_col">
     <div class="container">
       <h2 class="text-bold-700 mb-3">We are 234Spaces</h2>
-      <div style="line-height: .6;" class="lead mb-3">
+      <div class="lead mb-3 signIn_sub-head">
         <p class="lead">Welcome back, Please login</p>
         <p class="lead">to your account</p>
       </div>
+      <div class="signIn_form">
+        <fieldset class="form-group">
+            <!-- <label for="disabledInput">Input with Placeholder</label> -->
+            <div class="form-data signIn_data">
+              <label class="form-data-label" for="disabledInput">Email</label>
+              <input type="email" class="form-control form-data-input" id="placeholderInput" placeholder="janedoe@gmail.com">
+            </div>
+            <div class="form-data">
+              <label class="form-data-label" for="disabledInput">Password</label>
+              <input type="email" class="form-control form-data-input" id="placeholderInput" placeholder="***********">
       <div style="box-shadow: 0 25px 25px -38px #aaa;">
         <form novalidate (ngSubmit)='signIn()' [formGroup]="signInForm" class="form">
           <div class="form-body">
@@ -45,6 +57,20 @@
               </a>
             </div>
           </div>
+        </div>
+        <div class="forgot-password-option">
+          <a 
+            [routerLink]="['/pages/forgotpassword']"
+            class="text-decoration-none text-primary"
+            >Forgot Password ?
+          </a>
+        </div>
+      </div>
+      <div class="d-flex align-items-baseline justify-content-between">
+        <p>Do you have an account? <a href="" class="text-bold-500">Sign Up</a></p>
+        <button type="button" class="btn btn-raised px-4 mb-0  explore_spaces-icon">
+          <span class="d-lg-inline-block d-none signIn-btn">SIGN IN</span>
+        </button>
           <div class="d-flex align-items-baseline justify-content-between">
             <p>Don't have an account? <a [routerLink]="['/sign-up']" class="text-bold-500">Sign Up</a></p>
             <button type="submit" class="btn btn-raised px-4 mb-0  explore_spaces-icon">
