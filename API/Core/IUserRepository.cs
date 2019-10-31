@@ -12,7 +12,8 @@ namespace API.Core
         Task<User> GetUser(string email);
         Task<User> CreateUser(User user, string password);
         void UpdateUser (string newPassword, User userToUpdate);
-        void VerifyUserEmail (User user);
+        void UpdateUserStatus(User userToVerify);
+        void VerifyAsMerchant (User user);
         void EmailSender(Message message);
         void DeleteUser(User user);
         Task<bool> UserExists(User user);

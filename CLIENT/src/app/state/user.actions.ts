@@ -129,8 +129,53 @@ export class ResetPasswordFailure implements Action {
         this.type = UserActionTypes.ResetPasswordFailure;
     }
 }
+export class ConfirmEmail implements Action {
+    readonly type = UserActionTypes.ConfirmEmail;
+
+    constructor(public payload: any) {
+        this.type = UserActionTypes.ConfirmEmail;
+    }
+}
+export class ConfirmEmailSuccess implements Action {
+    readonly type = UserActionTypes.ConfirmEmailSuccess;
+
+    constructor(public payload: string) {
+        this.type = UserActionTypes.ConfirmEmailSuccess;
+    }
+}
+export class ConfirmEmailFailure implements Action {
+    readonly type = UserActionTypes.ConfirmEmailFailure;
+
+    constructor(public payload: string) {
+        this.type = UserActionTypes.ConfirmEmailFailure;
+    }
+}
+export class ConfirmAsMerchant implements Action {
+    readonly type = UserActionTypes.ConfirmAsMerchant;
+
+    constructor(public payload: any) {
+        this.type = UserActionTypes.ConfirmAsMerchant;
+    }
+}
+export class ConfirmAsMerchantSuccess implements Action {
+    readonly type = UserActionTypes.ConfirmAsMerchantSuccess;
+
+    constructor(public payload: string) {
+        this.type = UserActionTypes.ConfirmAsMerchantSuccess;
+    }
+}
+export class ConfirmAsMerchantFailure implements Action {
+    readonly type = UserActionTypes.ConfirmAsMerchantFailure;
+
+    constructor(public payload: string) {
+        this.type = UserActionTypes.ConfirmAsMerchantFailure;
+    }
+}
+
 
 export type UserActions = CreateUser | CreateUserSuccess | CreateUserFailure
 | CreateMerchantUser | SignInUser | SignInUserSuccess | SignInUserFailure | SignOutUser
 | ResetPassword | ResetPasswordSuccess | ResetPasswordFailure | ForgotPassword
-| ForgotPasswordSuccess | ForgotPasswordFailure;
+| ForgotPasswordSuccess | ForgotPasswordFailure | ConfirmEmail
+| ConfirmEmailSuccess | ConfirmEmailFailure | ConfirmAsMerchant
+| ConfirmAsMerchantSuccess | ConfirmAsMerchantFailure;

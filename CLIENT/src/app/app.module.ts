@@ -27,6 +27,8 @@ import { environment } from 'src/environments/environment';
 import { HttpClientModule } from '@angular/common/http';
 import { UserModule } from './state/user.module';
 import { UserEffects } from './state/user.effects';
+import { BookingModule } from './state/booking/booking.module';
+import { BookingEffects } from './state/booking/booking.effects';
 
 @NgModule({
   declarations: [
@@ -53,8 +55,9 @@ import { UserEffects } from './state/user.effects';
     PerfectScrollbarModule,
     SpacesModule,
     UserModule,
+    BookingModule,
     StoreModule.forRoot({}),
-    EffectsModule.forRoot([UserEffects]),
+    EffectsModule.forRoot([UserEffects, BookingEffects]),
     StoreDevtoolsModule.instrument({
       name: '234 Spaces',
       maxAge: 25,

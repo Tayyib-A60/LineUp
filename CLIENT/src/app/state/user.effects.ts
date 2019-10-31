@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { Actions, Effect, ofType, act } from '@ngrx/effects';
+import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Action } from '@ngrx/store';
 import { UserService } from './user.service';
 import { UserActionTypes } from './user.action.types';
@@ -76,5 +76,30 @@ export class UserEffects {
             )
         )
     );
+
+    @Effect()
+    confirmEmail$: Observable<Action> = this.action$.pipe(
+        ofType(UserActionTypes.ConfirmEmail),
+        map((action: userActions.ConfirmEmail) => action.payload),
+        mergeMap((userToConfirm: any) =>
+            this.userService.confirmEmail(userToConfirm).pipe(
+                map(res => new userActions.ConfirmEmailSuccess(res.toString())),
+                catchError(err => of(new userActions.ConfirmEmailFailure(err)))
+            )
+        )
+    );
+    @Effect()
+    confirmAsMerchant$: Observable<Action> = this.action$.pipe(
+        ofType(UserActionTypes.ConfirmAsMerchant),
+        map((action: userActions.ConfirmAsMerchant) => action.payload),
+        mergeMap((merchantToConfirm: any) =>
+            this.userService.confirmAsMerchant(merchantToConfirm).pipe(
+                map(res => new userActions.ConfirmAsMerchantSuccess(res.toString())),
+                catchError(err => of(new userActions.ConfirmAsMerchantFailure(err)))
+            )
+        )
+    );
+
+
 
 }

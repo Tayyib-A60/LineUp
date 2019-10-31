@@ -50,12 +50,14 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
     this.config = this.configService.templateConf;
   }
 
-  merchantIsAuthenticated() {    
-    return localStorage.getItem('currentUser')['roles'] === 'Merchant'? true: false;
+  merchantIsAuthenticated() {
+    const currrentUser = JSON.parse(localStorage.getItem('currentUser'));
+    if(currrentUser) {      
+      return currrentUser['roles'] == 'Merchant'? true: false;
+    }    
   }
 
   signOut() {
-    localStorage.removeItem('currentUser');
     this.store.dispatch(new userActions.SignOutUser());
     this.router.navigate(['']);
   }

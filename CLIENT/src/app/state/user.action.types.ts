@@ -17,4 +17,10 @@ export enum UserActionTypes {
     ResetPassword = '[User] Reset Password',
     ResetPasswordSuccess = '[User] Reset Password Success',
     ResetPasswordFailure = '[User] Reset Password Failure',
+    ConfirmEmail = '[User] Confirm Email',
+    ConfirmEmailSuccess = '[User] Confirm Email Success',
+    ConfirmEmailFailure = '[User] Confirm Email Failure',
+    ConfirmAsMerchant = '[User] Confirm As Merchant',
+    ConfirmAsMerchantSuccess = '[User] Confirm As Merchant Success',
+    ConfirmAsMerchantFailure = '[User] Confirm As Merchant Failure',
 };

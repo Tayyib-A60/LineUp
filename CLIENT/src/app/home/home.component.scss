@@ -22,7 +22,9 @@
         margin-top: -3rem;
     }
   }
-
+  a {
+    color: #234234;
+  }
   .lineup_custom_input {
     font-size: 1.2rem;
     font-family: inherit;
@@ -30,7 +32,7 @@
     padding: .5rem .7rem;
     border-radius: 2px;
     border: none;
-    border-bottom: .5px solid #234234;
+    border-bottom: 1px solid #234234 !important;
     width: 90%;
     display: block;
     transition: all .3s;

@@ -72,9 +72,17 @@ namespace API.Persistence
 
             return user;
         }
-        public async void VerifyUserEmail (User user)
+        public void UpdateUserStatus(User userToVerify)
         {
-            _context.Entry(user).State = EntityState.Modified;
+            userToVerify.EmailVerified = true;
+            userToVerify.Enabled = true;
+            _context.Users.Update(userToVerify);
+            _context.SaveChangesAsync();
+        }
+        public async void VerifyAsMerchant (User user)
+        {
+            user.VerifiedAsMerchant = true;
+            _context.Users.Update(user);
             await _context.SaveChangesAsync();
         }
         public async void EmailSender(Message message)

@@ -50,4 +50,16 @@ export class UserService {
         const url = this.url + `/lineUp/user/${user['id']}`;
         return this.httpClient.put(url, user, { headers });
     }
+    
+    confirmEmail(user: object) {
+        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        const url = this.url + `/lineUp/user/verifyAccount`;
+        return this.httpClient.put(url, user, { headers });
+    }
+
+    confirmAsMerchant(user: object) {
+        const headers = new HttpHeaders({'Content-Type': 'application/json' });
+        const url = `${this.url}/lineUp/user/verifyAsMerchant`;
+        return this.httpClient.put(url, user, { headers });
+    }
 }

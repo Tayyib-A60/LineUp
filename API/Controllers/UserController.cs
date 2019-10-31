@@ -190,7 +190,7 @@ namespace API.Controllers {
             if(await _userRepository.UserExists(userToVerifyEmail) == false)
                 return BadRequest("User does not exist");
             userToVerifyEmail.EmailVerified = true;
-            _userRepository.VerifyUserEmail(userToVerifyEmail);
+            _userRepository.UpdateUserStatus(userToVerifyEmail);
             return Ok();
         }
 
@@ -220,7 +220,6 @@ namespace API.Controllers {
         }
 
         [HttpPut ("{id}")]
-        [AllowAnonymous]
         public async Task<IActionResult> UpdateUser (int id, [FromBody] UserDTO userResource) {
             if (userResource == null)
                 return BadRequest("User cannot be null");
@@ -232,6 +231,31 @@ namespace API.Controllers {
              return Ok();
         }
 
+        [HttpPut("verifyAccount")]
+        public async Task<IActionResult> VerifyUserAccount([FromBody] UserDTO userResource) {
+            if (userResource == null)
+                return BadRequest("User cannot be null");
+            var userToUpdate = await _userRepository.GetUser(userResource.Id);
+            if(userToUpdate.EmailVerified || userToUpdate.Enabled)
+                return Ok();
+            if (userToUpdate == null)
+                return NotFound("User does not exist");
+            //  _mapper.Map<UserDTO, User> (userResource, userToUpdate);
+             _userRepository.UpdateUserStatus(userToUpdate);
+             return Ok();
+        }
+        [HttpPut("verifyAsMerchant")]
+        public async Task<IActionResult> VerifyAsMerchant([FromBody] UserDTO userResource) {
+            if (userResource == null)
+                return BadRequest("User cannot be null");
+            var userToUpdate = await _userRepository.GetUser(userResource.Id);
+            if (userToUpdate == null)
+                return NotFound("User does not exist");
+            //  _mapper.Map<UserDTO, User> (userResource, userToUpdate);
+             _userRepository.VerifyAsMerchant(userToUpdate);
+             return Ok();
+        }
+
         [HttpDelete ("{id}")]
         public async Task<IActionResult> Delete (int id) {
             var user = await _userRepository.GetUser (id);
@@ -240,7 +264,7 @@ namespace API.Controllers {
         }
         private string MailString(string origin, string token)
         {
-            return $"<br/><br/><div style='background-color: #FFEFD5; height: 60% !important;'><h2 style='text-align: center; padding-top: 15px;'><strong>Welcome to 234Spaces</strong></h2><p>To verify your email, please click the button or link below to verify your email</p> <br> <a class='resetBtn' href='{origin.ToString()}/verifyEmail?token={token}' style='background-color: #00FF7F; color: #0c0b0b; padding: 6px; border-radius: 3px; text-decoration: none;'>Verify Email</a><br><p>&nbsp;<p><p>{origin.ToString()}/verifyEmail?token={token}</p></div>";
+            return $"<br/><br/><div style='background-color: #FFEFD5; height: 60% !important;'><h2 style='text-align: center; padding-top: 15px;'><strong>Welcome to 234Spaces</strong></h2><p>To verify your email, please click the button or link below to verify your email</p> <br> <a class='resetBtn' href='{origin.ToString()}/confirm-email?token={token}' style='background-color: #00FF7F; color: #0c0b0b; padding: 6px; border-radius: 3px; text-decoration: none;'>Verify Email</a><br><p>&nbsp;<p><p>{origin.ToString()}/confirm-email?token={token}</p></div>";
         }
     }
 }

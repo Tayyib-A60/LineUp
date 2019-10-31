@@ -1,4 +1,4 @@
-import { UserActions, ForgotPasswordFailure } from './user.actions';
+import { UserActions } from './user.actions';
 import { UserActionTypes } from './user.action.types';
 
 export interface UserState {
@@ -70,6 +70,32 @@ export function reducer(state = INITIAL_STATE, action: UserActions) {
                 ...state,
                 error: action.payload,
                 response: null
+            };
+        case UserActionTypes.ConfirmAsMerchantSuccess:
+            console.log('Confirmed as merchant');
+            return {
+                ...state,
+                response: action.payload,
+                error: null
+            };
+        case UserActionTypes.ConfirmAsMerchantFailure:
+            return {
+                ...state,
+                response: null,
+                error: action.payload
+            };
+        case UserActionTypes.ConfirmEmailSuccess:
+            console.log('Email Confirmed');
+            return {
+                ...state,
+                response: action.payload,
+                error: null
+            };
+        case UserActionTypes.ConfirmEmailFailure:
+            return {
+                ...state,
+                response: null,
+                error: action.payload
             };
         default: return state;
     }

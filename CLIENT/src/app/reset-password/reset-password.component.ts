@@ -37,25 +37,36 @@ export class ResetPasswordComponent implements OnInit {
   }
 
   private initializeForm() {
+    this.route.queryParams.subscribe(res => {
+      const token = res['token'];
+      this.payload = jwthelper.decodeToken(token);
+      this.expired = jwthelper.isTokenExpired(token);
+      if(this.resetPasswordPage || this.confirmEmail) {
+          if(this.expired) {
+            this.router.navigate(['../'], {relativeTo: this.route});
+          }
+      }
+    });
     if(this.forgotPasswordPage) {
       this.form = this.formBuilder.group({
         email:['', [Validators.required, Validators.email]],
       });
-    } else if(this.resetPasswordPage) {
-        this.route.queryParams.subscribe(res => {
-          const token = res['token'];
-          this.payload = jwthelper.decodeToken(token);
-          this.expired = jwthelper.isTokenExpired(token);
-          if(this.expired) {
-            this.router.navigate(['../'], {relativeTo: this.route});
-          }
-        });
-        console.log(this.payload);
-        this.form = this.formBuilder.group({
-          name: [this.payload['unique_name'], Validators.required],
-          email:[this.payload['nameid'], [Validators.required, Validators.email]],
-          password:['', [Validators.required, Validators.minLength(8)]]
-        });
+    } 
+    if(!this.expired) {
+      if(this.resetPasswordPage) {
+            this.form = this.formBuilder.group({
+              name: [this.payload['unique_name'], Validators.required],
+              email:[this.payload['nameid'], [Validators.required, Validators.email]],
+              password:['', [Validators.required, Validators.minLength(8)]]
+            });
+        } else if(this.confirmEmail) {
+            const user = {
+              email: this.payload['nameid'],
+              id: this.payload['groupsid'],
+              role: this.payload['role']
+            }
+            this.store.dispatch(new userActions.ConfirmEmail(user));
+        }
     }
   }
 
@@ -71,7 +82,12 @@ export class ResetPasswordComponent implements OnInit {
           const userToUpdate = {...this.form.value, id: this.payload['groupsid'], role: this.payload['role']}
           this.store.dispatch(new userActions.ResetPassword(userToUpdate));
     } else if(this.route.snapshot.routeConfig.path === 'confirm-email') {
-
+          const user = {
+            email: this.payload['nameid'],
+            id: this.payload['groupsid'],
+            role: this.payload['role']
+          }
+          this.store.dispatch(new userActions.ConfirmEmail(user));
     }
   }
 
