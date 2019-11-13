@@ -94,6 +94,27 @@ export class GetSpacesFailure implements Action {
         this.type = SpaceActionTypes.GetSpacesFailure;
     }
 }
+export class GetMerchantSpaces implements Action {
+    readonly type = SpaceActionTypes.GetMerchantSpaces;
+
+    constructor() {
+        this.type = SpaceActionTypes.GetMerchantSpaces;
+    }
+}
+export class GetMerchantSpacesSuccess implements Action {
+    readonly type = SpaceActionTypes.GetMerchantSpacesSuccess;
+
+    constructor(public payload: SpaceQueryResult) {
+        this.type = SpaceActionTypes.GetMerchantSpacesSuccess;
+    }
+}
+export class GetMerchantSpacesFailure implements Action {
+    readonly type = SpaceActionTypes.GetMerchantSpacesFailure;
+
+    constructor(public payload: string) {
+        this.type = SpaceActionTypes.GetMerchantSpacesFailure;
+    }
+}
 
 export class GetSingleSpace implements Action {
     readonly type = SpaceActionTypes.GetSingleSpace;
@@ -230,6 +251,7 @@ DeleteSpace | CreateSpaceType | UpdateSpaceType | DeleteSpaceType
 | CreateSpaceSuccess | CreateSpaceFailure | UpdateSpaceSuccess | UpdateSpaceFailure
 | DeleteSpaceSuccess | DeleteSpaceFailure | CreateSpaceTypeSuccess | CreateSpaceTypeFailure
 | UpdateSpaceTypeSuccess | UpdateSpaceTypeFailure | DeleteSpaceTypeSuccess | DeleteSpaceTypeFailure
-| CreateAmenity | CreateAmenitySuccess | CreateAmenityFailure | GetSpaces | GetSpacesSuccess
-| GetSpacesFailure | GetSpaceTypes | GetSpaceTypesSuccess | GetSpaceTypesFailure | GetSingleSpace
+| CreateAmenity | CreateAmenitySuccess | CreateAmenityFailure 
+| GetSpaces | GetSpacesSuccess | GetSpacesFailure | GetMerchantSpaces | GetMerchantSpacesSuccess 
+| GetMerchantSpacesFailure | GetSpaceTypes | GetSpaceTypesSuccess | GetSpaceTypesFailure | GetSingleSpace
 | GetSingleSpaceSuccess | GetSingleSpaceFailure; 

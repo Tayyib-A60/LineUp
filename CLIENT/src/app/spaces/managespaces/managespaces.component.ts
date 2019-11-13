@@ -23,9 +23,9 @@ export class ManagespacesComponent implements OnInit {
     }
 
     ngOnInit() {
-      this.store.dispatch(new spaceActions.GetSpaces());
+      this.store.dispatch(new spaceActions.GetMerchantSpaces());
 
-      this.store.pipe(select(spaceSelectors.getSpaceQueryResult),
+      this.store.pipe(select(spaceSelectors.getMerchantSpaces),
       takeWhile(() => this.componentActive))
       .subscribe(spaceQR => {
         this.spaceQueryResult = spaceQR

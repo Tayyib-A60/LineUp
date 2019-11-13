@@ -3,16 +3,22 @@ import { BookingActionTypes } from './booking.action.types';
 
 export interface BookingState {
     Bookings: any[],
+    customerBookingQR: {},
+    merchantBookingQR: {},
     currentBooking: any,
     error: string,
-    response: any
+    response: any,
+    bookingTimes: any
 }
 
 const INITIAL_STATE: BookingState = {
     Bookings: [],
+    customerBookingQR: {},
+    merchantBookingQR: {},
     currentBooking: null,
     error: '',
-    response: null
+    response: null,
+    bookingTimes: null
 };
 
 export function reducer(state = INITIAL_STATE, action: BookingActions) {
@@ -39,6 +45,42 @@ export function reducer(state = INITIAL_STATE, action: BookingActions) {
             return {
                 ...state,
                 response: null,
+                error: action.payload
+            };
+        case BookingActionTypes.GetCustomerBookingsSuccess:
+            return {
+                ...state,
+                customerBookingQR: action.payload,
+                error: ''
+            };
+        case BookingActionTypes.GetCustomerBookingsFailure:
+            return {
+                ...state,
+                error: action.payload,
+                response: null
+            };
+        case BookingActionTypes.GetMerchantBookingsSuccess:
+            return {
+                ...state,
+                merchantBookingQR: action.payload,
+                error: ''
+            };
+        case BookingActionTypes.GetMerchantBookingsFailure:
+            return {
+                ...state,
+                error: action.payload,
+                response: null
+            };
+        case BookingActionTypes.GetBookingTimesSuccess:
+            return {
+                ...state,
+                bookingTimes: action.payload,
+                error: ''
+            };
+        case BookingActionTypes.GetBookingTimesFailure:
+            return {
+                ...state,
+                bookingTimes: null,
                 error: action.payload
             };
         default:

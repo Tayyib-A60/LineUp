@@ -1,4 +1,10 @@
+import { takeWhile } from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
+import * as bookingActions from '../../state/booking/booking.actions';
+import * as bookingSelectors from '../../state/booking/booking.selector';
+import { BookingState } from '../../state/booking/booking.reducer';
+import { State, Store, select } from '@ngrx/store';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-managebookings',
@@ -7,44 +13,26 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ManagebookingsComponent implements OnInit {
 
-  data = [
-    {
-      id: 1,
-      image: 'assets/img/elements/01.png',
-      name: "Ethel Price",
-      location: "V.I",
-      price: "200,000",
-      size: 200
-    },
-    {
-      id: 1,
-      image: 'assets/img/elements/02.png',
-      name: "Ethel Price",
-      location: "V.I",
-      price: "200,000",
-      size: 200
-    },
-    {
-      id: 1,
-      image: 'assets/img/elements/03.png',
-      name: "Ethel Price",
-      location: "V.I",
-      price: "200,000",
-      size: 200
-    },
-    {
-      id: 1,
-      image: 'assets/img/elements/04.png',
-      name: "Ethel Price",
-      location: "V.I",
-      price: "200,000",
-      size: 200
-    },
-  ];
+  currentUser: any;
+  bookings = [];
+  componentActive = true;
   
-  constructor() { }
+  constructor(private bookingStore: Store<BookingState>,
+              private router: Router) { }
 
   ngOnInit() {
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    this.bookingStore.dispatch(new bookingActions.GetMerchantBookings(this.currentUser['id']));
+    this.bookingStore.pipe(select(bookingSelectors.getMerchantBookings),
+                      takeWhile(() => this.componentActive))
+                      .subscribe(bookings => {
+                        console.log(bookings);
+                        this.bookings = bookings['items'];
+                        if(this.bookings) {
+                          const currentBookingTime = this.bookings[0]['usingFrom'];
+                          console.log(new Date(currentBookingTime));
+                        }             
+    });
   }
 
 }

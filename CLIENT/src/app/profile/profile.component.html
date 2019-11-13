@@ -1,4 +1,4 @@
-<app-navbar (toggleHideSidebar)="toggleHideSidebar($event)"></app-navbar>
+<app-navbar></app-navbar>
 <div class="profile-container">
   <div class="container-fluid">
     <div class="row text-left">
@@ -10,155 +10,305 @@
           </div> -->
           <div class="card-content">
             <div class="card-body">
-              <ngb-tabset type="pills" [orientation]="currentOrientation">
-                <ngb-tab title="Profile">
-                  <ng-template ngbTabContent>
-                    <div class="container-fluid">
-                      <div class="">
-                        <h4 class="pt-3 mb-3 mt-2 text-bold-700">Personal Information</h4>
-                        <div class="d-inline-flex flex-column mb-2 profile_album">
-                            <div class="fonticon-wrap"><i class="fa fa-camera"></i></div>
-                            <!-- <label class="fonticon-classname">fa-camera</label> -->
-                            <!-- <label class="fonticon-unit">f030</label> -->
-                            <a href="">Upload Photo</a>
-                        </div>  
+            <ngb-tabset type="pills" [orientation]="currentOrientation">
+                <ngb-tab>
+                    <ng-template ngbTabTitle>Your Bookings</ng-template>
+                    <ng-template ngbTabContent>
+                        <div class="card-container">
+                            <div class="row text-left" matchHeight="card">
+                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                  <div class="card card-border">
+                                    <div class="card-content card-bg">
+                                      <h4 class="pt-2 mb-4 mt-2 ml-3 text-bold-700">Upcoming Bookings</h4>
+                                      <div class="row text-left ml-2" matchHeight="card">
+                                          <div *ngFor='let booking of upcomingReservations' class="col-lg-4 col-md-12 col-sm-12">
+                                              <div class="card">
+                                                <div class="card-content card-bg">
+                                                  <div class="card-img">
+                                                    <img class="card-img-top img-fluid card-radius" src="assets/img/photos/14.jpg" alt="Card image cap">
+                                                    <h4 class="card-title home-card-title">{{ booking.totalPrice | currency : 'NGN' : 'symbol-narrow'}} per day</h4>
+                                                    <a class="btn btn-floating halfway-fab bg-warning"><i class="ft-heart"></i></a>
+                                                  </div>
+                                                  <div class="card-body card-body-pad">
+                                                    <div class="row justify-content-between">
+                                                      <div class="col-6">
+                                                          <h3 class="home-card-text">{{booking.spaceBooked.name}}</h3>
+                                                      </div>
+                                                          <div class="col-3">
+                                                            <ngb-rating max="5" [(rate)]="currentRate"></ngb-rating>
+                                                          </div>
+                                                          <div class="col-3">
+                                                              <p><b>{{currentRate}}</b></p>
+                                                          </div>
+                                                    </div>
+                                                    <p class="card-text">{{booking.spaceBooked.description}}</p>
+                                                    <div class="card-footer card-footer-pad">
+                                                        <div class="row">
+                                                            <div class="col-6">
+                                                              <span>
+                                                                {{booking.usingFrom | date}}
+                                                              </span>
+                                                            </div>
+                                                            <div class="col-6">
+                                                              <span>
+                                                                {{booking.usingTill | date}}
+                                                              </span>
+                                                            </div>
+                                                            <!-- <div class="col-7">
+                                                              <i class="fa fa-map-marker"></i>
+                                                              <span>&nbsp;Lekki Admiralty road</span>
+                                                            </div> -->
+                                                          </div>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                          </div>
+                                          
+                                      </div>
+                                      <p *ngIf='upcomingReservations.length < 1' class="lead ml-3 mb-4">0 Bookings Found</p>
+                                    </div>
+                                  </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card-container">
+                            <div class="card card-border">
+                                <div class="card-content card-bg">
+                                    <h4 class="pt-2 mb-3 mt-2 ml-3 text-bold-700">Previous Bookings</h4>
+                                  <div class="row text-left ml-2" matchHeight="card">
+                                      <div *ngFor='let booking of previousReservations' class="col-lg-4 col-md-12 col-sm-12">
+                                          <div class="card">
+                                            <div class="card-content card-bg">
+                                              <div class="card-img">
+                                                <img class="card-img-top img-fluid card-radius" src="assets/img/photos/14.jpg" alt="Card image cap">
+                                                <h4 class="card-title home-card-title">NGN 3,000 per day</h4>
+                                                <a class="btn btn-floating halfway-fab bg-warning"><i class="ft-heart"></i></a>
+                                              </div>
+                                              <div class="card-body card-body-pad">
+                                                <div class="row justify-content-between">
+                                                  <div class="col-6">
+                                                      <h3 class="home-card-text">Landmark Towers</h3>
+                                                  </div>
+                                                      <div class="col-3">
+                                                        <ngb-rating max="5" [(rate)]="currentRate"></ngb-rating>
+                                                      </div>
+                                                      <div class="col-3">
+                                                          <p><b>{{currentRate}}</b></p>
+                                                      </div>
+                                                </div>
+                                                <p class="card-text">Creative workspace in Lekki overlooking the atlantic ocean.</p>
+                                                <div class="card-footer card-footer-pad">
+                                                    <div class="row">
+                                                        <div class="col-5">
+                                                          <i class="fa fa-users"></i>
+                                                          <span>&nbsp;Fits 25 guests</span>
+                                                        </div>
+                                                        <div class="col-7">
+                                                          <i class="fa fa-map-marker"></i>
+                                                          <span>&nbsp;Lekki Admiralty road</span>
+                                                        </div>
+                                                      </div>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                      </div>
+                                      
+                                  </div>
+                                  <p *ngIf='previousReservations.length < 1' class="lead ml-3 mb-4">0 Bookings Found</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </ng-template>
+                  </ngb-tab>
+              <ngb-tab title="Profile">
+                <ng-template ngbTabContent>
+                  <div class="container-fluid">
+                    <div class="">
+                      <h4 class="pt-3 mb-3 mt-2 text-bold-700">Personal Information</h4>
+                      <div class="d-inline-flex flex-column mb-2 profile_album">
+                          <div class="fonticon-wrap"><i class="fa fa-camera"></i></div>
+                          <!-- <label class="fonticon-classname">fa-camera</label> -->
+                          <!-- <label class="fonticon-unit">f030</label> -->
+                          <a href="">Upload Photo</a>
+                      </div>  
+                    </div>
+                    <div class="row">
+                      <div class="col-lg-4 col-md-12 col-sm-12">
+                          <div class="profile_card">
+                              <div class="form-group">
+                                  <label for="userinput1">First name</label>
+                                  <input type="text" id="userinput1" class="form-control" name="name" placeholder="Kayode">
+                                </div>
+                          </div>
                       </div>
-                      <div class="row">
+                      <div class="col-lg-4 col-md-12 col-sm-12">
+                          <div class="profile_card">
+                              <div class="form-group">
+                                  <label for="userinput1">Last name</label>
+                                  <input type="text" id="userinput1" class="form-control" name="name" placeholder="Kayode">
+                                </div>
+                          </div>
+                      </div>
+                      <div class="col-lg-4 col-md-12 col-sm-12">
+                          <div class="profile_card">
+                              <div class="form-group">
+                                  <label for="userinput1">Email Address</label>
+                                  <input type="text" id="userinput1" class="form-control" name="name" placeholder="">
+                                </div>
+                          </div>
+                      </div>
+                    </div>
+                    <div class="row">
                         <div class="col-lg-4 col-md-12 col-sm-12">
                             <div class="profile_card">
                                 <div class="form-group">
-                                    <label for="userinput1">First name</label>
-                                    <input type="text" id="userinput1" class="form-control" name="name" placeholder="Kayode">
-                                  </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-12 col-sm-12">
-                            <div class="profile_card">
-                                <div class="form-group">
-                                    <label for="userinput1">Last name</label>
-                                    <input type="text" id="userinput1" class="form-control" name="name" placeholder="Kayode">
-                                  </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-12 col-sm-12">
-                            <div class="profile_card">
-                                <div class="form-group">
-                                    <label for="userinput1">Email Address</label>
+                                    <label for="userinput1">Contact Number</label>
                                     <input type="text" id="userinput1" class="form-control" name="name" placeholder="">
                                   </div>
                             </div>
                         </div>
+                        <div class="col-lg-4 col-md-12 col-sm-12">
+                            <div class="profile_card">
+                                <div class="form-group">
+                                    <label for="projectinput6">Gender</label>
+                                    <select id="projectinput6" name="budget" class="form-control">
+                                      <option value="0" selected="" disabled="">Select Gender</option>
+                                      <option value="Male">Male</option>
+                                      <option value="Female">Female</option>
+                                    </select>
+                                  </div>
+                            </div>
+                        </div>
+                        <hr/>
+                    </div>
+                    <div class="profile_page-border mt-3 mb-3">
+                      <h4 class="pt-3 mb-4 text-bold-700">Social Links</h4>
+                      <div class="profile-sub-head">
+                        <p>234Spaces Venue Partners have work and meeting spaces that</p>
+                        <p>are available for short-term bookings. </p>
                       </div>
                       <div class="row">
                           <div class="col-lg-4 col-md-12 col-sm-12">
                               <div class="profile_card">
                                   <div class="form-group">
-                                      <label for="userinput1">Contact Number</label>
-                                      <input type="text" id="userinput1" class="form-control" name="name" placeholder="">
+                                      <label for="userinput1">Facebook</label>
+                                      <input type="text" id="userinput1" class="form-control" name="name" placeholder="www.facebook.com/username">
                                     </div>
                               </div>
                           </div>
                           <div class="col-lg-4 col-md-12 col-sm-12">
                               <div class="profile_card">
                                   <div class="form-group">
-                                      <label for="projectinput6">Gender</label>
-                                      <select id="projectinput6" name="budget" class="form-control">
-                                        <option value="0" selected="" disabled="">Select Gender</option>
-                                        <option value="Male">Male</option>
-                                        <option value="Female">Female</option>
-                                      </select>
+                                      <label for="userinput1">Twitter</label>
+                                      <input type="text" id="userinput1" class="form-control" name="name" placeholder="www.twitter.com/username">
                                     </div>
                               </div>
                           </div>
-                          <hr/>
+                          <div class="col-lg-4 col-md-12 col-sm-12">
+                              <div class="profile_card">
+                                  <div class="form-group">
+                                      <label for="userinput1">LinkedIn</label>
+                                      <input type="text" id="userinput1" class="form-control" name="name" placeholder="www.linkedin.com/username">
+                                    </div>
+                              </div>
+                          </div>
                       </div>
-                      <div class="profile_page-border mt-3 mb-3">
-                        <h4 class="pt-3 mb-4 text-bold-700">Social Links</h4>
-                        <div class="profile-sub-head">
-                          <p>234Spaces Venue Partners have work and meeting spaces that</p>
-                          <p>are available for short-term bookings. </p>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-4 col-md-12 col-sm-12">
-                                <div class="profile_card">
-                                    <div class="form-group">
-                                        <label for="userinput1">Facebook</label>
-                                        <input type="text" id="userinput1" class="form-control" name="name" placeholder="www.facebook.com/username">
-                                      </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-12 col-sm-12">
-                                <div class="profile_card">
-                                    <div class="form-group">
-                                        <label for="userinput1">Twitter</label>
-                                        <input type="text" id="userinput1" class="form-control" name="name" placeholder="www.twitter.com/username">
-                                      </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-12 col-sm-12">
-                                <div class="profile_card">
-                                    <div class="form-group">
-                                        <label for="userinput1">LinkedIn</label>
-                                        <input type="text" id="userinput1" class="form-control" name="name" placeholder="www.linkedin.com/username">
-                                      </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-4 col-md-12 col-sm-12">
-                                <div class="profile_card">
-                                    <div class="form-group">
-                                        <label for="userinput1">Instagram</label>
-                                        <input type="text" id="userinput1" class="form-control" name="name" placeholder="www.instagram.com/username">
-                                      </div>
-                                </div>
-                            </div>
-                        </div>
-                        <h4 class="mt-3 pt-3 mb-2 text-bold-700 profile_border_top">Security</h4>
-                        <div class="row mb-3">
-                            <div class="col-lg-4 col-md-12 col-sm-12 ">
-                                <div class="profile_card">
-                                    <div class="form-group">
-                                        <label for="userinput1">Old Password</label>
-                                        <input type="text" id="userinput1" class="form-control" name="name" placeholder="old password">
-                                      </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-12 col-sm-12">
-                                <div class="profile_card">
-                                    <div class="form-group">
-                                        <label for="userinput1">New Password</label>
-                                        <input type="text" id="userinput1" class="form-control" name="name" placeholder="new password">
-                                      </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-12 col-sm-12">
-                                <div class="profile_card">
-                                    <div class="form-group">
-                                        <label for="userinput1">LinkedIn</label>
-                                        <input type="text" id="userinput1" class="form-control" name="name" placeholder="www.linkedin.com/username">
-                                      </div>
-                                </div>
-                            </div>
-                        </div>
+                      <div class="row">
+                          <div class="col-lg-4 col-md-12 col-sm-12">
+                              <div class="profile_card">
+                                  <div class="form-group">
+                                      <label for="userinput1">Instagram</label>
+                                      <input type="text" id="userinput1" class="form-control" name="name" placeholder="www.instagram.com/username">
+                                    </div>
+                              </div>
+                          </div>
                       </div>
-                      <div class="d-flex justify-content-end mt-4">
-                          <button type="button" class="btn btn-raised px-4 mb-0  profile_btn">
-                              <!-- <i class="ft ft-search d-lg-none d-lg-inline-block"></i> -->
-                              <span class="d-lg-inline-block d-none ml-1">SAVE CHANGES</span>
-                            </button>
+                      <h4 class="mt-3 pt-3 mb-2 text-bold-700 profile_border_top">Security</h4>
+                      <div class="row mb-3">
+                          <div class="col-lg-4 col-md-12 col-sm-12 ">
+                              <div class="profile_card">
+                                  <div class="form-group">
+                                      <label for="userinput1">Old Password</label>
+                                      <input type="text" id="userinput1" class="form-control" name="name" placeholder="old password">
+                                    </div>
+                              </div>
+                          </div>
+                          <div class="col-lg-4 col-md-12 col-sm-12">
+                              <div class="profile_card">
+                                  <div class="form-group">
+                                      <label for="userinput1">New Password</label>
+                                      <input type="text" id="userinput1" class="form-control" name="name" placeholder="new password">
+                                    </div>
+                              </div>
+                          </div>
+                          <div class="col-lg-4 col-md-12 col-sm-12">
+                              <div class="profile_card">
+                                  <div class="form-group">
+                                      <label for="userinput1">LinkedIn</label>
+                                      <input type="text" id="userinput1" class="form-control" name="name" placeholder="www.linkedin.com/username">
+                                    </div>
+                              </div>
+                          </div>
                       </div>
                     </div>
-                  </ng-template>
-                </ngb-tab>
-                <ngb-tab>
-                  <ng-template ngbTabTitle>Your Spaces</ng-template>
-                  <ng-template ngbTabContent>
-                    <div class="card-container">
-                        <div class="row text-left" matchHeight="card">
-                            <div class="col-lg-4 col-md-12 col-sm-12">
+                    <div class="d-flex justify-content-end mt-4">
+                        <button type="button" class="btn btn-raised px-4 mb-0  profile_btn">
+                            <!-- <i class="ft ft-search d-lg-none d-lg-inline-block"></i> -->
+                            <span class="d-lg-inline-block d-none ml-1">SAVE CHANGES</span>
+                          </button>
+                    </div>
+                  </div>
+                </ng-template>
+              </ngb-tab>
+              <ngb-tab>
+                <ng-template ngbTabTitle>Your Spaces</ng-template>
+                <ng-template ngbTabContent>
+                  <div class="card-container">
+                      <div class="row text-left" matchHeight="card">
+                          <div class="col-lg-4 col-md-12 col-sm-12">
+                            <div class="card">
+                              <div class="card-content card-bg">
+                                <div class="card-img">
+                                  <img class="card-img-top img-fluid card-radius" src="assets/img/photos/14.jpg" alt="Card image cap">
+                                  <h4 class="card-title home-card-title">NGN 3,000 per day</h4>
+                                  <a class="btn btn-floating halfway-fab bg-warning"><i class="ft-heart"></i></a>
+                                </div>
+                                <div class="card-body card-body-pad">
+                                  <div class="row justify-content-between">
+                                    <div class="col-6">
+                                        <h3 class="home-card-text">Landmark Towers</h3>
+                                    </div>
+                                        <div class="col-3">
+                                          <ngb-rating max="5" [(rate)]="currentRate"></ngb-rating>
+                                        </div>
+                                        <div class="col-3">
+                                            <p><b>{{currentRate}}</b></p>
+                                        </div>
+                                  </div>
+                                  <p class="card-text">Creative workspace in Lekki overlooking the atlantic ocean.</p>
+                                  <div  class="card-footer card-footer-pad">
+                                      <div class="row">
+                                          <div class="col-5">
+                                            <i class="fa fa-users"></i>
+                                            <span>&nbsp;Fits 25 guests</span>
+                                          </div>
+                                          <div class="col-7">
+                                            <i class="fa fa-map-marker"></i>
+                                            <span>&nbsp;Lekki Admiralty road</span>
+                                          </div>
+                                        </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-lg-4 col-md-12 col-sm-12">
                               <div class="card">
-                                <div class="card-content card-bg">
+                                <div class="card-content card-bg hct">
                                   <div class="card-img">
                                     <img class="card-img-top img-fluid card-radius" src="assets/img/photos/14.jpg" alt="Card image cap">
                                     <h4 class="card-title home-card-title">NGN 3,000 per day</h4>
@@ -170,14 +320,14 @@
                                           <h3 class="home-card-text">Landmark Towers</h3>
                                       </div>
                                           <div class="col-3">
-                                            <ngb-rating max="5" [(rate)]="currentRate"></ngb-rating>
+                                            <ngb-rating max="5" [(rate)]="firstRate"></ngb-rating>
                                           </div>
                                           <div class="col-3">
-                                              <p><b>{{currentRate}}</b></p>
+                                              <p><b>{{firstRate}}</b></p>
                                           </div>
                                     </div>
                                     <p class="card-text">Creative workspace in Lekki overlooking the atlantic ocean.</p>
-                                    <div  class="card-footer card-footer-pad">
+                                    <div class="card-footer card-footer-pad">
                                         <div class="row">
                                             <div class="col-5">
                                               <i class="fa fa-users"></i>
@@ -192,174 +342,35 @@
                                   </div>
                                 </div>
                               </div>
-                            </div>
-                            <div class="col-lg-4 col-md-12 col-sm-12">
-                                <div class="card">
-                                  <div class="card-content card-bg hct">
-                                    <div class="card-img">
-                                      <img class="card-img-top img-fluid card-radius" src="assets/img/photos/14.jpg" alt="Card image cap">
-                                      <h4 class="card-title home-card-title">NGN 3,000 per day</h4>
-                                      <a class="btn btn-floating halfway-fab bg-warning"><i class="ft-heart"></i></a>
-                                    </div>
-                                    <div class="card-body card-body-pad">
-                                      <div class="row justify-content-between">
-                                        <div class="col-6">
-                                            <h3 class="home-card-text">Landmark Towers</h3>
-                                        </div>
-                                            <div class="col-3">
-                                              <ngb-rating max="5" [(rate)]="firstRating"></ngb-rating>
-                                            </div>
-                                            <div class="col-3">
-                                                <p><b>{{firstRating}}</b></p>
-                                            </div>
-                                      </div>
-                                      <p class="card-text">Creative workspace in Lekki overlooking the atlantic ocean.</p>
-                                      <div class="card-footer card-footer-pad">
-                                          <div class="row">
-                                              <div class="col-5">
-                                                <i class="fa fa-users"></i>
-                                                <span>&nbsp;Fits 25 guests</span>
-                                              </div>
-                                              <div class="col-7">
-                                                <i class="fa fa-map-marker"></i>
-                                                <span>&nbsp;Lekki Admiralty road</span>
-                                              </div>
-                                            </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-12 col-sm-12">
-                                <div class="card">
-                                    <div class="card-content card-album">
-                                        <i class="fa fa-plus-square fa-3x"></i>
-                                        <p><a href="">Add Space</a></p>
-                                      
-                                    </div>
-                                  </div>
-                            </div>
-                        </div>
-                      </div>
-                    
-                  </ng-template>
-                </ngb-tab>
-                <ngb-tab>
-                  <ng-template ngbTabTitle>Messages</ng-template>
-                  <ng-template ngbTabContent>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid.
-                    <p>Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table
-                    craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl
-                    cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar helvetica VHS salvia
-                    yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes anderson 8-bit, sustainable jean
-                    shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party scenester stumptown, tumblr butcher vero
-                    sint qui sapiente accusamus tattooed echo park.</p>
-                  </ng-template>
-                </ngb-tab>
-                <ngb-tab>
-                  <ng-template ngbTabTitle>Your Bookings</ng-template>
-                  <ng-template ngbTabContent>
-                      <div class="card-container">
-                          <div class="row text-left" matchHeight="card">
-                              <div class="col-lg-12 col-md-12 col-sm-12">
-                                <div class="card card-border">
-                                  <div class="card-content card-bg">
-                                    <h4 class="pt-2 mb-4 mt-2 ml-3 text-bold-700">Upcoming Bookings</h4>
-                                    <p class="lead ml-3 mb-4">0 Bookings Found</p>
-                                  </div>
-                                </div>
-                              </div>
                           </div>
-                      </div>
-                     
-                      <div class="card-container">
-                          <div class="card card-border">
-                              <div class="card-content card-bg">
-                                  <h4 class="pt-2 mb-3 mt-2 ml-3 text-bold-700">Previous Bookings</h4>
-                                <div class="row text-left ml-2" matchHeight="card">
-                                    <div class="col-lg-4 col-md-12 col-sm-12">
-                                        <div class="card">
-                                          <div class="card-content card-bg">
-                                            <div class="card-img">
-                                              <img class="card-img-top img-fluid card-radius" src="assets/img/photos/14.jpg" alt="Card image cap">
-                                              <h4 class="card-title home-card-title">NGN 3,000 per day</h4>
-                                              <a class="btn btn-floating halfway-fab bg-warning"><i class="ft-heart"></i></a>
-                                            </div>
-                                            <div class="card-body card-body-pad">
-                                              <div class="row justify-content-between">
-                                                <div class="col-6">
-                                                    <h3 class="home-card-text">Landmark Towers</h3>
-                                                </div>
-                                                    <div class="col-3">
-                                                      <ngb-rating max="5" [(rate)]="currentRate"></ngb-rating>
-                                                    </div>
-                                                    <div class="col-3">
-                                                        <p><b>{{currentRate}}</b></p>
-                                                    </div>
-                                              </div>
-                                              <p class="card-text">Creative workspace in Lekki overlooking the atlantic ocean.</p>
-                                              <div class="card-footer card-footer-pad">
-                                                  <div class="row">
-                                                      <div class="col-5">
-                                                        <i class="fa fa-users"></i>
-                                                        <span>&nbsp;Fits 25 guests</span>
-                                                      </div>
-                                                      <div class="col-7">
-                                                        <i class="fa fa-map-marker"></i>
-                                                        <span>&nbsp;Lekki Admiralty road</span>
-                                                      </div>
-                                                    </div>
-                                              </div>
-                                            </div>
-                                          </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4 col-md-12 col-sm-12">
-                                        <div class="card">
-                                          <div class="card-content card-bg">
-                                            <div class="card-img">
-                                              <img class="card-img-top img-fluid card-radius" src="assets/img/photos/14.jpg" alt="Card image cap">
-                                              <h4 class="card-title home-card-title">NGN 3,000 per day</h4>
-                                              <a class="btn btn-floating halfway-fab bg-warning"><i class="ft-heart"></i></a>
-                                            </div>
-                                            <div class="card-body card-body-pad">
-                                              <div class="row justify-content-between">
-                                                <div class="col-6">
-                                                    <h3 class="home-card-text">Landmark Towers</h3>
-                                                </div>
-                                                    <div class="col-3">
-                                                      <ngb-rating max="5" [(rate)]="currentRate"></ngb-rating>
-                                                    </div>
-                                                    <div class="col-3">
-                                                        <p><b>{{currentRate}}</b></p>
-                                                    </div>
-                                              </div>
-                                              <p class="card-text">Creative workspace in Lekki overlooking the atlantic ocean.</p>
-                                              <div class="card-footer card-footer-pad">
-                                                  <div class="row">
-                                                      <div class="col-5">
-                                                        <i class="fa fa-users"></i>
-                                                        <span>&nbsp;Fits 25 guests</span>
-                                                      </div>
-                                                      <div class="col-7">
-                                                        <i class="fa fa-map-marker"></i>
-                                                        <span>&nbsp;Lekki Admiralty road</span>
-                                                      </div>
-                                                    </div>
-                                              </div>
-                                            </div>
-                                          </div>
-                                        </div>
-                                    </div>
+                          <div class="col-lg-4 col-md-12 col-sm-12">
+                              <div class="card">
+                                  <div class="card-content card-album">
+                                      <i class="fa fa-plus-square fa-3x"></i>
+                                      <p><a href="">Add Space</a></p>
                                     
+                                  </div>
                                 </div>
-                              </div>
                           </div>
                       </div>
-                      
-                  </ng-template>
-                </ngb-tab>
-                
-              </ngb-tabset>
+                    </div>
+                  
+                </ng-template>
+              </ngb-tab>
+              <ngb-tab>
+                <ng-template ngbTabTitle>Messages</ng-template>
+                <ng-template ngbTabContent>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid.
+                  <p>Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table
+                  craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl
+                  cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar helvetica VHS salvia
+                  yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes anderson 8-bit, sustainable jean
+                  shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party scenester stumptown, tumblr butcher vero
+                  sint qui sapiente accusamus tattooed echo park.</p>
+                </ng-template>
+              </ngb-tab>
+              
+              
+            </ngb-tabset>
     
               <!-- <div class="btn-group btn-group-toggle" ngbRadioGroup [(ngModel)]="currentOrientation">
                 <label ngbButtonLabel class="btn-outline-primary btn-sm">

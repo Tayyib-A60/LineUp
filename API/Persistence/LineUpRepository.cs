@@ -6,8 +6,6 @@ using API.Core;
 using API.Core.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using SendGrid;
-using SendGrid.Helpers.Mail;
 
 namespace API.Persistence
 {
@@ -92,6 +90,22 @@ namespace API.Persistence
         public async Task<QueryResult<Space>> GetSpaces(SpaceQuery query)
         {
             var spaces =  _context.Spaces
+                                    // .Where(sp => sp.UserId == query.UserId)
+                                    .Include(sp => sp.Type)
+                                    // .Include(sp => sp.Photos.Where(p => p.IsMain == true))
+                                    .AsQueryable();
+            spaces = FilterSpaces(query, spaces);
+            int count = spaces.Count();
+            spaces = spaces.Skip((query.CurrentPage - 1) * query.PageSize)
+                                    .Take(query.PageSize);
+            var queryResult = new QueryResult<Space>();
+            queryResult.TotalItems = count;
+            queryResult.Items = await spaces.ToListAsync();
+            return queryResult;
+        }
+        public async Task<QueryResult<Space>> GetMerchantSpaces(SpaceQuery query)
+        {
+            var spaces =  _context.Spaces
                                     .Where(sp => sp.UserId == query.UserId)
                                     .Include(sp => sp.Type)
                                     // .Include(sp => sp.Photos.Where(p => p.IsMain == true))
@@ -103,6 +117,37 @@ namespace API.Persistence
             var queryResult = new QueryResult<Space>();
             queryResult.TotalItems = count;
             queryResult.Items = await spaces.ToListAsync();
+            return queryResult;
+        }
+        public async Task<QueryResult<Booking>> GetBookings(int userId, BookingQuery query)
+        {
+            var bookings =  _context.Bookings
+                            .Where(b => b.UserId == userId)
+                            .Include(b => b.SpaceBooked)
+                            .Include(b => b.Chat)
+                            .AsQueryable();
+            bookings = bookings.OrderByDescending(bp => bp.Id);
+            var queryResult = new QueryResult<Booking>();
+            // bookings = bookings.AsQueryable().Skip((query.CurrentPage - 1) * query.PageSize)
+            //                         .Take(query.PageSize);
+            queryResult.TotalItems = bookings.Count();
+            queryResult.Items = await bookings.ToListAsync();
+            return queryResult;
+        }
+        public async Task<QueryResult<Booking>> GetCustomerBookings(int userId, BookingQuery query)
+        {
+            var bookings =  _context.Bookings
+                            .Where(b => b.BookedById
+                             == userId)
+                            .Include(b => b.SpaceBooked)
+                            .Include(b => b.Chat)
+                            .AsQueryable();
+            bookings = bookings.OrderByDescending(bp => bp.Id);
+            var queryResult = new QueryResult<Booking>();
+            // bookings = bookings.AsQueryable().Skip((query.CurrentPage - 1) * query.PageSize)
+            //                         .Take(query.PageSize);
+            queryResult.TotalItems = bookings.Count();
+            queryResult.Items = await bookings.ToListAsync();
             return queryResult;
         }
         private IQueryable<Space> FilterSpaces(SpaceQuery query, IQueryable<Space> spaces)
@@ -143,11 +188,53 @@ namespace API.Persistence
             return await _context.Bookings
                             .FirstOrDefaultAsync(b => b.Id == bookingId);
         }
-        public async Task<IEnumerable<Booking>> GetBookings(int userId)
+        // public async Task<IEnumerable<Booking>> GetBookings(int userId)
+        // {
+        //     return await _context.Bookings
+        //                     .Where(b => b.UserId == userId)
+        //                     .ToListAsync();
+        // }
+        public async Task<List<BookedTimes>> GetBookedTimes(int spaceId, BookedTimes proposedBookingTime)
         {
-            return await _context.Bookings
-                            .Where(b => b.UserId == userId)
+            var bookings = await _context.Bookings
+                            .Include(bk => bk.SpaceBooked)
+                            .Where(bk => bk.SpaceBooked.Id == spaceId)
+                            // .ToListAsync();
+                            // .Where(bk => bk.SpaceBooked.Id == spaceId)
+                            // (proposedBookingTime.From >= bk.UsingFrom 
+                            //             && proposedBookingTime.From < bk.UsingTill)
+                            //             || (proposedBookingTime.To >= bk.UsingFrom 
+                            //             && proposedBookingTime.To < bk.UsingTill)
+                            // (proposedBookingTime.From <= bk.UsingFrom
+                            //             || (proposedBookingTime.From > bk.UsingFrom 
+                            //             && proposedBookingTime.From <= bk.UsingTill )) && 
+                            //             ((proposedBookingTime.To <= bk.UsingTill 
+                            //             && proposedBookingTime.To > bk.UsingFrom)
+                            //             || proposedBookingTime.To > bk.UsingTill)
+                            .Where(bk => (bk.UsingFrom >= proposedBookingTime.From
+                                        && proposedBookingTime.From <= bk.UsingTill) 
+                                        || (bk.UsingFrom >= proposedBookingTime.To
+                                        && proposedBookingTime.To <= bk.UsingTill)
+                                        || (bk.UsingTill >= proposedBookingTime.From)
+                                        || (proposedBookingTime.From < bk.UsingTill
+                                        && proposedBookingTime.To > bk.UsingTill)
+                                )
+                            // .Where(bk => bk.UsingFrom.)
                             .ToListAsync();
+            var existing = new List<Booking>();
+            foreach (var booking in bookings)
+            {
+            };
+            var bookingTimes = new List<BookedTimes>();
+            foreach (var item in bookings)
+            {
+                var bookingTime = new BookedTimes();
+                bookingTime.From = item.UsingFrom;
+                bookingTime.To = item.UsingTill;
+                bookingTime.Status = item.Status.ToString();
+                bookingTimes.Add(bookingTime);
+            };
+            return bookingTimes;
         }
     }
 }

@@ -23,7 +23,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor='let space of data'>
+                  <tr *ngFor='let booking of bookings'>
                     <td>
                       <div class="row text-left" matchHeight="card">
                           <div class="col-xl-5 col-lg-12">
@@ -36,8 +36,8 @@
                                 </div>
                                 <div style="margin-left: -6rem" class="card-stacked align-self-center">
                                   <div class="px-3">
-                                    <h4 class="card-title">Card title</h4>
-                                    <p class="card-text">Sweet halvah dragée jelly-o halvah carrot cake oat cake.</p>
+                                    <h5>{{booking['usingFrom'] | date: 'MMM, d, h:mm a'}} - {{booking['usingTill'] | date: 'MMM, d, y h:mm a'}}</h5>
+                                    <p class="card-text">{{booking['spaceBooked']['name']}}</p>
                                   </div>
                                 </div>
                               </div>
@@ -53,8 +53,8 @@
                                 </div>
                                 <div style="margin-left: -6rem" class="card-stacked align-self-center">
                                   <div class="px-3">
-                                    <h4 class="card-title">Card title</h4>
-                                    <p class="card-text">Sweet halvah dragée jelly-o halvah carrot cake oat cake.</p>
+                                    <h4 class="card-title">Booked by</h4>
+                                    <p class="card-text">Jelly-o halvah</p>
                                   </div>
                                 </div>
                               </div>
@@ -68,7 +68,7 @@
                             <div class="card-content d-flex justify-content-between">
                               <div style="margin-left: -6rem" class="card-stacked align-self-center">
                                 <div class="px-3">
-                                  <h4 class="card-title">#200,000</h4>
+                                  <h4 class="card-title">{{booking['totalPrice'] | currency: 'NGN' : 'symbol-narrow'}}</h4>
                                 </div>
                               </div>
                             </div>

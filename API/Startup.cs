@@ -38,7 +38,8 @@ namespace api
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ILineUpRepository, LineUpRepository>();
             services.AddScoped<IPhotoRepository, PhotoRepository>();
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+                    .AddJsonOptions(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddAutoMapper();
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
             services.Configure<PhotoSettings>(Configuration.GetSection("PhotoSettings"));

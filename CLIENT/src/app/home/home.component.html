@@ -132,7 +132,7 @@
                     <div class="row text-left" matchHeight="card">
                       <!-- <div > -->
                         <div *ngFor='let space of spaceQueryResult.items' class="col-lg-4 col-md-12 col-sm-12">
-                          <a [routerLink]="['/space-display']">
+                          <a [routerLink]="['/space-details/' + space.id]">
                           <div class="card">
                             <div class="card-content card-bg">
                               <div class="card-img">

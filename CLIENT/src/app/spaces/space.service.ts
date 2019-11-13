@@ -56,6 +56,11 @@ export class SpaceService {
     const url = this.url + '/lineUp/getSpaces?' + this.toQueryString(filter);
     return this.httpClient.get(url, { headers });
   }
+  getMerchantSpaces(filter?: any) {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    const url = this.url + '/lineUp/getMerchantSpaces?' + this.toQueryString(filter);
+    return this.httpClient.get(url, { headers });
+  }
 
   deleteSpace(id: number): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });

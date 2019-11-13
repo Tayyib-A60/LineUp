@@ -20,7 +20,8 @@ namespace API.Mapping
             CreateMap<UserDTO, User>();
             CreateMap<UserToLoginDTO, User>();
             CreateMap<UserToSignUpDTO, User>();
-            CreateMap<SpaceQueryDTO, Space>();
+            CreateMap<SpaceQueryDTO, SpaceQuery>();
+            CreateMap<BookingQueryDTO, BookingQuery>();
 
             // Domain to API Resource
             CreateMap<Amenity, AmenityDTO>();

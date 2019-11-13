@@ -8,6 +8,7 @@ import { SpaceQueryResult } from '../models/spaceQueryResult';
 export interface SpaceState {
     spaces: Space[];
     spaceQueryResult: SpaceQueryResult;
+    merchantSpacesQR: SpaceQueryResult;
     spaceTypes: SpaceType[];
     currentSpaceId: number;
     amenities: Amenity[];
@@ -19,6 +20,7 @@ export interface SpaceState {
 const INITIAL_STATE: SpaceState = {
     spaces: [],
     spaceQueryResult: <SpaceQueryResult>{},
+    merchantSpacesQR: <SpaceQueryResult>{},
     spaceTypes: [],
     currentSpaceId: null,
     error: '',
@@ -76,6 +78,17 @@ export function reducer(state = INITIAL_STATE, action: SpaceActions): SpaceState
                 error: ''
             };
         case SpaceActionTypes.GetSpacesFailure:
+            return {
+                ...state,
+                error: action.payload
+            };
+        case SpaceActionTypes.GetMerchantSpacesSuccess:
+            return {
+                ...state,
+                merchantSpacesQR: action.payload,
+                error: ''
+            };
+        case SpaceActionTypes.GetMerchantSpacesFailure:
             return {
                 ...state,
                 error: action.payload

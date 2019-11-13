@@ -13,8 +13,13 @@ import { SpaceQueryResult } from '../models/spaceQueryResult';
 
 @Injectable()
 export class SpaceEffects {
+    merchantId = localStorage.getItem('currentUser')? JSON.parse(localStorage.getItem('currentUser'))['id'] : 0;
     query = {
-        userId: 3,
+        currentPage: 1,
+        pageSize: 10
+    };
+    merchantQuery = {
+        userId: this.merchantId,
         currentPage: 1,
         pageSize: 10
     };
@@ -100,6 +105,17 @@ export class SpaceEffects {
             .pipe(
                 map((spaceQueryResult: SpaceQueryResult) => new spaceActions.GetSpacesSuccess(spaceQueryResult)),
                 catchError(err => of(new spaceActions.GetSpacesFailure(err)))
+            )
+        )
+    );
+    
+    @Effect()
+    getMerchantSpaces$: Observable<Action> = this.action$.pipe(
+        ofType(SpaceActionTypes.GetMerchantSpaces),
+        mergeMap((action: spaceActions.GetMerchantSpaces) => this.spaceService.getMerchantSpaces(this.merchantQuery)
+            .pipe(
+                map((merchantSpaceQR: SpaceQueryResult) => new spaceActions.GetMerchantSpacesSuccess(merchantSpaceQR)),
+                catchError(err => of(new spaceActions.GetMerchantSpacesFailure(err)))
             )
         )
     );

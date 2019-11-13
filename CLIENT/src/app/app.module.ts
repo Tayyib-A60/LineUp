@@ -29,6 +29,7 @@ import { UserModule } from './state/user.module';
 import { UserEffects } from './state/user.effects';
 import { BookingModule } from './state/booking/booking.module';
 import { BookingEffects } from './state/booking/booking.effects';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -50,6 +51,7 @@ import { BookingEffects } from './state/booking/booking.effects';
     FormsModule,
     NgSelectModule,
     HttpClientModule,
+    ToastrModule.forRoot(),
     ReactiveFormsModule,
     NgbModule.forRoot(),
     PerfectScrollbarModule,
