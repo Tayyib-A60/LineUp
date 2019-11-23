@@ -1,0 +1,392 @@
+<app-navbar (toggleHideSidebar)="toggleHideSidebar($event)"></app-navbar>
+<div class="space">
+    <div>
+      <div class="d-flex caption_tab">
+          <a [routerLink]="['#Overview']">Overview</a>
+          <a [routerLink]="['#About']">About</a>
+          <a [routerLink]="['#Amenities']">Amenities</a>
+          <a [routerLink]="['#Location']">Location</a>
+          <a [routerLink]="['#Similar-Spaces']">Similar Spaces</a>
+        </div>
+        <ngb-carousel>
+          <ng-template ngbSlide>
+            <img class='img_banner' src="assets/img/photos/space2.jpg" alt="Random first slide">
+            <div class="caption_container">
+                <h4 class="caption_text">NGN 3,000 per day</h4>
+                <i class="fa fa-users"></i>
+                <span>&nbsp;25 People</span>
+            </div>
+          </ng-template>
+          <ng-template ngbSlide>
+            <img class='img_banner' src="assets/img/photos/space3.jpg" alt="Random first slide">
+            <!-- <div class="d-flex justify-content-between caption_tab">
+                <a href="#Overview">Overview</a>
+                <a href="#About">About</a>
+                <a href="#Amenities">Amenities</a>
+                <a href="#Location">Location</a>
+                <a href="#Similar-Spaces">Similar Spaces</a>
+              </div> -->
+            <div class="caption_container">
+                <h4 class="caption_text">NGN 3,000 per day</h4>
+                <i class="fa fa-users"></i>
+                <span>&nbsp;25 People</span>
+            </div>
+          </ng-template>
+          <ng-template ngbSlide>
+            <img class='img_banner' src="assets/img/photos/space5.jpg" alt="Random first slide">
+            <!-- <div class="d-flex justify-content-between caption_tab">
+                <a href="#Overview">Overview</a>
+                <a href="#About">About</a>
+                <a href="#Amenities">Amenities</a>
+                <a href="#Location">Location</a>
+                <a href="#Similar-Spaces">Similar Spaces</a>
+              </div> -->
+            <div class="caption_container">
+                <h4 class="caption_text">NGN 3,000 per day</h4>
+                <i class="fa fa-users"></i>
+                <span>&nbsp;25 People</span>
+            </div>
+          </ng-template>
+        </ngb-carousel>
+      </div>
+      <div class="container-fluid space_container mt-4">
+        <div class="row">
+            <div class="col-md-7 mb-2">
+              <p class="space_head">Work space, multi-use area at Present Story</p>
+              <button class="btn btn-outline-secondary mt-4 mb-4"><i class="fa fa-upload"></i>&nbsp; Share Space</button>
+              <div class="d-flex justify-content-between space_content">
+                <div class="">
+                  <div class="pb-3 space_content_wrapper-1">Minimum term</div>
+                  <i class="fa fa-users fa-2x space_content_wrapper-2"></i>
+                  <div class="pt-3 space_content_wrapper-3">1<span>&nbsp; hour</span></div>
+                </div>
+                <div class="space_content_wrapper">
+                  <div class="pb-3 space_content_wrapper-1">Size</div>
+                  <i class="fa fa-users fa-2x space_content_wrapper-2"></i>
+                  <div class="pt-3 space_content_wrapper-3">24<span>&nbsp; sqm</span></div>
+                </div>
+                <div class="space_content_wrapper">
+                  <div class="pb-3 space_content_wrapper-1">Capacity</div>
+                  <i class="fa fa-users fa-2x space_content_wrapper-2"></i>
+                  <div class="pt-3 space_content_wrapper-3">10<span>&nbsp; people</span></div>
+                </div>
+                <div class="space_content_wrapper">
+                  <div class="pb-3 space_content_wrapper-1">Space type</div>
+                  <i class="fa fa-users fa-2x space_content_wrapper-2"></i>
+                  <div class="pt-3 space_content_wrapper-3"><span>&nbsp; Multi-use area</span></div>
+                </div>
+                <div class="space_content_wrapper">
+                  <div class="pb-3 space_content_wrapper-1">Availability</div>
+                  <i style="opacity: 0;" class="fa fa-users fa-2x space_content_wrapper-2"></i>
+                  <div class="pt-3 space_content_wrapper-3"><span>&nbsp; Availability</span></div>
+                </div>
+              </div>
+              <div class="mt-4 mb-4">
+                  <h4 class="text-bold-500">Shop 7, 14 - 20 Nicholson Street, Coburg, 3058, Shop 7, 14-20 Nicholson Street,, Coburg VIC 3058</h4>
+              </div>
+              <div class="h6 mb-3">
+                <a href="">View venue page &#62;</a>
+              </div>
+              <div class="space_text">
+                <p>
+                    This warm & creative space is within Present Story, a beautiful gift shop located on Nicholson Street in Coburg. The space measures 6 metres x 3.5 metres and tables and seating for 8 is provided, or the space can be cleared for specific use. Seagrass floor, heating/cooling, and speaker system make for an intimate meeting space, area for women's circles, workshops, small gatherings, exhibition space, classes, or brand/retail pop up. Present Story is open to the public from 10am to 6pm Tuesday to Friday, 10am - 5pm Saturday and 10am - 4pm Sunday. Outside these hours, the space is completely private.
+                </p>
+                <p>This space has been created to run local, community arts & crafts workshops on weekends. As such, many weekends will be booked for this purpose but the space is also available during the week and evenings by arrangement.</p>
+                <p>Minimum one hour bookings for off peak periods, with weekend bookings requiring a minimum 3 hour booking. We are also open to discussing reduced pricing for community based not for profit events.</p>
+                <p>Present Story is an inclusive space and welcomes all sections of our diverse community.</p>
+                <p>Our website currently reflects our retail space only so please drop in or contact Linda to discuss a viewing of the space at a time that suits you.</p>
+              </div>
+              <div class="mt-4">
+                  <h4 class="text-bold-500">Amenities</h4>
+                  <div class="d-flex">
+                      <div class="custom-control custom-checkbox pr-4 space_content">
+                          <input style="color: blue;" type="checkbox" class="custom-control-input" checked>
+                          <label class="custom-control-label">&nbsp; WiFi</label>
+                      </div>
+                      <div class="custom-control custom-checkbox pr-4 space_content">
+                          <input type="checkbox" class="custom-control-input" checked>
+                          <label class="custom-control-label">&nbsp; Wheelchair access...</label>
+                      </div>
+                      <div class="custom-control custom-checkbox pr-4 space_content">
+                          <input type="checkbox" class="custom-control-input" checked>
+                          <label class="custom-control-label" >&nbsp; Meeting room(s)</label>
+                      </div>
+                  </div>
+              </div>
+              <div class="space_form">
+                <form action="">
+                    <h2 class="space_form-head">Send an enquiry to Linda about Work space, multi-use area...</h2>
+                    <div class="space_form-input">
+                        <div class="form-group space_form-input-group">
+                            <label class="space_form-input-field text-bold-400" for="userinput1">Name*</label>
+                            <input type="text" id="userinput1" class="form-control" name="name" placeholder="" required>
+                        </div>
+                        <div class="form-group space_form-input-group">
+                            <label class="space_form-input-field text-bold-400" for="userinput1">Email*</label>
+                            <input type="text" id="userinput1" class="form-control" name="name" placeholder="" required>
+                        </div>
+                        <div class="form-group space_form-input-group">
+                            <label class="space_form-input-field text-bold-400" for="userinput1">Phone</label>
+                            <input type="text" id="userinput1" class="form-control" name="name" placeholder="" required>
+                        </div>
+                        <div class="form-group space_form-input-group">
+                            <label class="space_form-input-field text-bold-400 pb-2" for="userinput1">I'd like to</label>
+                            <div class="custom-control custom-checkbox mb-2">
+                              <input type="checkbox" class="custom-control-input lead" id="defaultUnchecked">
+                              <label class="custom-control-label space_form-input-checkbox" for="defaultUnchecked">&nbsp;Enquire about a booking</label>
+                            </div>
+                            <div class="custom-control custom-checkbox mb-2">
+                              <input type="checkbox" class="custom-control-input lead" id="defaultUnchecked">
+                              <label class="custom-control-label space_form-input-checkbox" for="defaultUnchecked">&nbsp;Request a tour</label>
+                            </div>
+                            <div class="custom-control custom-checkbox mb-2">
+                              <input type="checkbox" class="custom-control-input lead" id="defaultUnchecked">
+                              <label class="custom-control-label space_form-input-checkbox" for="defaultUnchecked">&nbsp;Make a general enquiry</label>
+                            </div>
+                        </div>
+                        <div class="form-group space_form-input-group">
+                            <label class="space_form-input-field text-bold-400" for="userinput1">Your Message</label>
+                            <textarea class="form-control" id="message" name="message" rows="4" placeholder="Hi T-boy, I'm interested in your listing on 234Spaces and would like some further details."></textarea>
+                            <!-- <span class="space_form-input-group-counter" aria-label="Character counter" id="counter">500</span> -->
+                        </div>
+                        <div><p>*Required Information</p></div>
+                        <div class="pb-2">
+                            <div data-toggle="collapse" data-target="#demo">
+                                <p class="space_form-input-dropdown">Personal Information Collection Statement<span class="abc" style="float: right;">&or; </span></p>
+                            </div>
+                            <div id="demo" class="collapse">
+                              <p class="space_form-input-data">Your personal information will be disclosed to the space manager so that they can contact you about your enquiry. We collect, use and disclose your personal information to give you a more personalised user experience and to promote the services of 234Spaces and third parties. We may also contact you to get your feedback on our products and services. 
+                                Our <a href="">Privacy policy</a> explains how we collect, use and disclose personal information and how you may access, correct or complain about the handling of personal information.</p>
+                              <p class="space_form-input-data">By submitting this enquiry, you acknowledge that you are making a genuine enquiry about this space. Your use or access of 234Spaces is subject to our 
+                                <a href="">Website terms of use.</a> 234Space reserves the right to take action in accordance with its
+                                <a href="">Website terms of use</a> to prevent any misuse of this feature.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space_form-input-footer">
+                      <button class="space_form-btn">Send Enquiry</button> 
+                      </div>    
+                </form>
+              </div>
+              
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-4 mb-2">
+                <div class="space_form">
+                  <div class="space_form-head">Contact Details</div>
+                  <div class="space_form-input pb-1">
+                    <h4 class="space_form-input-field text-bold-400">Linda Whiteside</h4>
+                    <p class="space_form-input-data space_right-cursor">Member since Jun 2019</p>
+                    <div class="d-flex">
+                      <i class="ft-menu"></i>
+                      <div class="h6 mx-2">Verified user</div>
+                      <i class="ft-menu"></i>
+                    </div>
+                    <div>
+                      <button class="btn btn-outline-secondary btn-block">0421*** ***</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="space_form space_content space_right-bg px-3 pt-3 pb-3">
+                  <div>
+                    <i class="ft-menu"></i>
+                    <span class="h4 text-bold-500">Need to know</span>
+                  </div>
+                  <div class="space_content">
+                      <h4 class="space_form-input-field text-bold-500 mt-3 pb-1">Duration</h4>
+                      <p class="space_form-input-data space_right-cursor mb-0">Minimum term: &nbsp; <span class="text-bold-500">1 hour</span></p>
+                  </div>
+                  <div class="space_content">
+                      <h4 class="space_form-input-field text-bold-500 mt-3 pb-1">Pricing options</h4>
+                      <p class="space_form-input-data space_right-cursor mb-0">Per hour: &nbsp;<span class="text-bold-500">$45</span></p>
+                  </div>
+                  <div class="">
+                      <h4 class="space_form-input-field text-bold-500 mt-3 pb-1">Opening hours</h4>
+                      <p class="space_right-p mb-1">Present Story is open to the public 6 days a week. Access after these hours will be by arrangement.</p>
+                      <p class="space_form-input-data space_right-cursor mb-0">Monday - Sunday &nbsp; <span class="text-bold-500">7:00am – 12:00am</span></p>
+                  </div>
+                </div>
+                <div class="space_form">
+                    <!-- <img class='img_banner' src="assets/img/photos/space5.jpg" height="10rem" width="10rem" alt="Random first slide"> -->
+                    <img alt="Present Story" src="https://s3-ap-southeast-2.amazonaws.com/spacely-static-resources-production/ui/svg/venueBanner.svg">
+                    <div class="space_right-bg px-3 pt-3 pb-3">
+                      <h4 class="text-bold-500 pb-2">See all the spaces available at Present Story</h4>
+                      <div>
+                          <a class="btn btn-info space_right-btn m-0">View venue page</a>
+                        </div>
+                    </div>
+                   
+                </div>
+            </div>
+        </div>
+</div>
+<div class="jumbotron">
+  <h1>Map would be here</h1>
+</div>
+<div class="space_container">
+  <h2 class="text-bold-700 mb-3">Discover similar spaces you’ll love.</h2>
+  <div class="d-flex justify-content-between">
+    <div class="display_container mr-2">
+      <div>
+        <ngb-carousel>
+          <ng-template ngbSlide>
+            <img class='img_baner' src="assets/img/photos/space2.jpg" alt="Random first slide" width="100%">
+            <div class="display_caption">
+                <h4 class="display_caption-text">$500 / day</h4>
+            </div>
+          </ng-template>
+          <!-- <ng-template ngbSlide>
+            <img class='img_baner' src="assets/img/photos/space3.jpg" alt="Random first slide" width="100%">
+          </ng-template> -->
+          <ng-template ngbSlide>
+            <img class='img_bnner' src="assets/img/photos/space5.jpg" alt="Random first slide" width="100%">
+            <div class="display_caption">
+                <h4 class="display_caption-text">$500 / day</h4>
+            </div>
+          </ng-template>
+        </ngb-carousel>
+      </div>
+      <div class="display_body">
+      <div class="mb-1">
+       <div class="mt-1">
+         <a href="/" class="display_body-btn">Workshop</a>
+       </div>
+       <div class="display_text-1">
+          <h5 class="mt-2 mb-2 text-bold-500"><a href="">The Space</a></h5>
+          <p><a href="">421 Lygon street</a></p>
+          <p class="text-bold-500"><a href="">Bruswick East VIC 3057</a></p>
+        </div>
+         <div class="display_icon">
+           <i class="fa fa-users"></i>
+           <span>&nbsp; 40</span>
+         </div>
+      </div>
+    </div>
+    <div class="display_text-2">
+          <a href="" class="display_sub-text text-bold-400">View <span style="vertical-align: middle;">&#62;</span></a>
+    </div>
+    </div>
+    <div class="display_container mr-2">
+      <div>
+        <ngb-carousel>
+          <ng-template ngbSlide>
+            <img class='img_baner' src="assets/img/photos/space2.jpg" alt="Random first slide" width="100%">
+            <div class="display_caption">
+                <h4 class="display_caption-text">$500 / day</h4>
+            </div>
+          </ng-template>
+          <!-- <ng-template ngbSlide>
+            <img class='img_baner' src="assets/img/photos/space3.jpg" alt="Random first slide" width="100%">
+          </ng-template> -->
+          <ng-template ngbSlide>
+            <img class='img_bnner' src="assets/img/photos/space5.jpg" alt="Random first slide" width="100%">
+            <div class="display_caption">
+                <h4 class="display_caption-text">$500 / day</h4>
+            </div>
+          </ng-template>
+        </ngb-carousel>
+      </div>
+      <div class="display_body">
+      <div class="mb-1">
+       <div class="mt-1">
+         <a href="/" class="display_body-btn">Workshop</a>
+       </div>
+       <div class="display_text-1">
+          <h5 class="mt-2 mb-2 text-bold-500"><a href="">The Space</a></h5>
+          <p><a href="">421 Lygon street</a></p>
+          <p class="text-bold-500"><a href="">Bruswick East VIC 3057</a></p>
+        </div>
+         <div class="display_icon">
+           <i class="fa fa-users"></i>
+           <span>&nbsp; 40</span>
+         </div>
+      </div>
+    </div>
+    <div class="display_text-2">
+          <a href="" class="display_sub-text text-bold-400">View <span style="vertical-align: middle;">&#62;</span></a>
+    </div>
+    </div>
+    <div class="display_container mr-2">
+      <div>
+        <ngb-carousel>
+          <ng-template ngbSlide>
+            <img class='img_baner' src="assets/img/photos/space2.jpg" alt="Random first slide" width="100%">
+            <div class="display_caption">
+                <h4 class="display_caption-text">$500 / day</h4>
+            </div>
+          </ng-template>
+          <!-- <ng-template ngbSlide>
+            <img class='img_baner' src="assets/img/photos/space3.jpg" alt="Random first slide" width="100%">
+          </ng-template> -->
+          <ng-template ngbSlide>
+            <img class='img_bnner' src="assets/img/photos/space5.jpg" alt="Random first slide" width="100%">
+            <div class="display_caption">
+                <h4 class="display_caption-text">$500 / day</h4>
+            </div>
+          </ng-template>
+        </ngb-carousel>
+      </div>
+      <div class="display_body">
+      <div class="mb-1">
+       <div class="mt-1">
+         <a href="/" class="display_body-btn">Workshop</a>
+       </div>
+       <div class="display_text-1">
+          <h5 class="mt-2 mb-2 text-bold-500"><a href="">The Space</a></h5>
+          <p><a href="">421 Lygon street</a></p>
+          <p class="text-bold-500"><a href="">Bruswick East VIC 3057</a></p>
+        </div>
+         <div class="display_icon">
+           <i class="fa fa-users"></i>
+           <span>&nbsp; 40</span>
+         </div>
+      </div>
+    </div>
+    <div class="display_text-2">
+          <a href="" class="display_sub-text text-bold-400">View <span style="vertical-align: middle;">&#62;</span></a>
+    </div>
+    </div>
+    <div class="display_container">
+      <div>
+        <ngb-carousel>
+          <ng-template ngbSlide>
+            <img class='img_baner' src="assets/img/photos/space2.jpg" alt="Random first slide" width="100%">
+            <div class="display_caption">
+                <h4 class="display_caption-text">$500 / day</h4>
+            </div>
+          </ng-template>
+          <!-- <ng-template ngbSlide>
+            <img class='img_baner' src="assets/img/photos/space3.jpg" alt="Random first slide" width="100%">
+          </ng-template> -->
+          <ng-template ngbSlide>
+            <img class='img_bnner' src="assets/img/photos/space5.jpg" alt="Random first slide" width="100%">
+            <div class="display_caption">
+                <h4 class="display_caption-text">$500 / day</h4>
+            </div>
+          </ng-template>
+        </ngb-carousel>
+      </div>
+      <div class="display_body">
+      <div class="mb-1">
+       <div class="mt-1">
+         <a href="/" class="display_body-btn">Workshop</a>
+       </div>
+       <div class="display_text-1">
+          <h5 class="mt-2 mb-2 text-bold-500"><a href="">The Space</a></h5>
+          <p><a href="">421 Lygon street</a></p>
+          <p class="text-bold-500"><a href="">Bruswick East VIC 3057</a></p>
+        </div>
+         <div class="display_icon">
+           <i class="fa fa-users"></i>
+           <span>&nbsp; 40</span>
+         </div>
+      </div>
+    </div>
+    <div class="display_text-2">
+          <a href="" class="display_sub-text text-bold-400">View <span style="vertical-align: middle;">&#62;</span></a>
+    </div>
+    </div>
+  </div>
+</div>
+</div>
+<app-footer></app-footer>

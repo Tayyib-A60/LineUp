@@ -14,9 +14,13 @@ import { ProfileComponent } from './profile/profile.component';
 import { BookingRequestComponent } from './booking-request/booking-request.component';
 import { BookingRequestTwoComponent } from './booking-request-two/booking-request-two.component';
 import { SpaceDisplayComponent } from './space-display/space-display.component';
+
 import { AddPropsComponent } from './spaces/add-props/add-props.component';
 import { MerchantAuthGuardService } from './services/merchantAuthGuardService';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { MapSpaceComponent } from './map-space/map-space.component';
+import { SpaceHomeComponent } from './space-home/space-home.component';
+import { NewSpaceComponent } from './new-space/new-space.component';
 
 
 const routes: Routes = [
@@ -41,6 +45,12 @@ const routes: Routes = [
   { path: 'booking-request', component: BookingRequestComponent },
   { path: 'booking-request-two', component: BookingRequestTwoComponent },
   { path: 'space-display', component: SpaceDisplayComponent },
+  { path: 'map-space', component: MapSpaceComponent },
+  { path: 'space-home', component: SpaceHomeComponent },
+  { path: 'new-space', component: NewSpaceComponent },
+  
+  
+  
   { path: '**', redirectTo: '' }
 
 ];
