@@ -8,6 +8,7 @@ namespace API.Core
     {
          void Add<T>(T entity) where T : class;
          void Update<T>(T entity) where T : class;
+         void UpdateSpace(Space space);
          void Delete<T>(T entity) where T : class;
          Task<bool> EntityExists<T>(T entityName) where T: class;
          Task<bool> SaveAllChanges();
@@ -16,6 +17,8 @@ namespace API.Core
          Task<QueryResult<Space>> GetSpaces(SpaceQuery query);
          Task<QueryResult<Space>> GetMerchantSpaces(SpaceQuery query);
          Task<QueryResult<Booking>> GetBookings(int id, BookingQuery query);
+         Task<QueryResult<User>> GetMerchants();
+         void VerifyMerchant(int id);
          Task<QueryResult<Booking>> GetCustomerBookings(int id, BookingQuery query);
          Task<SpaceType> GetSpaceType(int spaceTypeId);
          Task<IEnumerable<SpaceType>> GetSpaceTypes();

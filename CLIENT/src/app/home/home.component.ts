@@ -35,7 +35,6 @@ export class HomeComponent implements OnInit {
   }
   
   ngOnInit() {
-    this.notification.typeSuccess('Welcome to 234Spaces','Success!')
     this.store.dispatch(new spaceActions.GetSpaces());
 
     this.store.pipe(select(spaceSelectors.getSpaceQueryResult),

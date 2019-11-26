@@ -23,8 +23,8 @@ export class NotificationService {
     }
 
     // Success Type
-    typeError() {
-        this.toastr.error('I do not think that word means what you think it means.', 'Inconceivable!');
+    typeError(message, heading) {
+        this.toastr.error(message, heading);
     }
 
     // Custom Type

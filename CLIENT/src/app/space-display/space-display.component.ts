@@ -62,8 +62,10 @@ export class SpaceDisplayComponent implements OnInit {
     this.spaceStore.pipe(select(spaceSelectors.getSingleSpace),
         takeWhile(() => this.componentActive))
         .subscribe(space => {
+          console.log(space);
+          
           this.thisSpace = space;
-          console.log(this.thisSpace); 
+          // console.log(this.thisSpace); 
     });
     
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));

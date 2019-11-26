@@ -1,4 +1,6 @@
 export enum BookingActionTypes {
+    BookingSuccessNotification = '[Booking] Success Notification',
+    BookingFailureNotification = '[Booking] Failure Notification',
     CreateReservation= '[Reservation] Create Reservation',
     CreateReservationSuccess = '[Reservation] Create Reservation Success',
     CreateReservationFailure = '[Reservation] Create Reservation Failure',

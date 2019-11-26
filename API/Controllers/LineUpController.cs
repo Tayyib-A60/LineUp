@@ -27,6 +27,7 @@ namespace API.Controllers {
                 return BadRequest("Space cannot be null");
             if(await _lineUpRepository.EntityExists(spaceToCreate))
                 return BadRequest("Space has already been created");
+            spaceToCreate.DateCreated = DateTime.Now;
             _lineUpRepository.Add(spaceToCreate);
             await _lineUpRepository.SaveAllChanges();
             return Ok();
@@ -48,6 +49,7 @@ namespace API.Controllers {
             if(spaceToUpdate == null)
                 return BadRequest("Space cannot be null");
             if(await _lineUpRepository.EntityExists(spaceToUpdate)) {
+                // spaceToUpdate.Amenities.Entr
                 _lineUpRepository.Update(spaceToUpdate);
                 await _lineUpRepository.SaveAllChanges();
                 return Ok();
@@ -197,6 +199,13 @@ namespace API.Controllers {
         }
         [HttpGet("getMerchantBookings/{userId}")]
         public async Task<QueryResult<Booking>> GetMerchantBookings(int userId, [FromQuery] BookingQueryDTO queryDTO)
+        {
+            var query = _mapper.Map<BookingQuery>(queryDTO);
+            return await _lineUpRepository.GetBookings(userId, query);
+        }
+
+        [HttpGet("getMerchantReservations/{userId}")]
+        public async Task<QueryResult<Booking>> GetMerchantReservations(int userId, [FromQuery] BookingQueryDTO queryDTO)
         {
             var query = _mapper.Map<BookingQuery>(queryDTO);
             return await _lineUpRepository.GetBookings(userId, query);

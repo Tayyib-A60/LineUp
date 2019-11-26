@@ -24,7 +24,17 @@ namespace API.Persistence
         }
         public void Update<T>(T entity) where T : class
         {
+            // if(entity is Space) {
+            //     var space = entity as Space;
+            //     foreach (var item in space.Amenities)
+            //     {
+            //         _context.Entry<Amenity>(item).State = EntityState.Added;
+            //     }
+            // }
             _context.Entry(entity).State = EntityState.Modified;
+        }
+        public void UpdateSpace(Space space) {
+            _context.Spaces.Update(space);
         }
         public void Delete<T>(T entity) where T : class
         {
@@ -85,6 +95,10 @@ namespace API.Persistence
             return await _context.Spaces
                             .Include(space => space.Type)
                             .Include(space => space.Amenities)
+                            .Include(space => space.Location)
+                            .Include(space => space.PricePH)
+                            .Include(space => space.PricePD)
+                            .Include(space => space.PricePW)
                             .FirstOrDefaultAsync(s => s.Id == spaceId);
         }
         public async Task<QueryResult<Space>> GetSpaces(SpaceQuery query)
@@ -92,6 +106,10 @@ namespace API.Persistence
             var spaces =  _context.Spaces
                                     // .Where(sp => sp.UserId == query.UserId)
                                     .Include(sp => sp.Type)
+                                    .Include(space => space.Location)
+                                    .Include(space => space.PricePH)
+                                    .Include(space => space.PricePD)
+                                    .Include(space => space.PricePW)
                                     // .Include(sp => sp.Photos.Where(p => p.IsMain == true))
                                     .AsQueryable();
             spaces = FilterSpaces(query, spaces);
@@ -108,6 +126,10 @@ namespace API.Persistence
             var spaces =  _context.Spaces
                                     .Where(sp => sp.UserId == query.UserId)
                                     .Include(sp => sp.Type)
+                                    .Include(space => space.Location)
+                                    .Include(space => space.PricePH)
+                                    // .Include(space => space.PricePD)
+                                    // .Include(space => space.PricePD)
                                     // .Include(sp => sp.Photos.Where(p => p.IsMain == true))
                                     .AsQueryable();
             spaces = FilterSpaces(query, spaces);
@@ -153,11 +175,11 @@ namespace API.Persistence
         private IQueryable<Space> FilterSpaces(SpaceQuery query, IQueryable<Space> spaces)
         {
             if(query.Price > 0)
-                spaces = spaces.Where(sp => sp.Price <= query.Price);
+                spaces = spaces.Where(sp => (sp.PricePH.Price <= query.Price || sp.PricePD.Price <= query.Price || sp.PricePW.Price <= query.Price));
             if(!string.IsNullOrWhiteSpace(query.Location))
-                spaces = spaces.Where(sp => sp.Location.ToLower().Contains(query.Location));
+                spaces = spaces.Where(sp => sp.Location.Name.ToLower().Contains(query.Location));
             if(!string.IsNullOrWhiteSpace(query.SearchString))
-                spaces = spaces.Where(sp => sp.Location.ToLower().StartsWith(query.SearchString) || sp.Location.ToLower().Contains(query.SearchString) || sp.Name.StartsWith(query.SearchString) || sp.Name.ToLower().Contains(query.SearchString) || sp.Description.Contains(query.SearchString));
+                spaces = spaces.Where(sp => sp.Location.Name.ToLower().StartsWith(query.SearchString) || sp.Location.Name.ToLower().Contains(query.SearchString) || sp.Name.StartsWith(query.SearchString) || sp.Name.ToLower().Contains(query.SearchString) || sp.Description.Contains(query.SearchString));
             if(query.Size > 0)
                 spaces = spaces.Where(sp => Convert.ToInt64(sp.Size) <= query.Size);
             if(!string.IsNullOrWhiteSpace(query.SpaceType))
@@ -183,6 +205,17 @@ namespace API.Persistence
             return await _context.Amenities
                             .ToListAsync();
         }
+        public async Task<QueryResult<User>> GetMerchants()
+        {
+            throw new NotImplementedException();
+        }
+
+        public async void VerifyMerchant(int id)
+        {
+            var merchant = await _context.Users
+                        .FirstOrDefaultAsync(u => u.Id == id);
+            merchant.VerifiedAsMerchant = true;
+        }
         public async Task<Booking> GetBooking(int bookingId)
         {
             return await _context.Bookings
@@ -199,34 +232,18 @@ namespace API.Persistence
             var bookings = await _context.Bookings
                             .Include(bk => bk.SpaceBooked)
                             .Where(bk => bk.SpaceBooked.Id == spaceId)
-                            // .ToListAsync();
-                            // .Where(bk => bk.SpaceBooked.Id == spaceId)
-                            // (proposedBookingTime.From >= bk.UsingFrom 
-                            //             && proposedBookingTime.From < bk.UsingTill)
-                            //             || (proposedBookingTime.To >= bk.UsingFrom 
-                            //             && proposedBookingTime.To < bk.UsingTill)
-                            // (proposedBookingTime.From <= bk.UsingFrom
-                            //             || (proposedBookingTime.From > bk.UsingFrom 
-                            //             && proposedBookingTime.From <= bk.UsingTill )) && 
-                            //             ((proposedBookingTime.To <= bk.UsingTill 
-                            //             && proposedBookingTime.To > bk.UsingFrom)
-                            //             || proposedBookingTime.To > bk.UsingTill)
-                            .Where(bk => (bk.UsingFrom >= proposedBookingTime.From
-                                        && proposedBookingTime.From <= bk.UsingTill) 
-                                        || (bk.UsingFrom >= proposedBookingTime.To
-                                        && proposedBookingTime.To <= bk.UsingTill)
-                                        || (bk.UsingTill >= proposedBookingTime.From)
-                                        || (proposedBookingTime.From < bk.UsingTill
-                                        && proposedBookingTime.To > bk.UsingTill)
-                                )
-                            // .Where(bk => bk.UsingFrom.)
                             .ToListAsync();
+        //Check for the existing bookings that UsingFrom or UsingTill falls in between the proposed using from nd to
             var existing = new List<Booking>();
             foreach (var booking in bookings)
             {
+                var fallsInBtw = ((proposedBookingTime.From >= booking.UsingFrom || proposedBookingTime.From <= booking.UsingFrom) && booking.UsingFrom <= proposedBookingTime.To);
+                var alsoInBetween = ((proposedBookingTime.From >= booking.UsingTill || proposedBookingTime.From <= booking.UsingTill) && booking.UsingTill <= proposedBookingTime.To);
+                if(fallsInBtw || alsoInBetween)
+                    existing.Add(booking);
             };
             var bookingTimes = new List<BookedTimes>();
-            foreach (var item in bookings)
+            foreach (var item in existing)
             {
                 var bookingTime = new BookedTimes();
                 bookingTime.From = item.UsingFrom;

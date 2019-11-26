@@ -1,4 +1,7 @@
 export enum SpaceActionTypes {
+    SuccessNotification= 'Success Notification',
+    FailureNotification= 'Failure Notification',
+    NotificationDisplayed = 'Displayed Notification',
     CreateSpace = '[Space] Create Space',
     UpdateSpace = '[Space] Update Space',
     DeleteSpace = '[Space] Delete Space',
@@ -11,12 +14,12 @@ export enum SpaceActionTypes {
     CreateSpaceType = '[Spacetype] Create Spacetype',
     UpdateSpaceType = '[SpaceType] Update SpaceType',
     DeleteSpaceType = '[SpaceType] Delete SpaceType',
-    CreateSpaceTypeSuccess = '[Spacetype] Create SpaceTypeSuccess',
-    UpdateSpaceTypeSuccess = '[SpaceType] Update SpaceTypeSuccess',
-    DeleteSpaceTypeSuccess = '[SpaceType] Delete SpaceTypeSuccess',
-    CreateSpaceTypeFailure = '[Spacetype] Create SpaceTypeFailure',
-    UpdateSpaceTypeFailure = '[SpaceType] Update SpaceTypeFailure',
-    DeleteSpaceTypeFailure = '[SpaceType] Delete SpaceTypeFailure',
+    CreateSpaceTypeSuccess = '[Spacetype] Create SpaceType Success',
+    UpdateSpaceTypeSuccess = '[SpaceType] Update SpaceType Success',
+    DeleteSpaceTypeSuccess = '[SpaceType] Delete SpaceType Success',
+    CreateSpaceTypeFailure = '[Spacetype] Create SpaceType Failure',
+    UpdateSpaceTypeFailure = '[SpaceType] Update SpaceType Failure',
+    DeleteSpaceTypeFailure = '[SpaceType] Delete SpaceType Failure',
     CreateAmenity = '[Amenity] CreateAmenity',
     CreateAmenitySuccess = '[Amenity] CreateAmenity Success',
     CreateAmenityFailure = '[Amenity] CreateAmenity Failure',
@@ -35,4 +38,11 @@ export enum SpaceActionTypes {
     GetSingleSpace = '[GetSingleSpace] Get SingleSpace',
     GetSingleSpaceSuccess = '[GetSingleSpace] Get SingleSpace Success',
     GetSingleSpaceFailure = '[GetSingleSpace] Get SingleSpace Failure'
-}; 
+};
+export function containsSuccess(type: string) {
+    const isSuccess = type.toLowerCase().search('success');
+    if(isSuccess > 0){
+        return 'Success Notification';
+    }
+    return 'Failure Notification';
+}

@@ -21,6 +21,7 @@ export class BookingService {
         const url = this.url + `/lineUp/getCustomerBookings/${id}`;
         return this.httpClient.get(url, { headers });
     }
+    
     getMerchantReservations(id: number) {
         const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         const url = this.url + `/lineUp/getMerchantBookings/${id}`;

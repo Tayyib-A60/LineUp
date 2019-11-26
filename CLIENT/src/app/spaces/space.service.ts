@@ -36,6 +36,8 @@ export class SpaceService {
   }
 
   createSpaceType(spaceType: SpaceType) {
+    console.log('Got to create space type');
+    
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     const url = this.url + '/lineUp/createSpaceType';
     return this.httpClient.post(url, spaceType, { headers });

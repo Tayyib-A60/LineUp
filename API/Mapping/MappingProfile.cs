@@ -16,6 +16,7 @@ namespace API.Mapping
             CreateMap<ChatDTO, Chat>();
             CreateMap<EnquiryDTO, Enquiry>();
             CreateMap<SpaceDTO, Space>();
+            CreateMap<SpaceToUpdateDTO, Space>();
             CreateMap<SpaceTypeDTO, SpaceTypeDTO>();
             CreateMap<UserDTO, User>();
             CreateMap<UserToLoginDTO, User>();
@@ -29,6 +30,7 @@ namespace API.Mapping
             CreateMap<Chat, ChatDTO>();
             CreateMap<Enquiry, EnquiryDTO>();
             CreateMap<Space, SpaceDTO>();
+            CreateMap<Space, SpaceToUpdateDTO>();
             CreateMap<SpaceType, SpaceType>();
             CreateMap<User, UserDTO>();
             CreateMap<User, UserToLoginDTO>();

@@ -2,6 +2,20 @@ import { Action } from '@ngrx/store';
 import { BookingActionTypes } from './booking.action.types';
 import { Router } from '@angular/router';
 
+export class BookingSuccessNotification implements Action {
+    readonly type = BookingActionTypes.BookingSuccessNotification;
+
+    constructor(public payload: string) {
+        this.type = BookingActionTypes.BookingSuccessNotification;
+    }
+}
+export class BookingFailureNotification implements Action {
+    readonly type = BookingActionTypes.BookingFailureNotification;
+
+    constructor(public payload: string) {
+        this.type = BookingActionTypes.BookingFailureNotification;
+    }
+}
 export class CreateBooking implements Action {
     readonly type = BookingActionTypes.CreateBooking;
 
@@ -112,4 +126,5 @@ export type BookingActions = CreateBooking | CreateBookingSuccess | CreateBookin
 | CreateReservation | CreateReservationSuccess | CreateReservationFailure | GetCustomerBookings
 | GetCustomerBookingsSuccess | GetCustomerBookingsFailure | GetMerchantBookings
 | GetMerchantBookingsSuccess | GetMerchantBookingsFailure | GetBookingTimes
-| GetBookingTimesSuccess | GetBookingTimesFailure;
+| GetBookingTimesSuccess | GetBookingTimesFailure | BookingSuccessNotification
+| BookingFailureNotification;
