@@ -44,13 +44,10 @@ const routes: Routes = [
   { path: 'profile', component: ProfileComponent },
   { path: 'booking-request', component: BookingRequestComponent },
   { path: 'booking-request-two', component: BookingRequestTwoComponent },
-  { path: 'space-display', component: SpaceDisplayComponent },
   { path: 'map-space', component: MapSpaceComponent },
   { path: 'space-home', component: SpaceHomeComponent },
   { path: 'new-space', component: NewSpaceComponent },
-  
-  
-  
+  { path: 'space-details/:id', component: SpaceDisplayComponent },
   { path: '**', redirectTo: '' }
 
 ];

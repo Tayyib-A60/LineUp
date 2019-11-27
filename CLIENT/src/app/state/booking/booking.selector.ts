@@ -8,7 +8,17 @@ export const getCurrentBooking = createSelector(
     bookingState => bookingState.currentBooking
 );
 
-export const getBookings = createSelector(
+export const getCustomerBookings = createSelector(
     getBookingFeatureState,
-    bookingState => bookingState.Bookings
+    bookingState => bookingState.customerBookingQR
+);
+
+export const getMerchantBookings = createSelector(
+    getBookingFeatureState,
+    bookingState => bookingState.merchantBookingQR
+);
+
+export const getBookingTimes = createSelector(
+    getBookingFeatureState,
+    bookingState => bookingState.bookingTimes
 );

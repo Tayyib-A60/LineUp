@@ -33,6 +33,7 @@ import { MapSpaceComponent } from './map-space/map-space.component';
 import { SpaceChatComponent } from './space-chat/space-chat.component';
 import { SpaceHomeComponent } from './space-home/space-home.component';
 import { NewSpaceComponent } from './new-space/new-space.component';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -58,6 +59,7 @@ import { NewSpaceComponent } from './new-space/new-space.component';
     FormsModule,
     NgSelectModule,
     HttpClientModule,
+    ToastrModule.forRoot(),
     ReactiveFormsModule,
     NgbModule.forRoot(),
     PerfectScrollbarModule,

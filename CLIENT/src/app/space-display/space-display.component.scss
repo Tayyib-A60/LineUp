@@ -131,9 +131,11 @@ select {
 
 }
 .card_time_format {
-    background-color: #aaa;
+    background-color: rgb(235, 19, 19);
     padding: .2rem 1rem;
     border-radius: 3px;
+    margin-bottom: 2px;
+    font-size: 1.2rem;
 }
 
 .card .btn-floating {

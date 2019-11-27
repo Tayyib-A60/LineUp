@@ -25,16 +25,28 @@
                     	<form novalidate (ngSubmit)='createSpace()' [formGroup]="spaceForm" class="form">
 							<div class="form-body">
 		                        <div class="row">
-		                            <div class="col-xl-6 col-lg-6 col-md-12 mb-1">
+		                            <div class="col-xl-12 col-lg-12 col-md-12 mb-1">
 		                                <fieldset class="form-group">
 		                                    <label for="name">Space name</label>
 		                                    <input formControlName="name" type="text" class="form-control" name="name" id="name">
 		                                </fieldset>
 		                            </div>
-		                            <div class="col-xl-6 col-lg-6 col-md-12 mb-1">
+		                            <div *ngIf='editMode' class="col-xl-6 col-lg-6 col-md-12 mb-1">
 		                                <fieldset class="form-group">
-		                                    <label for="location">Location</label>
-		                                    <input formControlName="location" type="text" name="location" class="form-control" id="location">
+		                                    <label for="locationName">Location</label>
+		                                    <input formControlName="locationName" type="text" name="locationName" class="form-control" id="locationName">
+		                                </fieldset>
+		                            </div>
+		                            <div *ngIf='editMode' class="col-xl-6 col-lg-6 col-md-12 mb-1">
+		                                <fieldset class="form-group">
+		                                    <label for="locationLong">Longitude</label>
+		                                    <input formControlName="locationLong" type="text" name="locationLong" class="form-control" id="locationLong">
+		                                </fieldset>
+		                            </div>
+		                            <div *ngIf='editMode' class="col-xl-6 col-lg-6 col-md-12 mb-1">
+		                                <fieldset class="form-group">
+		                                    <label for="locationLat">Latitude</label>
+		                                    <input formControlName="locationLat" type="text" name="locationLat" class="form-control" id="locationLat">
 		                                </fieldset>
 		                            </div>
 		                            <div class="col-xl-6 col-lg-6 col-md-12 mb-1">
@@ -43,10 +55,40 @@
 		                                    <input formControlName="size" type="text" name="size" class="form-control" id="size" >
 		                                </fieldset>
 		                            </div>
-		                            <div class="col-xl-6 col-lg-6 col-md-12 mb-1">
+		                            <div *ngIf='editMode' class="col-xl-6 col-lg-6 col-md-12 mb-1">
 		                                <fieldset class="form-group">
-		                                    <label for="price">Price</label>
-		                                    <input formControlName="price" type="text" name="price" class="form-control" id="price" >
+		                                    <label for="price">Price Per Hour</label>
+		                                    <input formControlName="pricePH" type="number" name="pricePH" class="form-control" id="pricePH" >
+		                                </fieldset>
+		                            </div>
+		                            <div *ngIf='editMode' class="col-xl-6 col-lg-6 col-md-12 mb-1">
+		                                <fieldset class="form-group">
+		                                    <label for="price">Discount Per Hour</label>
+		                                    <input formControlName="discountPH" type="number" name="discountPH" class="form-control" id="discountPH" >
+		                                </fieldset>
+		                            </div>
+		                            <div *ngIf='editMode' class="col-xl-6 col-lg-6 col-md-12 mb-1">
+		                                <fieldset class="form-group">
+		                                    <label for="price">Price Per Day</label>
+		                                    <input formControlName="pricePD" type="number" name="pricePD" class="form-control" id="pricePD" >
+		                                </fieldset>
+		                            </div>
+		                            <div *ngIf='editMode' class="col-xl-6 col-lg-6 col-md-12 mb-1">
+		                                <fieldset class="form-group">
+		                                    <label for="price">Discount Per Day</label>
+		                                    <input formControlName="discountPD" type="number" name="discountPD" class="form-control" id="discountPD" >
+		                                </fieldset>
+		                            </div>
+		                            <div *ngIf='editMode' class="col-xl-6 col-lg-6 col-md-12 mb-1">
+		                                <fieldset class="form-group">
+		                                    <label for="price">Price Per Week</label>
+		                                    <input formControlName="pricePW" type="number" name="pricePW" class="form-control" id="pricePW" >
+		                                </fieldset>
+		                            </div>
+		                            <div *ngIf='editMode' class="col-xl-6 col-lg-6 col-md-12 mb-1">
+		                                <fieldset class="form-group">
+		                                    <label for="price">Discount Per Week</label>
+		                                    <input formControlName="discountPW" type="number" name="discountPW" class="form-control" id="discountPW" >
 		                                </fieldset>
 		                            </div>
 								</div>
@@ -59,9 +101,9 @@
 										</fieldset>                           
 									</div>
 								</div>
-								<div class="form-group" formArrayName="amenities">
+								<div *ngIf='editMode' class="form-group" formArrayName="amenities">
 									<div class="row"
-										*ngFor="let amenity of spaceForm.get('amenities').controls; let i = index"
+										*ngFor="let amenity of spaceForm.get('amenities')['controls']; let i = index"
 										[formGroupName]="i"
 									>
 										<div class="col-xl-5 col-lg-5 col-md-5">
@@ -80,7 +122,7 @@
 											<fieldset class="form-group">
 												<label for="price">Delete</label>
 												<!-- <input formControlName="price" type='number' class="form-control" placeholder="Price (required)" name="price" id="price"> -->
-												<button class="form-control" type="button" (click)='removeAmenity()' class="btn btn-raised mr-1 btn-danger btn-primary btn-sm">X</button>
+												<button class="form-control" type="button" (click)='removeAmenity(i)' class="btn btn-raised mr-1 btn-danger btn-primary btn-sm">X</button>
 											</fieldset>
 										</div>	
 									</div>
@@ -89,7 +131,7 @@
 										<!-- && selectedSpaceType !== 
 										&& selectedSpaceType !==  -->
 									<div class="col-xs-12 col-lg-12 col-md-12 col-sm-12">
-										<button [disabled]='!spaceForm.valid || !spaceForm.dirty' type="submit" class="btn btn-raised mr-1 btn-round btn-primary btn-large">{{ editMode? 'Update Space' : 'Create Space'}}</button>
+										<button  type="submit" class="btn btn-raised mr-1 btn-round btn-primary btn-large">{{ editMode? 'Update Space' : 'Create Space'}}</button>
 										<button *ngIf='editMode' type="button" (click)='addAmenity()' class="btn btn-raised mr-1 btn-round btn-primary btn-large">Add amenity</button>
 									</div>
 								</div>

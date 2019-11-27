@@ -20,32 +20,44 @@ export class AddspaceComponent implements OnInit {
   selectedSpaceType = '';
   spaceForm: FormGroup;
   id: string;
-  editMode: boolean;
+  editMode = false;
   spaceTypes$: Observable<SpaceType[]>;
   componentActive = true;
   spaceTypes: SpaceType[];
-  spaceToEdit: Space;
+  spaceToEdit = <Space>{};
+  currentUser: any;
     constructor(private formBuilder: FormBuilder,
                 private store: Store<spaceReducer.SpaceState>,
                 private route: ActivatedRoute) { }
                 
     ngOnInit() {
+      this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      // console.log(this.currentUser);
+
       this.route.params
       .subscribe(
         (params: Params) => {
           this.id = params['id'];
           this.editMode = params['id'] != null;
-          this.initializeForm();
-        }
-      );
+        });
+      if(this.editMode) {
+        this.store.dispatch(new spaceActions.GetSingleSpace(Number(this.id)));
+        this.store.pipe(select(spaceSelectors.getSingleSpace),
+        takeWhile(() => this.componentActive))
+        .subscribe(space => {
+          this.spaceToEdit = space;
+          if(this.spaceToEdit)
+            this.intializeFormWtValues();
+        });
+      }
       this.store.dispatch(new spaceActions.GetSpaceTypes());
-
-      // this.spaceTypes$ = this.store.pipe(select(spaceSelectors.getSpaceTypes));
       this.store.pipe(select(spaceSelectors.getSpaceTypes),
       takeWhile(() => this.componentActive))
       .subscribe(spaceTypes => {
         this.spaceTypes = spaceTypes;
       });
+      if(this.editMode == false)
+        this.initializeForm();
     }
 
     ngOnDestroy(): void {
@@ -55,66 +67,128 @@ export class AddspaceComponent implements OnInit {
     private initializeForm() {
       let amenitiesArray = new FormArray([]);
       let name = '';
-      let location = '';
+      let locationName = '';
+      let locationLong = '';
+      let locationLat = '';
       let size = null;
       let type = {type: '', id: null};
       let st = '';
       let stid = null;
       let description =  '';
-      let price = null;
-      let userId = 3;
-      if(this.editMode) {
-        // fetch the space to edit nd initialize the form to contain it's properties here.
-        this.store.dispatch(new spaceActions.GetSingleSpace(Number(this.id)));
-        this.store.pipe(select(spaceSelectors.getSingleSpace),
-        takeWhile(() => this.componentActive))
-          .subscribe(space => {
-            this.spaceToEdit = space;
-            name = space.name;
-            location = space.location;
-            description = space.description;
-            size = space.size;
-            price = space.price;
-            type = space.type;
-            if(space.type) {
-              st = space.type.type;
-              stid = space.type.id;
-            }
-            this.selectedSpaceType = st;
-            const amenities = space.amenities;
-            // console.log(amenities);
-          
-              if(amenities) {
-                console.log('Got here', amenities.length);
-                
-                  amenities.map(a => {
-                    amenitiesArray.push(
-                      new FormGroup({
-                        'name': new FormControl(a['name'], Validators.required),
-                        'price': new FormControl(a['price'], Validators.required)
-                      })
-                    );
-                  }); 
-              } 
-            
-            this.spaceForm = new FormGroup({
-              'id': new FormControl(this.id, Validators.required),
-              'name': new FormControl(name, [Validators.required,  Validators.minLength(3),
-                                            Validators.maxLength(50)]),
-              'location': new FormControl(location, Validators.required),
-              'description': new FormControl(description, Validators.required),
-              'size': new FormControl(size, Validators.required),
-              'price': new FormControl(price, Validators.required),
-              'amenities': amenitiesArray,
-              'userId': new FormControl(userId),
-              'type': new FormGroup({
-                'type': new FormControl(st),
-                'id': new FormControl(stid)
-              })
-            });
+      let pricePH = null;
+      let discountPH = null;
+      let pricePD = null;
+      let discountPD = null;
+      let pricePW = null;
+      let discountPW = null;
+      let currentUserId = this.currentUser['id'];
 
-        });
-        
+      this.spaceForm = new FormGroup({
+        'name': new FormControl(name, [Validators.required,  Validators.minLength(3),
+                                      Validators.maxLength(50)]),
+        // 'locationName': new FormControl(locationName, Validators.required),
+        // 'locationLong': new FormControl(locationLong, Validators.required),
+        // 'locationLat': new FormControl(locationLat, Validators.required),
+        'description': new FormControl(description, Validators.required),
+        'size': new FormControl(size, Validators.required),
+        // 'pricePH': new FormControl(pricePH, Validators.required),
+        // 'discountPH': new FormControl(discountPH, Validators.required),
+        // 'pricePD': new FormControl(pricePD, Validators.required),
+        // 'discountPD': new FormControl(discountPD, Validators.required),
+        // 'pricePW': new FormControl(pricePW, Validators.required),
+        // 'discountPW': new FormControl(discountPW, Validators.required),
+        // 'amenities': amenitiesArray,
+        'userId': new FormControl(currentUserId),
+        'type': new FormGroup({
+          'type': new FormControl(null),
+          'id': new FormControl(null)
+        })
+      });
+    }
+
+    private intializeFormWtValues() {
+      // console.log(this.spaceToEdit);
+      
+      if(this.editMode) { // && this.spaceToEdit
+        // fetch the space to edit nd initialize the form to contain it's properties here.
+        let amenitiesArray = new FormArray([]);
+        let name = '';
+        let locationName = '';
+        let locationLong = '';
+        let locationLat = '';
+        let size = null;
+        let type = {type: '', id: null};
+        let st = '';
+        let stid = null;
+        let description =  '';
+        let pricePH = null;
+        let discountPH = null;
+        let pricePD = null;
+        let discountPD = null;
+        let pricePW = null;
+        let discountPW = null;
+        let currentUserId = this.currentUser['id'];
+            
+            // this.spaceToEdit = space;
+        name = this.spaceToEdit.name;
+        if(this.spaceToEdit.location) {
+          locationName = this.spaceToEdit.location.name;
+          locationLong = this.spaceToEdit.location.long;
+          locationLat = this.spaceToEdit.location.lat;
+        }
+        if(this.spaceToEdit.pricePD) {
+          pricePH = this.spaceToEdit.pricePH.price;
+          discountPH = this.spaceToEdit.pricePH.discount;
+          pricePD = this.spaceToEdit.pricePD.price;
+          discountPD = this.spaceToEdit.pricePD.discount;
+          pricePW = this.spaceToEdit.pricePW.price;
+          discountPW = this.spaceToEdit.pricePW.discount;
+        }
+        description = this.spaceToEdit.description;
+        size = this.spaceToEdit.size;
+        type = this.spaceToEdit.type;
+        if(this.spaceToEdit.type) {
+          st = this.spaceToEdit.type.type;
+          stid = this.spaceToEdit.type.id;
+        }
+        this.selectedSpaceType = st;
+        const amenities = this.spaceToEdit.amenities;
+        // console.log(amenities);
+          
+        if(amenities) {                
+            amenities.map(a => {
+              amenitiesArray.push(
+                new FormGroup({
+                  'name': new FormControl(a['name'], Validators.required),
+                  'price': new FormControl(a['price'], Validators.required),
+                  // 'id': new FormControl(a['id'])
+                })
+              );
+            }); 
+        } 
+            
+        this.spaceForm = new FormGroup({
+          'id': new FormControl(this.id, Validators.required),
+          'name': new FormControl(name, [Validators.required,  Validators.minLength(3),
+                                        Validators.maxLength(50)]),
+          'locationName': new FormControl(locationName, Validators.required),
+          'locationLong': new FormControl(locationLong, Validators.required),
+          'locationLat': new FormControl(locationLat, Validators.required),
+          'description': new FormControl(description, Validators.required),
+          'size': new FormControl(size, Validators.required),
+          'pricePH': new FormControl(pricePH, Validators.required),
+          'discountPH': new FormControl(discountPH, Validators.required),
+          'pricePD': new FormControl(pricePD, Validators.required),
+          'discountPD': new FormControl(discountPD, Validators.required),
+          'pricePW': new FormControl(pricePW, Validators.required),
+          'discountPW': new FormControl(discountPW, Validators.required),
+          'amenities': amenitiesArray,
+          'userId': new FormControl(currentUserId),
+          'type': new FormGroup({
+            'type': new FormControl(st),
+            'id': new FormControl(stid)
+          })
+        });        
       }
       // this.spaceForm = this.formBuilder.group({
       //   spaceName: ['', [Validators.required,
@@ -125,22 +199,7 @@ export class AddspaceComponent implements OnInit {
       //   description: '',
       //   price: '',
       //   amenities
-      // });      
-      
-      this.spaceForm = new FormGroup({
-        'name': new FormControl(name, [Validators.required,  Validators.minLength(3),
-                                      Validators.maxLength(50)]),
-        'location': new FormControl(location, Validators.required),
-        'description': new FormControl(description, Validators.required),
-        'size': new FormControl(size, Validators.required),
-        'price': new FormControl(price, Validators.required),
-        'amenities': amenitiesArray,
-        'userId': new FormControl(userId),
-        'type': new FormGroup({
-          'type': new FormControl(null),
-          'id': new FormControl(null)
-        })
-      });
+      // });
     }
 
     addAmenity() {
@@ -172,12 +231,74 @@ export class AddspaceComponent implements OnInit {
         id: spaceTypeId
       });
       if(this.editMode) {
-        console.log(this.spaceForm.value);
+        // console.log(this.spaceForm.value);
+        const spaceToUpdate = {
+          id: Number(this.id),
+          userId: this.currentUser.id,
+          type: {
+            type: this.selectedSpaceType,
+            id: spaceTypeId
+          },
+          name: this.spaceForm.controls['name'].value,
+          location: {
+            id: this.spaceToEdit.location?this.spaceToEdit.location.id : 0,
+            name: this.spaceForm.controls['locationName'].value,
+            long: this.spaceForm.controls['locationLong'].value,
+            lat: this.spaceForm.controls['locationLat'].value
+          },
+          pricePH: {
+            id: this.spaceToEdit.pricePH? this.spaceToEdit.pricePH.id: 0,
+            price: this.spaceForm.controls['pricePH'].value,
+            discount: this.spaceForm.controls['discountPH'].value
+          },
+          pricePD: {
+            id: this.spaceToEdit.pricePD? this.spaceToEdit.pricePD.id: 0,
+            price: this.spaceForm.controls['pricePD'].value,
+            discount: this.spaceForm.controls['discountPD'].value
+          },
+          pricePW: {
+            id: this.spaceToEdit.pricePW? this.spaceToEdit.pricePW.id : 0,
+            price: this.spaceForm.controls['pricePW'].value,
+            discount: this.spaceForm.controls['discountPW'].value
+          },
+          description: this.spaceForm.controls['description'].value,
+          size: this.spaceForm.controls['size'].value,
+          amenities: [...this.spaceForm.controls['amenities'].value]
+        }
+        // console.log(spaceToUpdate);
         
-        this.store.dispatch(new spaceActions.UpdateSpace(this.spaceForm.value));
+        this.store.dispatch(new spaceActions.UpdateSpace(<Space>(spaceToUpdate)));
       }
       else {
-        this.store.dispatch(new spaceActions.CreateSpace(this.spaceForm.value));
+        const spaceToCreate = {
+          userId: this.currentUser.id,
+          type: {
+            type: this.selectedSpaceType,
+            id: spaceTypeId
+          },
+          name: this.spaceForm.controls['name'].value,
+          // location: {
+          //   name: this.spaceForm.controls['locationName'].value,
+          //   long: this.spaceForm.controls['locationLong'].value,
+          //   lat: this.spaceForm.controls['locationLat'].value
+          // },
+          // pricePH: {
+          //   price: this.spaceForm.controls['pricePH'].value,
+          //   discount: this.spaceForm.controls['discountPH'].value
+          // },
+          // pricePD: {
+          //   price: this.spaceForm.controls['pricePD'].value,
+          //   discount: this.spaceForm.controls['discountPD'].value
+          // },
+          // pricePW: {
+          //   price: this.spaceForm.controls['pricePW'].value,
+          //   discount: this.spaceForm.controls['discountPW'].value
+          // },
+          description: this.spaceForm.controls['description'].value,
+          size: this.spaceForm.controls['size'].value
+
+        }
+        this.store.dispatch(new spaceActions.CreateSpace(<Space>(spaceToCreate)));
       }
       // console.log(this.spaceForm.value);
       this.spaceForm.reset();

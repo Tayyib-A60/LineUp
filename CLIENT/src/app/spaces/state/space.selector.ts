@@ -8,6 +8,10 @@ export const getSpaces = createSelector(
     getSpaceFeatureState,
     spaceState => spaceState.spaces
 );
+export const getMerchantSpaces = createSelector(
+    getSpaceFeatureState,
+    spaceState => spaceState.merchantSpacesQR
+);
 
 export const getSpaceTypes = createSelector(
     getSpaceFeatureState,

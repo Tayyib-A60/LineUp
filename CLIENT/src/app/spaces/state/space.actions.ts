@@ -5,6 +5,27 @@ import { SpaceType } from '../models/spaceType.model';
 import { Amenity } from '../models/amenity.model';
 import { SpaceQueryResult } from '../models/spaceQueryResult';
 
+export class SuccessNotification implements Action {
+    readonly type = SpaceActionTypes.SuccessNotification;
+
+    constructor(public payload: string) {
+        this.type = SpaceActionTypes.SuccessNotification;
+    }
+}
+export class FailureNotification implements Action {
+    readonly type = SpaceActionTypes.FailureNotification;
+
+    constructor(public payload: string) {
+        this.type = SpaceActionTypes.FailureNotification;
+    }
+}
+export class NotificationDisplayed implements Action {
+    readonly type = SpaceActionTypes.NotificationDisplayed;
+
+    constructor() {
+        this.type = SpaceActionTypes.NotificationDisplayed;
+    }
+}
 export class CreateSpace implements Action {
     readonly type = SpaceActionTypes.CreateSpace;
 
@@ -92,6 +113,27 @@ export class GetSpacesFailure implements Action {
 
     constructor(public payload: string) {
         this.type = SpaceActionTypes.GetSpacesFailure;
+    }
+}
+export class GetMerchantSpaces implements Action {
+    readonly type = SpaceActionTypes.GetMerchantSpaces;
+
+    constructor() {
+        this.type = SpaceActionTypes.GetMerchantSpaces;
+    }
+}
+export class GetMerchantSpacesSuccess implements Action {
+    readonly type = SpaceActionTypes.GetMerchantSpacesSuccess;
+
+    constructor(public payload: SpaceQueryResult) {
+        this.type = SpaceActionTypes.GetMerchantSpacesSuccess;
+    }
+}
+export class GetMerchantSpacesFailure implements Action {
+    readonly type = SpaceActionTypes.GetMerchantSpacesFailure;
+
+    constructor(public payload: string) {
+        this.type = SpaceActionTypes.GetMerchantSpacesFailure;
     }
 }
 
@@ -230,6 +272,7 @@ DeleteSpace | CreateSpaceType | UpdateSpaceType | DeleteSpaceType
 | CreateSpaceSuccess | CreateSpaceFailure | UpdateSpaceSuccess | UpdateSpaceFailure
 | DeleteSpaceSuccess | DeleteSpaceFailure | CreateSpaceTypeSuccess | CreateSpaceTypeFailure
 | UpdateSpaceTypeSuccess | UpdateSpaceTypeFailure | DeleteSpaceTypeSuccess | DeleteSpaceTypeFailure
-| CreateAmenity | CreateAmenitySuccess | CreateAmenityFailure | GetSpaces | GetSpacesSuccess
-| GetSpacesFailure | GetSpaceTypes | GetSpaceTypesSuccess | GetSpaceTypesFailure | GetSingleSpace
-| GetSingleSpaceSuccess | GetSingleSpaceFailure; 
+| CreateAmenity | CreateAmenitySuccess | CreateAmenityFailure 
+| GetSpaces | GetSpacesSuccess | GetSpacesFailure | GetMerchantSpaces | GetMerchantSpacesSuccess 
+| GetMerchantSpacesFailure | GetSpaceTypes | GetSpaceTypesSuccess | GetSpaceTypesFailure
+| GetSingleSpace | GetSingleSpaceSuccess | GetSingleSpaceFailure | SuccessNotification | FailureNotification | NotificationDisplayed; 

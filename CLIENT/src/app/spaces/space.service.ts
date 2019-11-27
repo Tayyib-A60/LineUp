@@ -36,6 +36,8 @@ export class SpaceService {
   }
 
   createSpaceType(spaceType: SpaceType) {
+    console.log('Got to create space type');
+    
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     const url = this.url + '/lineUp/createSpaceType';
     return this.httpClient.post(url, spaceType, { headers });
@@ -54,6 +56,11 @@ export class SpaceService {
   getSpaces(filter?: any) {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     const url = this.url + '/lineUp/getSpaces?' + this.toQueryString(filter);
+    return this.httpClient.get(url, { headers });
+  }
+  getMerchantSpaces(filter?: any) {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    const url = this.url + '/lineUp/getMerchantSpaces?' + this.toQueryString(filter);
     return this.httpClient.get(url, { headers });
   }
 
