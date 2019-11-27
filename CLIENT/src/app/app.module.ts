@@ -29,6 +29,10 @@ import { UserModule } from './state/user.module';
 import { UserEffects } from './state/user.effects';
 import { BookingModule } from './state/booking/booking.module';
 import { BookingEffects } from './state/booking/booking.effects';
+import { MapSpaceComponent } from './map-space/map-space.component';
+import { SpaceChatComponent } from './space-chat/space-chat.component';
+import { SpaceHomeComponent } from './space-home/space-home.component';
+import { NewSpaceComponent } from './new-space/new-space.component';
 import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
@@ -41,7 +45,11 @@ import { ToastrModule } from 'ngx-toastr';
     ProfileComponent,
     BookingRequestComponent,
     BookingRequestTwoComponent,
-    SpaceDisplayComponent
+    SpaceDisplayComponent,
+    MapSpaceComponent,
+    SpaceChatComponent,
+    SpaceHomeComponent,
+    NewSpaceComponent
   ],
   imports: [
     AppRoutingModule,

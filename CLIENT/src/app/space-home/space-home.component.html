@@ -1,0 +1,233 @@
+<app-navbar (toggleHideSidebar)="toggleHideSidebar($event)"></app-navbar>
+<div class="nav_container">
+  <div class="d-flex justify-content-between align-items-center px-5 pt-3">
+    <div class="nav_logo">
+      <h3>234Spaces</h3>
+    </div>
+    <div style="vertical-align: baseline;" class="d-flex align-items-center">
+        <!-- <div class="dropdown btn-group dropup mr-3 mb-1" ngbDropdown>
+        <button type="button" class="btn btn-daner btn-raised">
+          Action
+        <button type="button" class="btn btn-danger btn-raised dropdown-toggle" ngbDropdownToggle aria-haspopup="true"
+        aria-expanded="false">
+          <span><i class="ft-menu"></i></span>MENU
+        </button>
+          <span class="sr-only">Toggle Dropdown</span>
+        </button>
+        <div ngbDropdownMenu class="dropdown-menu" role="menu">
+          <a class="dropdown-item">Action</a>
+          <a class="dropdown-item">Another action</a>
+          <a class="dropdown-item">Something else here</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item">Separated link</a>
+        </div>
+      </div> -->
+        <!-- <div class="mr-3">
+            
+            <div data-toggle="collapse" data-target="#navbarToggleExternalContent" 
+            aria-controls="navbarToggleExternalContent" aria-expanded="false" 
+            aria-label="Toggle navigation">
+            <div class="menu-toggler">
+                <i class="ft-menu menu-icon"></i>
+                <label class="fontcon-classname ml-1" for="">MENU</label>
+            </div>
+            </div>
+            <div class="collapse" id="navbarToggleExternalContent">
+              <div class="menu-list">
+                  <div class="menu-list-item">
+                      <a href="" class=''>
+                        <i class="ft-search"></i>
+                        <span class="fonticon-clasme ml-4">Browse spaces</span>
+                    </a>
+                  </div>
+                  <div class="menu-list-item">
+                      <a href="" class=''>
+                        <i class="ft-search"></i>
+                        <span class="fonticon-clasme ml-4">Browse spaces</span>
+                    </a>
+                  </div>
+                  <div class="menu-list-item">
+                      <a href="" class=''>
+                        <i class="ft-search"></i>
+                        <span class="fonticon-clasme ml-4">Browse spaces</span>
+                    </a>
+                  </div>
+                  <div class="menu-list-item">
+                      <a href="" class=''>
+                        <i class="ft-search"></i>
+                        <span class="fonticon-clasme ml-4">Browse spaces</span>
+                    </a>
+                  </div>
+              </div>
+            </div>
+        </div> -->
+        <div class="dropdown btn-group mr-1 " ngbDropdown>
+            <button  type="button" class="btn btn-inf btn-raied h4 mb-0 dropdown-toggle" ngbDropdownToggle>
+                <i  class="ft-menu mr-1"></i>Menu
+              <!-- <span class="caret">jjddhhh</span> -->
+            </button>
+            <div ngbDropdownMenu class="dropdown-menu" role="menu">
+              <a class="dropdown-item">Action</a>
+              <a class="dropdown-item">Another action</a>
+              <a class="dropdown-item">Something else here</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item">Separated link</a>
+            </div>
+          </div>
+        <div>
+            <button type="button" class="btn btn-raised px-4 mb-0  nav_btn">LOGIN</button>
+        </div>
+    </div>
+  </div>
+  <!-- Home-text start -->
+  <div class="space_head px-5">
+      <p class="space_text">Explore over 4,000 short-term</p>
+      <p class="space_text">and shared work spaces.</p>
+  </div>
+<!-- Home-text end -->
+<!-- Search Bar Start -->
+<div class="space_input mx-5">
+      <span class="space_highlight">
+          <i class="fa fa-search fa-1x space_icon-1"></i>
+          <input type="text" class="space_input-2" placeholder="Search by location">
+          <!-- <span>|</span> -->
+      </span>
+      <span class="space_highlight">
+        <select name="" id="">
+          <option value="All Spaces" selected>
+            <span class="menu-list-item">All Spaces</span>
+          </option>
+          <option value="All Spaces">
+            <span class="menu-list-item">All Spaces</span>
+          </option>
+          <option value="All Spaces">
+            <span class="menu-list-item">All Spaces</span>
+          </option>
+          <!-- <option value="Office Space" class="menu-list-item">Office Space</option>
+          <option value="Office Space" class="menu-list-item">Office Space</option>
+          <option value="Office Space" class="menu-list-item">Office Space</option> -->
+        </select>
+      </span>
+      <span>
+          <button type="button" class="btn btn-raised px-4 mb-0  nav_btn">SEARCH</button>
+      </span>
+</div>
+  <!-- Search Bar End -->
+  <!-- Home Image Start -->
+  <div >
+      <img class='space_img' src="assets/img/photos/space2.jpg"  alt="Random first slide">
+  </div>
+<!-- Home Image End -->
+<!-- Home-text start -->
+<div class="space_head px-5 pb-2">
+    <p class="space_text">Browse or book workspaces around Nigeria.</p>
+    <!-- <P class="space_text">and shared work spaces.</P> -->
+</div>
+<!-- Home-text end -->
+<!-- List your space for free section start -->
+<!-- List your space for free section start -->
+<div class="jumbotron list_space p-0">
+  <div class="row">
+      <div class="col-sm-6">
+          <img class='list_space_img' src="assets/img/photos/01.jpg" alt="Random first slide">
+        </div>
+        <div class="col-sm-6 pt-5">
+          <h1 class="text-bold-600">List your space for free</h1>
+          <div class="custom-control custom-checkbox pt-2">
+              <input type="checkbox" class="custom-control-input lead" checked>
+              <label class="custom-control-label text-bold-400" for="defaultUnchecked">&nbsp;List your space in 5 easy steps</label>
+          </div>
+          <div class="custom-control custom-checkbox pt-2">
+              <input type="checkbox" class="custom-control-input lead" checked>
+              <label class="custom-control-label text-bold-400" for="defaultUnchecked">&nbsp;Customise and control your listing</label>
+          </div>
+          <div class="custom-control custom-checkbox pt-2">
+              <input type="checkbox" class="custom-control-input lead" checked>
+              <label class="custom-control-label text-bold-400" for="defaultUnchecked">&nbsp;Attract great people</label>
+          </div>
+          <div class="d-flex justify-content-end">
+              <button type="button" class="btn btn-raised mr-5 mb-0 pr-3 nav_btn list_space_btn">Get Started</button>
+          </div>
+        </div>
+  </div>
+</div>
+<!-- List your space for free section end -->
+<!-- Home-text start -->
+<div class="space_head px-5 pb-4">
+    <p class="space_text">234Spaces gives you peace of mind.</p>
+</div>
+<!-- Home-text end -->
+<div class="d-flex justify-content-between mx-5 pb-2">
+  <div class="space_manager">
+    <div class="pb-2 pt-3">
+        <i  class="fa fa-home fa-3x space_manager_icon pb-3"></i>
+        <p class="space_manager_text">Trusty and verified</p>
+        <p class="space_manager_text">space managers.</p>
+    </div>
+    <p>Verified space managers have got your back. Prepped and ready to support you with any questions about the unknown.</p>
+  </div>
+  <div class="space_manager">
+    <div class="pb-2 pt-3">
+        <i  class="fa fa-credit-card fa-3x space_manager_icon pb-3"></i>
+        <p class="space_manager_text">Book and pay</p>
+        <p class="space_manager_text">conveniently online.</p>
+    </div>
+    <p>Our listings have all the relevant info you need so you can go from browsing to booking in next to no time.</p>
+  </div>
+  <div class="space_manager">
+    <div class="pb-2 pt-3">
+        <i  class="fas fa-user-lock fa-3x space_manager_icon pb-3"></i>
+        <p class="space_manager_text">Secure payments</p>
+        <p class="space_manager_text">through Stripe.</p>
+    </div>
+    <p>Our payment partner, Stripe, uses gold standard security tools to make sure your personal information is out of harm’s way.</p>
+  </div>
+  <div class="space_manager">
+    <div class="pb-2 pt-3">
+        <i  class="fa fa-home fa-3x space_manager_icon pb-3"></i>
+        <p class="space_manager_text">We’re friends of</p>
+        <p class="space_manager_text">space managers.</p>
+    </div>
+    <p>Verified space managers have got your back. Prepped and ready to support you with any questions about the unknown.</p>
+  </div>
+  
+  
+  
+</div>
+</div>
+<app-footer></app-footer>
+<!-- <div class="container">
+                <div data-toggle="collapse" data-target="#demo">
+                    <i class="ft-menu menu-icon"></i>
+                    <label class="fontcon-classname ml-1" for="">MENU</label>
+                </div>
+                <div id="demo" class="collapse">
+                    <div class="menu-list">
+                        <div class="menu-list-item">
+                            <a href="" class=''>
+                              <i class="ft-search"></i>
+                              <span class="fonticon-clasme ml-4">Browse spaces</span>
+                          </a>
+                        </div>
+                        <div class="menu-list-item">
+                            <a href="" class=''>
+                              <i class="ft-search"></i>
+                              <span class="fonticon-clasme ml-4">Browse spaces</span>
+                          </a>
+                        </div>
+                        <div class="menu-list-item">
+                            <a href="" class=''>
+                              <i class="ft-search"></i>
+                              <span class="fonticon-clasme ml-4">Browse spaces</span>
+                          </a>
+                        </div>
+                        <div class="menu-list-item">
+                            <a href="" class=''>
+                              <i class="ft-search"></i>
+                              <span class="fonticon-clasme ml-4">Browse spaces</span>
+                          </a>
+                        </div>
+                    </div>
+                  </div>
+                
+              </div> -->
