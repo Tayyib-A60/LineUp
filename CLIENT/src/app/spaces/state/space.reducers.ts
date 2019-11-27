@@ -1,10 +1,10 @@
+import { QueryResult } from './../models/queryResult.model';
 import { Space } from '../models/space.model';
 import { SpaceType } from '../models/spaceType.model';
 import { SpaceActions } from './space.actions';
 import { SpaceActionTypes } from './space.action.types';
 import { Amenity } from '../models/amenity.model';
 import { SpaceQueryResult } from '../models/spaceQueryResult';
-import { NotificationService } from '../../services/notification.service';
 
 export interface SpaceState {
     spaces: Space[];
@@ -15,7 +15,8 @@ export interface SpaceState {
     amenities: Amenity[];
     error: string;
     response: string;
-    spaceToEdit: Space
+    spaceToEdit: Space,
+    merchants: QueryResult
 }
 
 const INITIAL_STATE: SpaceState = {
@@ -27,7 +28,8 @@ const INITIAL_STATE: SpaceState = {
     error: '',
     response: '',
     amenities: [],
-    spaceToEdit: <Space>{}
+    spaceToEdit: <Space>{},
+    merchants: <QueryResult>{}
 }
     
 
@@ -161,6 +163,17 @@ const INITIAL_STATE: SpaceState = {
                     error: ''
                 };
             case SpaceActionTypes.GetSingleSpaceFailure:
+                return {
+                    ...state,
+                    error: action.payload
+                };
+            case SpaceActionTypes.GetMerchantsSuccess:
+                return {
+                    ...state,
+                    merchants: action.payload,
+                    error: ''
+                };
+            case SpaceActionTypes.GetMerchantsFailure:
                 return {
                     ...state,
                     error: action.payload

@@ -22,6 +22,7 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
   placement = "bottom-right";
   public isCollapsed = true;
   layoutSub: Subscription;
+  currentUser: any;
   @Output()
   toggleHideSidebar = new EventEmitter<Object>();
 
@@ -48,12 +49,12 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit() {
     this.config = this.configService.templateConf;
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
   }
 
   merchantIsAuthenticated() {
-    const currrentUser = JSON.parse(localStorage.getItem('currentUser'));
-    if(currrentUser) {      
-      return currrentUser['roles'] == 'Merchant'? true: false;
+    if(this.currentUser) {      
+      return this.currentUser['roles'] == 'Merchant' || 'AnySpaces'? true: false;
     }    
   }
 

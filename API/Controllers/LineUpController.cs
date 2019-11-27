@@ -161,8 +161,8 @@ namespace API.Controllers {
             return Ok();
         }
 
-        [HttpPost("createBooking")]
-        public async Task<IActionResult> CreateBooking([FromBody] BookingDTO bookingDTO)
+        [HttpPost("createReservation")]
+        public async Task<IActionResult> CreateReservation([FromBody] BookingDTO bookingDTO)
         {
             var bookingToCreate = _mapper.Map<Booking>(bookingDTO);
             if(bookingToCreate == null)
@@ -179,6 +179,30 @@ namespace API.Controllers {
             var existingBookingTimes = await _lineUpRepository.GetBookedTimes(bookingToCreate.SpaceBooked.Id, bookingToCreateBT);
             if(existingBookingTimes.Count() > 0)
                 return BadRequest("You can't select from a range of booking that already exists");
+            bookingToCreate.Status = BookingStatus.Booked;
+            bookingToCreate.BookingTime = DateTime.Now;
+            _lineUpRepository.Add(bookingToCreate);
+            await _lineUpRepository.SaveAllChanges();
+            return Ok();
+        }
+        [HttpPost("createBooking")]
+        public async Task<IActionResult> CreateBooking([FromBody] BookingDTO bookingDTO)
+        {
+            var bookingToCreate = _mapper.Map<Booking>(bookingDTO);
+            var bookingToCreateBT = new BookedTimes();
+            bookingToCreateBT.From = bookingToCreate.UsingFrom;
+            bookingToCreateBT.To = bookingToCreate.UsingTill;
+            var existingBookingTimes = await _lineUpRepository.GetBookedTimes(bookingToCreate.SpaceBooked.Id, bookingToCreateBT);
+            if(existingBookingTimes.Count() > 0)
+                return BadRequest("You can't select from a range of booking that already exists");
+            if(bookingToCreate == null)
+                return BadRequest("Booking cannot be null");
+            if(bookingToCreate.UsingFrom < DateTime.Now)
+                return BadRequest("You can't create a booking for a date that has passed");
+            if(bookingToCreate.UsingFrom >= bookingToCreate.UsingTill)
+                return BadRequest("Time from must be behind/be the same as time to");
+            if(await _lineUpRepository.EntityExists(bookingToCreate))
+                return BadRequest("Booking already exists");
             bookingToCreate.Status = BookingStatus.Reserved;
             bookingToCreate.BookingTime = DateTime.Now;
             _lineUpRepository.Add(bookingToCreate);
@@ -263,6 +287,7 @@ namespace API.Controllers {
             await _lineUpRepository.SaveAllChanges();
             return Ok();
         }
+
         [HttpPost("acceptBooking/{bookingId}")]
         public async Task<IActionResult> AcceptBooking(int bookingId)
         {
@@ -270,7 +295,19 @@ namespace API.Controllers {
             if(booking == null)
                 return BadRequest("Booking not found");
             booking.Status = BookingStatus.Booked;
+            await _lineUpRepository.SaveAllChanges();
             return Ok();
+        }
+
+        [HttpGet("getMerchants")]
+        public async Task<IActionResult> GetMerchants()
+        {
+            var merchants = await _lineUpRepository.GetMerchants();
+            var queryResultToReturn = new QueryResult<UserToReturnDTO>();
+            queryResultToReturn.TotalItems = merchants.TotalItems;
+            var merchantsToReturn = _mapper.Map<IEnumerable<User>, IEnumerable<UserToReturnDTO>>(merchants.Items);
+            queryResultToReturn.Items = merchantsToReturn;
+            return Ok(queryResultToReturn);
         }
     }
 }

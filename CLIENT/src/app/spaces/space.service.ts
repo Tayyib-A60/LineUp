@@ -70,6 +70,12 @@ export class SpaceService {
     return this.httpClient.delete(url, { headers });
   }
 
+  getMerchants(filter?: any) {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    const url = this.url + '/lineUp/getMerchants';
+    return this.httpClient.get(url, { headers });
+  }
+
   private toQueryString(obj) {
     const parts = [];
     for (const property in obj) {

@@ -14,6 +14,7 @@ namespace API.Core
          Task<bool> SaveAllChanges();
          Task<Enquiry> GetEnquiry(int enquiryId);
          Task<Space> GetSpace(int spaceId);
+         void CreateBookingFromReservation(int id);
          Task<QueryResult<Space>> GetSpaces(SpaceQuery query);
          Task<QueryResult<Space>> GetMerchantSpaces(SpaceQuery query);
          Task<QueryResult<Booking>> GetBookings(int id, BookingQuery query);

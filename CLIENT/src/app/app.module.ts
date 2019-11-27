@@ -5,6 +5,7 @@ import { NgModule } from '@angular/core';
 import { PerfectScrollbarModule } from "ngx-perfect-scrollbar";
 import { CommonModule } from "@angular/common";
 import { NgSelectModule } from '@ng-select/ng-select';
+import { AgmCoreModule } from '@agm/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -51,6 +52,9 @@ import { ToastrModule } from 'ngx-toastr';
     FormsModule,
     NgSelectModule,
     HttpClientModule,
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyDqDa-Jf1KhEOO0FXyJwReGiquRMCaz9Bs'
+    }),
     ToastrModule.forRoot(),
     ReactiveFormsModule,
     NgbModule.forRoot(),
@@ -64,7 +68,7 @@ import { ToastrModule } from 'ngx-toastr';
       name: '234 Spaces',
       maxAge: 25,
       logOnly: environment.production
-    })
+    }) // AIzaSyDqDa-Jf1KhEOO0FXyJwReGiquRMCaz9Bs (Google maps api key)
   ],
   exports: [
   ],

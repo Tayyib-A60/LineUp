@@ -267,6 +267,28 @@ export class CreateAmenityFailure implements Action {
     }
 }
 
+export class GetMerchants implements Action {
+    readonly type = SpaceActionTypes.GetMerchants;
+
+    constructor() {
+        this.type = SpaceActionTypes.GetMerchants;
+    }
+}
+export class GetMerchantsSuccess implements Action {
+    readonly type = SpaceActionTypes.GetMerchantsSuccess;
+
+    constructor(public payload: any) {
+        this.type = SpaceActionTypes.GetMerchantsSuccess;
+    }
+}
+export class GetMerchantsFailure implements Action {
+    readonly type = SpaceActionTypes.GetMerchantsFailure;
+
+    constructor(public payload: string) {
+        this.type = SpaceActionTypes.GetMerchantsFailure;
+    }
+}
+
 export type SpaceActions = CreateSpace | UpdateSpace |
 DeleteSpace | CreateSpaceType | UpdateSpaceType | DeleteSpaceType
 | CreateSpaceSuccess | CreateSpaceFailure | UpdateSpaceSuccess | UpdateSpaceFailure
@@ -275,4 +297,4 @@ DeleteSpace | CreateSpaceType | UpdateSpaceType | DeleteSpaceType
 | CreateAmenity | CreateAmenitySuccess | CreateAmenityFailure 
 | GetSpaces | GetSpacesSuccess | GetSpacesFailure | GetMerchantSpaces | GetMerchantSpacesSuccess 
 | GetMerchantSpacesFailure | GetSpaceTypes | GetSpaceTypesSuccess | GetSpaceTypesFailure
-| GetSingleSpace | GetSingleSpaceSuccess | GetSingleSpaceFailure | SuccessNotification | FailureNotification | NotificationDisplayed; 
+| GetSingleSpace | GetSingleSpaceSuccess | GetSingleSpaceFailure | SuccessNotification | FailureNotification | NotificationDisplayed | GetMerchants | GetMerchantsSuccess | GetMerchantsFailure; 

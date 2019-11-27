@@ -24,7 +24,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent" [ngbCollapse]="isCollapsed">
                 <ul class="navbar-nav">
                     <li *ngIf='merchantIsAuthenticated()' class="nav-item" ngbDropdown [placement]="placement">
-                        <a [routerLink]="['/admin']" class="nav-link position-relative"><span class="nav-name">Merchant</span></a>
+                        <a [routerLink]="['/admin']" class="nav-link position-relative"><span class="nav-name">{{currentUser['roles'] == 'Merchant'? 'Merchant': 'Admin'}}</span></a>
                     </li>
                     <li *ngIf='!merchantIsAuthenticated()' class="nav-item" ngbDropdown [placement]="placement">
                         <a [routerLink]="['/sign-up-as-merchant']" class="nav-link position-relative"><span class="nav-name">List-your-space</span></a>

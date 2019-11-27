@@ -207,7 +207,13 @@ namespace API.Persistence
         }
         public async Task<QueryResult<User>> GetMerchants()
         {
-            throw new NotImplementedException();
+            var users = await _context.Users
+                        .Where(u => u.Role == Role.Merchant)
+                        .ToListAsync();            
+            var queryResult = new QueryResult<User>();
+            queryResult.TotalItems = users.Count();
+            queryResult.Items = users;
+            return queryResult;
         }
 
         public async void VerifyMerchant(int id)
@@ -215,6 +221,12 @@ namespace API.Persistence
             var merchant = await _context.Users
                         .FirstOrDefaultAsync(u => u.Id == id);
             merchant.VerifiedAsMerchant = true;
+        }
+        public async void CreateBookingFromReservation(int id)
+        {
+            var reservation = await _context.Bookings
+                                    .FirstOrDefaultAsync(bk => bk.Id == id);
+            reservation.Status = BookingStatus.Booked;
         }
         public async Task<Booking> GetBooking(int bookingId)
         {

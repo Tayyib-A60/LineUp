@@ -37,8 +37,12 @@ export enum SpaceActionTypes {
     GetAmenitiesFailure = '[GetAmenities] Get Amenities Failure',
     GetSingleSpace = '[GetSingleSpace] Get SingleSpace',
     GetSingleSpaceSuccess = '[GetSingleSpace] Get SingleSpace Success',
-    GetSingleSpaceFailure = '[GetSingleSpace] Get SingleSpace Failure'
+    GetSingleSpaceFailure = '[GetSingleSpace] Get SingleSpace Failure',
+    GetMerchants = '[GetMerchants] Get Merchants',
+    GetMerchantsSuccess = '[GetMerchants] Get Merchants Success',
+    GetMerchantsFailure = '[GetMerchants] Get Merchants Failure',
 };
+
 export function containsSuccess(type: string) {
     const isSuccess = type.toLowerCase().search('success');
     if(isSuccess > 0){

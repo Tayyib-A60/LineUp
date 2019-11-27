@@ -17,6 +17,7 @@ import { SpaceDisplayComponent } from './space-display/space-display.component';
 import { AddPropsComponent } from './spaces/add-props/add-props.component';
 import { MerchantAuthGuardService } from './services/merchantAuthGuardService';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { ManageMerchantsComponent } from './spaces/manage-merchants/manage-merchants.component';
 
 
 const routes: Routes = [
@@ -27,7 +28,8 @@ const routes: Routes = [
     { path: 'manage-reservations', component: ManagereservationsComponent },
     { path: 'manage-bookings', component: ManagebookingsComponent },
     { path: 'manage-enquiries', component: ManageenquiriesComponent },
-    { path: 'create-addons', component: AddPropsComponent }
+    { path: 'create-addons', component: AddPropsComponent },
+    { path: 'merchants', component: ManageMerchantsComponent },
   ]},
   { path: '', component: HomeComponent },
   { path: 'sign-in', component: SignInComponent },

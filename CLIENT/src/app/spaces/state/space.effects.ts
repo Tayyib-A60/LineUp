@@ -1,9 +1,10 @@
+import { ManageMerchantsService } from './../manage-merchants.service';
 import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { SpaceService } from '../space.service';
-import { SpaceActionTypes, containsSuccess } from './space.action.types';
+import { SpaceActionTypes } from './space.action.types';
 import * as spaceActions from './space.actions';
-import { mergeMap, map, catchError, switchMap } from 'rxjs/operators';
+import { mergeMap, map, catchError } from 'rxjs/operators';
 import { SpaceType } from '../models/spaceType.model';
 import { of, Observable } from 'rxjs';
 import { Action } from '@ngrx/store';
@@ -11,6 +12,7 @@ import { Amenity } from '../models/amenity.model';
 import { Space } from '../models/space.model';
 import { SpaceQueryResult } from '../models/spaceQueryResult';
 import { NotificationService } from '../../services/notification.service';
+import { QueryResult } from '../models/queryResult.model';
 
 @Injectable()
 export class SpaceEffects {
@@ -26,7 +28,8 @@ export class SpaceEffects {
     };
     constructor(private actions$: Actions,
                 private spaceService: SpaceService,
-                private notify: NotificationService) { }
+                private notify: NotificationService,
+                private merchantService: ManageMerchantsService) { }
 
     // @Effect()
     // successNotification$ = this.actions$.pipe(
@@ -139,6 +142,17 @@ export class SpaceEffects {
             .pipe(
                 map((merchantSpaceQR: SpaceQueryResult) => new spaceActions.GetMerchantSpacesSuccess(merchantSpaceQR)),
                 catchError(err => of(new spaceActions.GetMerchantSpacesFailure(err) && new spaceActions.FailureNotification(`${err.message}`)))
+            )
+        )
+    );
+
+    @Effect()
+    getMerchants$: Observable<Action> = this.actions$.pipe(
+        ofType(SpaceActionTypes.GetMerchants),
+        mergeMap((action: spaceActions.GetMerchants) => this.spaceService.getMerchants()
+            .pipe(
+                map((merchants: QueryResult) => new spaceActions.GetMerchantsSuccess(merchants)),
+                catchError(err => of(new spaceActions.GetMerchantsFailure(err)))
             )
         )
     );

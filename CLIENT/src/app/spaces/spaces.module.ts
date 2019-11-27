@@ -23,6 +23,9 @@ import { SpaceEffects } from './state/space.effects';
 import { reducer } from './state/space.reducers';
 import { AddPropsComponent } from './add-props/add-props.component';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { ManageMerchantsComponent } from './manage-merchants/manage-merchants.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { AgmCoreModule } from '@agm/core';
  
 
 @NgModule({
@@ -39,7 +42,9 @@ import { NgSelectModule } from '@ng-select/ng-select';
     ManagereservationsComponent,
     ManagebookingsComponent,
     ManageenquiriesComponent,
-    AddPropsComponent
+    AddPropsComponent,
+    ManageMerchantsComponent,
+    DashboardComponent
   ],
   imports: [
     AppRoutingModule,
@@ -47,6 +52,9 @@ import { NgSelectModule } from '@ng-select/ng-select';
     NgxDatatableModule,
     TagInputModule,
     FormsModule,
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyDqDa-Jf1KhEOO0FXyJwReGiquRMCaz9Bs'
+    }),
     ReactiveFormsModule,
     StoreModule.forFeature('spaces', reducer),
     EffectsModule.forFeature([SpaceEffects]),
