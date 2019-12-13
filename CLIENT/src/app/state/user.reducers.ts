@@ -72,7 +72,6 @@ export function reducer(state = INITIAL_STATE, action: UserActions) {
                 response: null
             };
         case UserActionTypes.ConfirmAsMerchantSuccess:
-            console.log('Confirmed as merchant');
             return {
                 ...state,
                 response: action.payload,
@@ -85,7 +84,6 @@ export function reducer(state = INITIAL_STATE, action: UserActions) {
                 error: action.payload
             };
         case UserActionTypes.ConfirmEmailSuccess:
-            console.log('Email Confirmed');
             return {
                 ...state,
                 response: action.payload,

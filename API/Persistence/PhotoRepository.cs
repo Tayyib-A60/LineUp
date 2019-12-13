@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,8 +23,9 @@ namespace API.Persistence
         }
         public async Task<Photo> GetUserPhoto(int userId)
         {
-            return await _context.Photos
-                            .SingleOrDefaultAsync(p => p.UserId == userId);
+            throw new NotImplementedException();
+            // return await _context.Photos
+            //                 .SingleOrDefaultAsync(p => p.UserId == userId);
         }
         public async Task<Photo> GetSpacePhoto(int spaceId)
         {

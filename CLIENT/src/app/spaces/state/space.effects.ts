@@ -1,9 +1,10 @@
+import { ManageMerchantsService } from './../manage-merchants.service';
 import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { SpaceService } from '../space.service';
-import { SpaceActionTypes, containsSuccess } from './space.action.types';
+import { SpaceActionTypes } from './space.action.types';
 import * as spaceActions from './space.actions';
-import { mergeMap, map, catchError, switchMap } from 'rxjs/operators';
+import { mergeMap, map, catchError } from 'rxjs/operators';
 import { SpaceType } from '../models/spaceType.model';
 import { of, Observable } from 'rxjs';
 import { Action } from '@ngrx/store';
@@ -11,6 +12,7 @@ import { Amenity } from '../models/amenity.model';
 import { Space } from '../models/space.model';
 import { SpaceQueryResult } from '../models/spaceQueryResult';
 import { NotificationService } from '../../services/notification.service';
+import { QueryResult } from '../models/queryResult.model';
 
 @Injectable()
 export class SpaceEffects {
@@ -26,7 +28,8 @@ export class SpaceEffects {
     };
     constructor(private actions$: Actions,
                 private spaceService: SpaceService,
-                private notify: NotificationService) { }
+                private notification: NotificationService,
+                private merchantService: ManageMerchantsService) {}
 
     // @Effect()
     // successNotification$ = this.actions$.pipe(
@@ -50,11 +53,16 @@ export class SpaceEffects {
         map((action: spaceActions.CreateSpaceType) => action.payload),
         mergeMap((spaceType: SpaceType) => 
             this.spaceService.createSpaceType(spaceType).pipe(
-                map(response => new spaceActions.CreateSpaceTypeSuccess(response) && new spaceActions.SuccessNotification('Space type created successfully')
-                ),
-                catchError(err => of(new spaceActions.CreateSpaceTypeFailure(err) && new spaceActions.FailureNotification('Failed to create space type')) )
-                )
+                map(response => {
+                    this.notification.typeSuccess('Space type was added successfully', 'Space Type Success');
+                    return new spaceActions.CreateSpaceTypeSuccess(response);
+                }),
+                catchError(err => {
+                    this.notification.typeError(`${err.message}`, 'Error');
+                    return of(new spaceActions.CreateSpaceTypeFailure(err))
+                })
             )
+        )
     );
     
     @Effect()
@@ -63,8 +71,14 @@ export class SpaceEffects {
         map((action: spaceActions.CreateSpace) => action.payload),
         mergeMap((space: Space) => 
             this.spaceService.createSpace(space).pipe(
-                map(response => new spaceActions.CreateSpaceSuccess(response) && new spaceActions.SuccessNotification('Space created successfully') ),
-                catchError(err => of(new spaceActions.CreateSpaceFailure(err) && new spaceActions.FailureNotification(`${err.message}`)))
+                map(response => {
+                    this.notification.typeSuccess('Space added', 'Success')
+                    return new spaceActions.CreateSpaceSuccess(response)
+                }),
+                catchError(err => {
+                    this.notification.typeError(`${err.message}`, 'Error');
+                    return of(new spaceActions.CreateSpaceFailure(err));
+                })
             )
         )
     );
@@ -75,8 +89,14 @@ export class SpaceEffects {
         map((action: spaceActions.UpdateSpace) => action.payload),
         mergeMap((space: Space) => 
             this.spaceService.updateSpace(space.id, space).pipe(
-                map(response => new spaceActions.UpdateSpaceSuccess(response) && new spaceActions.SuccessNotification('Space updated successfully')),
-                catchError(err => of(new spaceActions.UpdateSpaceFailure(err) && new spaceActions.FailureNotification(`${err.message}`)))
+                map(response => {
+                    this.notification.typeSuccess('Space updated', 'Success');
+                    return new spaceActions.UpdateSpaceSuccess(response);
+                }),
+                catchError(err =>{
+                    this.notification.typeError(`${err.message}`, 'Error');
+                    return of(new spaceActions.UpdateSpaceFailure(err));
+                })
             )
         )
     );
@@ -87,8 +107,14 @@ export class SpaceEffects {
         map((action: spaceActions.CreateAmenity) => action.payload),
         mergeMap((amenity: Amenity) => 
             this.spaceService.createAmenity(amenity).pipe(
-                map(response => new spaceActions.CreateAmenitySuccess(response) && new spaceActions.SuccessNotification('Amenity created successfully')),
-                catchError(err => of(new spaceActions.CreateAmenityFailure(err) && new spaceActions.FailureNotification(`${err.message}`)))
+                map(response => {
+                    this.notification.typeSuccess('Amenity added','Success')
+                    return new spaceActions.CreateAmenitySuccess(response)
+                }),
+                catchError(err => {
+                    this.notification.typeError(`${err.message}`, 'Error');
+                    return of(new spaceActions.CreateAmenityFailure(err))
+                })
             )
         )
     );
@@ -98,11 +124,11 @@ export class SpaceEffects {
         ofType(SpaceActionTypes.GetSingleSpace),
         mergeMap((action: spaceActions.GetSingleSpace) => this.spaceService.getSpace(action.payload)
             .pipe(
-                map((space: Space) => {
-                    // console.log(space);
-                    
-                    return new spaceActions.GetSingleSpaceSuccess(space)}),
-                catchError(err => of(new spaceActions.GetSingleSpaceFailure(err) && new spaceActions.FailureNotification(`${err.message}`)))
+                map((space: Space) => new spaceActions.GetSingleSpaceSuccess(space)),
+                catchError(err => {
+                    this.notification.typeError(`${err.message}`, 'Error');
+                    return of(new spaceActions.GetSingleSpaceFailure(err))
+                })
             ) 
         )
     );
@@ -112,11 +138,11 @@ export class SpaceEffects {
         ofType(SpaceActionTypes.GetSpaceTypes),
         mergeMap((action: spaceActions.GetSpaceTypes) => this.spaceService.getSpaceTypes()
             .pipe(
-                map((spaceTypes: SpaceType[]) => {
-                this.notify.typeSuccess('action.payload', 'Success!')
-                    return new spaceActions.GetSpaceTypesSuccess(spaceTypes);
-                }),
-                catchError(err => of(new spaceActions.GetSpaceTypesFailure(err) && new spaceActions.FailureNotification(`${err.message}`)))
+                map((spaceTypes: SpaceType[]) => new spaceActions.GetSpaceTypesSuccess(spaceTypes)),
+                catchError(err => {
+                    this.notification.typeError(`${err.message}`, 'Error');
+                    return of(new spaceActions.GetSpaceTypesFailure(err))
+                })
             ) 
         )
     );
@@ -124,10 +150,13 @@ export class SpaceEffects {
     @Effect()
     getSpaces$: Observable<Action> = this.actions$.pipe(
         ofType(SpaceActionTypes.GetSpaces),
-        mergeMap((action: spaceActions.GetSpaces) => this.spaceService.getSpaces(this.query)
+        mergeMap((action: spaceActions.GetSpaces) => this.spaceService.getSpaces(action.payload)
             .pipe(
                 map((spaceQueryResult: SpaceQueryResult) => new spaceActions.GetSpacesSuccess(spaceQueryResult)),
-                catchError(err => of(new spaceActions.GetSpacesFailure(err) && new spaceActions.FailureNotification(`${err.message}`)))
+                catchError(err => {
+                    this.notification.typeError(`${err.message}`, 'Error');
+                    return of(new spaceActions.GetSpacesFailure(err))
+                })
             )
         )
     );
@@ -135,10 +164,27 @@ export class SpaceEffects {
     @Effect()
     getMerchantSpaces$: Observable<Action> = this.actions$.pipe(
         ofType(SpaceActionTypes.GetMerchantSpaces),
-        mergeMap((action: spaceActions.GetMerchantSpaces) => this.spaceService.getMerchantSpaces(this.merchantQuery)
+        mergeMap((action: spaceActions.GetMerchantSpaces) => this.spaceService.getMerchantSpaces(action.payload)
             .pipe(
                 map((merchantSpaceQR: SpaceQueryResult) => new spaceActions.GetMerchantSpacesSuccess(merchantSpaceQR)),
-                catchError(err => of(new spaceActions.GetMerchantSpacesFailure(err) && new spaceActions.FailureNotification(`${err.message}`)))
+                catchError(err => {
+                    this.notification.typeError(`${err.message}`, 'Error');
+                    return of(new spaceActions.GetMerchantSpacesFailure(err))
+                })
+            )
+        )
+    );
+
+    @Effect()
+    getMerchants$: Observable<Action> = this.actions$.pipe(
+        ofType(SpaceActionTypes.GetMerchants),
+        mergeMap((action: spaceActions.GetMerchants) => this.spaceService.getMerchants()
+            .pipe(
+                map((merchants: QueryResult) => new spaceActions.GetMerchantsSuccess(merchants)),
+                catchError(err => {
+                    this.notification.typeError(`${err.message}`, 'Error');
+                    return of(new spaceActions.GetMerchantsFailure(err))
+                })
             )
         )
     );
@@ -149,10 +195,51 @@ export class SpaceEffects {
         map((action: spaceActions.DeleteSpace) => action.payload),
         mergeMap((id: number) => 
             this.spaceService.deleteSpace(id).pipe(
-                map((response: number) => new spaceActions.DeleteSpaceSuccess(response) && new spaceActions.SuccessNotification('Deleted successfully')),
-                catchError(err => of(new spaceActions.DeleteSpaceFailure(err) && new spaceActions.FailureNotification(`${err.message}`)))
+                map((response: number) => {
+                    this.notification.typeSuccess('Space deleted', 'Success');
+                    return new spaceActions.DeleteSpaceSuccess(response)
+                }),
+                catchError(err => {
+                    this.notification.typeError(`${err.message}`, 'Error');
+                    return of(new spaceActions.DeleteSpaceFailure(err))
+                })
             )
         )
     );
+
+    @Effect()
+    deletePhoto$: Observable<Action> = this.actions$.pipe(
+        ofType(SpaceActionTypes.DeleteSpacePhoto),
+        map((action: spaceActions.DeleteSpace) => action.payload),
+        mergeMap((id: number) =>
+            this.spaceService.deletePhoto(id).pipe(
+                map((res) => {
+                    this.notification.typeSuccess('Photo deleted', 'Success');
+                    return new spaceActions.DeleteSpacePhotoSuccess(id)
+                }),
+                catchError(err => {
+                    this.notification.typeError(`${err.message}`, 'Error');
+                    return of(new spaceActions.DeleteSpacePhotoFailure(err))
+                })
+            )
+        )
+    );   
     
+    @Effect()
+    setMainPhoto$: Observable<Action> = this.actions$.pipe(
+        ofType(SpaceActionTypes.SetMainPhoto),
+        map((action: spaceActions.SetMainPhoto) => action.payload),
+        mergeMap((id: number) => 
+            this.spaceService.setMainPhoto(id).pipe(
+                map((res) => {
+                    this.notification.typeSuccess('Main photo is set', 'Success');
+                    return new spaceActions.SetMainPhotoSuccess(id)
+                }),
+                catchError(err => {
+                    this.notification.typeError(`${err.message}`, 'Error');
+                    return of(new spaceActions.SetMainPhotoFailure(err))
+                })
+            )
+        )
+    );
 }

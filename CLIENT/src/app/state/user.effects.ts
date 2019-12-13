@@ -1,3 +1,4 @@
+import { NotificationService } from './../services/notification.service';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { Actions, Effect, ofType } from '@ngrx/effects';
@@ -12,7 +13,8 @@ import { User } from '../spaces/models/user.model';
 export class UserEffects {
 
     constructor(private action$: Actions,
-                private userService: UserService) { }
+                private userService: UserService,
+                private notification: NotificationService) { }
     
     @Effect()
     createUser$: Observable<Action> = this.action$.pipe(
@@ -20,9 +22,14 @@ export class UserEffects {
         map((action: userActions.CreateUser) => action.payload),
         mergeMap((user: User) => 
             this.userService.createUserAsCustomer(user).pipe(
-                map(response => new userActions.CreateUserSuccess(response)),
-                catchError(err => of(new userActions.CreateUserFailure(err))
-                )
+                map(response => {
+                    this.notification.typeSuccess('Sign up was successful', 'Sign up success');
+                    return new userActions.CreateUserSuccess(response);
+                }),
+                catchError(err => {
+                    this.notification.typeError('Sign up failed', 'Sign up failed');
+                    return of(new userActions.CreateUserFailure(err));
+                })
             )
         )
     );
@@ -33,9 +40,14 @@ export class UserEffects {
         map((action: userActions.CreateMerchantUser) => action.payload),
         mergeMap((user: User) => 
             this.userService.createUserAsMerchant(user).pipe(
-                map(response => new userActions.CreateUserSuccess(response)),
-                catchError(err => of(new userActions.CreateUserFailure(err))
-                )
+                map(response => {
+                    this.notification.typeSuccess('Sign up was successful', 'Sign up success');
+                    return new userActions.CreateUserSuccess(response);
+                }),
+                catchError(err => {
+                    this.notification.typeError('Sign up failed', 'Sign up failed');
+                    return of(new userActions.CreateUserFailure(err));
+                })
             )
         )
     );
@@ -46,9 +58,14 @@ export class UserEffects {
         map((action: userActions.SignInUser) => action.payload),
         mergeMap((user: User) => 
             this.userService.signInUser(user).pipe(
-                map(user => new userActions.SignInUserSuccess(user)),
-                catchError(err => of(new userActions.SignInUserFailure(err))
-                )
+                map(user => {
+                    this.notification.typeSuccess('Sign in was successful', 'Sign in success');
+                    return new userActions.SignInUserSuccess(user);
+                }),
+                catchError(err => {
+                    this.notification.typeError('Sign in failed' , 'Sign in failed');
+                    return of(new userActions.SignInUserFailure(err));
+                })
             )
         )
     );
@@ -59,8 +76,14 @@ export class UserEffects {
         map((action: userActions.ForgotPassword) => action.payload),
         mergeMap((user: any) => 
             this.userService.forgotPassword(user).pipe(
-                map(res => new userActions.ForgotPasswordSuccess(res)),
-                catchError(err => of(new userActions.ForgotPasswordFailure(err)))
+                map(res => {
+                    this.notification.typeSuccess('An link to reset your password has been sent to your email', 'Success');
+                    return new userActions.ForgotPasswordSuccess(res);
+                }),
+                catchError(err => {
+                    this.notification.typeError('Unable to send email, please try again', 'Failed')
+                   return of(new userActions.ForgotPasswordFailure(err));
+                })
             )
         )
     );
@@ -71,8 +94,14 @@ export class UserEffects {
         map((action: userActions.ResetPassword) => action.payload),
         mergeMap((userToUpdate: any) => 
             this.userService.resetPassword(userToUpdate).pipe(
-                map(res => new userActions.ResetPasswordSuccess(res)),
-                catchError(err => of(new userActions.ResetPasswordFailure(err)))
+                map(res => {
+                    this.notification.typeSuccess('Password reset was successful', 'Success')
+                    return new userActions.ResetPasswordSuccess(res);
+                }),
+                catchError(err => {
+                    this.notification.typeSuccess('Unable to reset your password', 'Failed')
+                    return of(new userActions.ResetPasswordFailure(err))
+                })
             )
         )
     );
@@ -83,8 +112,14 @@ export class UserEffects {
         map((action: userActions.ConfirmEmail) => action.payload),
         mergeMap((userToConfirm: any) =>
             this.userService.confirmEmail(userToConfirm).pipe(
-                map(res => new userActions.ConfirmEmailSuccess(res.toString())),
-                catchError(err => of(new userActions.ConfirmEmailFailure(err)))
+                map(res => {
+                    this.notification.typeSuccess('Your email has been confirmed', 'Success');
+                    return new userActions.ConfirmEmailSuccess(res.toString());
+                }),
+                catchError(err => {
+                    this.notification.typeError('Unable to confirm your email, please check your internet connection', 'Failed');
+                    return of(new userActions.ConfirmEmailFailure(err));
+                })
             )
         )
     );
@@ -94,8 +129,14 @@ export class UserEffects {
         map((action: userActions.ConfirmAsMerchant) => action.payload),
         mergeMap((merchantToConfirm: any) =>
             this.userService.confirmAsMerchant(merchantToConfirm).pipe(
-                map(res => new userActions.ConfirmAsMerchantSuccess(res.toString())),
-                catchError(err => of(new userActions.ConfirmAsMerchantFailure(err)))
+                map(res => {
+                    this.notification.typeSuccess('Your email has been confirmed', 'Success');
+                    return new userActions.ConfirmAsMerchantSuccess(res.toString())
+                }),
+                catchError(err => {
+                    this.notification.typeError('Unable to confirm your email, please check your internet connection', 'Failed');
+                return of(new userActions.ConfirmAsMerchantFailure(err));
+                })
             )
         )
     );

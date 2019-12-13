@@ -10,6 +10,7 @@ export interface Space {
     pricePW: Pricing;
     userId: number;
     amenities: Amenity[];
+    photos: any[]
 }
 export interface Location {
     id: number;

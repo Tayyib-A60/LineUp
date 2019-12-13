@@ -1,6 +1,5 @@
 import { AuthGuardService } from './../services/authguard.service';
 import { Component, Output, EventEmitter, OnDestroy, OnInit, AfterViewInit } from '@angular/core';
-// import { TranslateService } from '@ngx-translate/core';
 import { LayoutService } from '../services/layout.service';
 import { Subscription } from 'rxjs';
 import { ConfigService } from '../services/config.service';
@@ -22,6 +21,7 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
   placement = "bottom-right";
   public isCollapsed = true;
   layoutSub: Subscription;
+  currentUser: any;
   @Output()
   toggleHideSidebar = new EventEmitter<Object>();
 
@@ -48,16 +48,17 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit() {
     this.config = this.configService.templateConf;
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
   }
 
   merchantIsAuthenticated() {
-    const currrentUser = JSON.parse(localStorage.getItem('currentUser'));
-    if(currrentUser) {      
-      return currrentUser['roles'] == 'Merchant'? true: false;
+    if(this.currentUser) {      
+      return this.currentUser['roles'] === 'Merchant' || 'AnySpaces'? true: false;
     }    
   }
 
   signOut() {
+    localStorage.removeItem('currentUser');
     this.store.dispatch(new userActions.SignOutUser());
     this.router.navigate(['']);
   }

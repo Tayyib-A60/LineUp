@@ -13,7 +13,7 @@ export class BookingEffects {
 
     constructor(private actions$: Actions,
                 private bookingService: BookingService,
-                private notify: NotificationService) { }
+                private notification: NotificationService) { }
 
     // @Effect()
     // successNotification$ = this.actions$.pipe(
@@ -37,8 +37,14 @@ export class BookingEffects {
         map((action: bookingActions.CreateReservation) => action.payload),
         mergeMap((booking: any) =>
             this.bookingService.createReservation(booking).pipe(
-                map(res => new bookingActions.CreateReservationSuccess(res)),
-                catchError(err => of(new bookingActions.CreateReservationFailure(err)))
+                map(res => {
+                    this.notification.typeSuccess('Your reservation was added', 'Success');
+                    return new bookingActions.CreateReservationSuccess(res);
+                }),
+                catchError(err => {
+                    this.notification.typeError("We're unable to add your reservation at the moment, please try again", 'Failed');
+                    return of(new bookingActions.CreateReservationFailure(err));
+                })
             )
         )
     );
@@ -50,7 +56,10 @@ export class BookingEffects {
         mergeMap((customerId: number) =>
             this.bookingService.getCustomerReservations(customerId).pipe(
                 map(res => new bookingActions.GetCustomerBookingsSuccess(res)),
-                catchError(err => of(new bookingActions.GetCustomerBookingsFailure(err)))
+                catchError(err => {
+                    this.notification.typeError('Unable to get your bookings/reservations','Failed')
+                    return of(new bookingActions.GetCustomerBookingsFailure(err))
+                })
             )
         )
     );
@@ -61,7 +70,10 @@ export class BookingEffects {
         mergeMap((requestBody: any) =>
             this.bookingService.getBookingTimes(requestBody).pipe(
                 map(res => new bookingActions.GetBookingTimesSuccess(res) ),
-                catchError(err => of(new bookingActions.GetBookingTimesFailure(err)))
+                catchError(err => {
+                    this.notification.typeError('Please check your internet connection', 'Failed');
+                    return of(new bookingActions.GetBookingTimesFailure(err));
+                })
             )
         )
     );
@@ -70,12 +82,15 @@ export class BookingEffects {
     getMerchantBookings$: Observable<Action> = this.actions$.pipe(
         ofType(BookingActionTypes.GetMerchantBookings),
         map((action: bookingActions.GetMerchantBookings) => action.payload),
-        mergeMap((merchantId: number) =>
-            this.bookingService.getMerchantReservations(merchantId).pipe(
+        mergeMap((merchantBookingQuery: any) => {            
+            return this.bookingService.getMerchantReservations(merchantBookingQuery['userId'], merchantBookingQuery).pipe(
                 map(res => new bookingActions.GetMerchantBookingsSuccess(res)
                  ),
-                catchError(err => of(new bookingActions.GetMerchantBookingsFailure(err) ))
-            )
+                catchError(err => {
+                    this.notification.typeError('Please check your internet connection', 'Failed');
+                    return of(new bookingActions.GetMerchantBookingsFailure(err));
+                })
+            )}
         )
     );
 

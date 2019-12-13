@@ -1,3 +1,5 @@
+import { PaginationComponent } from './../pagination/pagination.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { StoreModule } from '@ngrx/store';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -23,7 +25,13 @@ import { SpaceEffects } from './state/space.effects';
 import { reducer } from './state/space.reducers';
 import { AddPropsComponent } from './add-props/add-props.component';
 import { NgSelectModule } from '@ng-select/ng-select';
- 
+import { ManageMerchantsComponent } from './manage-merchants/manage-merchants.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { AgmCoreModule } from '@agm/core';
+import { ImageEditorComponent } from './image-editor/image-editor.component';
+import { FileUploadModule } from 'ng2-file-upload';
+import { NguCarouselModule } from '@ngu/carousel';
+import { AdminPaginationComponent } from './admin-pagination/admin-pagination.component';
 
 @NgModule({
   declarations: [
@@ -39,18 +47,29 @@ import { NgSelectModule } from '@ng-select/ng-select';
     ManagereservationsComponent,
     ManagebookingsComponent,
     ManageenquiriesComponent,
-    AddPropsComponent
+    AddPropsComponent,
+    ManageMerchantsComponent,
+    DashboardComponent,
+    ImageEditorComponent,
+    AdminPaginationComponent,
+    // PaginationComponent
   ],
   imports: [
     AppRoutingModule,
     CommonModule,
+    NgbModule.forRoot(),
     NgxDatatableModule,
     TagInputModule,
     FormsModule,
+    FileUploadModule,
+    NguCarouselModule,
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyDqDa-Jf1KhEOO0FXyJwReGiquRMCaz9Bs'
+    }),
     ReactiveFormsModule,
     StoreModule.forFeature('spaces', reducer),
     EffectsModule.forFeature([SpaceEffects]),
-    NgSelectModule
+    NgSelectModule,
   ],
   providers: [SidebarDirective]
 })

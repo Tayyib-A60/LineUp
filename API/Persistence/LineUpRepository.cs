@@ -99,6 +99,7 @@ namespace API.Persistence
                             .Include(space => space.PricePH)
                             .Include(space => space.PricePD)
                             .Include(space => space.PricePW)
+                            .Include(space => space.Photos)
                             .FirstOrDefaultAsync(s => s.Id == spaceId);
         }
         public async Task<QueryResult<Space>> GetSpaces(SpaceQuery query)
@@ -125,6 +126,7 @@ namespace API.Persistence
         {
             var spaces =  _context.Spaces
                                     .Where(sp => sp.UserId == query.UserId)
+                                    // .Where(sp => sp.Type.Type.ToLower().Contains(query.SpaceType.ToLower()))
                                     .Include(sp => sp.Type)
                                     .Include(space => space.Location)
                                     .Include(space => space.PricePH)
@@ -149,9 +151,10 @@ namespace API.Persistence
                             .Include(b => b.Chat)
                             .AsQueryable();
             bookings = bookings.OrderByDescending(bp => bp.Id);
+            bookings = FilterBookings(query, bookings);
             var queryResult = new QueryResult<Booking>();
-            // bookings = bookings.AsQueryable().Skip((query.CurrentPage - 1) * query.PageSize)
-            //                         .Take(query.PageSize);
+            bookings = bookings.AsQueryable().Skip((query.CurrentPage - 1) * query.PageSize)
+                                    .Take(query.PageSize);
             queryResult.TotalItems = bookings.Count();
             queryResult.Items = await bookings.ToListAsync();
             return queryResult;
@@ -181,10 +184,19 @@ namespace API.Persistence
             if(!string.IsNullOrWhiteSpace(query.SearchString))
                 spaces = spaces.Where(sp => sp.Location.Name.ToLower().StartsWith(query.SearchString) || sp.Location.Name.ToLower().Contains(query.SearchString) || sp.Name.StartsWith(query.SearchString) || sp.Name.ToLower().Contains(query.SearchString) || sp.Description.Contains(query.SearchString));
             if(query.Size > 0)
-                spaces = spaces.Where(sp => Convert.ToInt64(sp.Size) <= query.Size);
+                spaces = spaces.Where(sp => Convert.ToInt64(sp.Size) >= query.Size);
             if(!string.IsNullOrWhiteSpace(query.SpaceType))
-                spaces = spaces.Where(sp => sp.Type.ToString().ToLower() == query.SpaceType.ToLower());
+                spaces = spaces.Where(sp => sp.Type.Type.ToLower().Contains(query.SpaceType.ToLower()));
             return spaces;            
+        }
+        private IQueryable<Booking> FilterBookings(BookingQuery query, IQueryable<Booking> booking)
+        {
+            if(!string.IsNullOrWhiteSpace(query.SearchString))
+                booking = booking.Where(bk => bk.SpaceBooked.Name.ToLower().StartsWith(query.SearchString) || bk.Id.ToString() == query.SearchString);
+            if(query.DateStart != null && query.DateStart.Date > DateTime.Parse("01/01/0001") && query.DateEnd != null && query.DateStart.Date > DateTime.Parse("01/01/0001"))
+                booking = booking.Where(bk => bk.UsingFrom.Date >= query.DateStart.Date
+                && bk.UsingFrom.Date <= query.DateEnd.Date);
+            return booking;            
         }
         public async Task<SpaceType> GetSpaceType(int spaceTypeId)
         {
@@ -207,7 +219,13 @@ namespace API.Persistence
         }
         public async Task<QueryResult<User>> GetMerchants()
         {
-            throw new NotImplementedException();
+            var users = await _context.Users
+                        .Where(u => u.Role == Role.Merchant)
+                        .ToListAsync();            
+            var queryResult = new QueryResult<User>();
+            queryResult.TotalItems = users.Count();
+            queryResult.Items = users;
+            return queryResult;
         }
 
         public async void VerifyMerchant(int id)
@@ -215,6 +233,12 @@ namespace API.Persistence
             var merchant = await _context.Users
                         .FirstOrDefaultAsync(u => u.Id == id);
             merchant.VerifiedAsMerchant = true;
+        }
+        public async void CreateBookingFromReservation(int id)
+        {
+            var reservation = await _context.Bookings
+                                    .FirstOrDefaultAsync(bk => bk.Id == id);
+            reservation.Status = BookingStatus.Booked;
         }
         public async Task<Booking> GetBooking(int bookingId)
         {
@@ -252,6 +276,19 @@ namespace API.Persistence
                 bookingTimes.Add(bookingTime);
             };
             return bookingTimes;
+        }
+        public async Task<Photo> GetPhoto(int id)
+        {
+            return await _context.Photos.FirstOrDefaultAsync(p => p.Id == id);
+        }
+        public async Task<Photo> GetMainPhoto(int id)
+        {
+            return await _context.Photos.Where(p => p.IsMain)
+                                        .FirstOrDefaultAsync(p => p.Id == id);
+        }
+        public string ComposeMessage(MessageParams messageParams)
+        {
+            return "";
         }
     }
 }

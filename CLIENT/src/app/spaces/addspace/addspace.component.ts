@@ -9,6 +9,7 @@ import { Observable } from 'rxjs/Observable';
 import { SpaceType } from '../models/spaceType.model';
 import { takeWhile } from 'rxjs/operators';
 import { Space } from '../models/space.model';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-addspace',
@@ -26,13 +27,23 @@ export class AddspaceComponent implements OnInit {
   spaceTypes: SpaceType[];
   spaceToEdit = <Space>{};
   currentUser: any;
+  latitude: number;
+  longitude: number;
+  infoWindow: any;
+  selectedLocation: string;
     constructor(private formBuilder: FormBuilder,
                 private store: Store<spaceReducer.SpaceState>,
-                private route: ActivatedRoute) { }
+                private route: ActivatedRoute,
+                private httpClient: HttpClient) { }
                 
     ngOnInit() {
+
+      navigator.geolocation.getCurrentPosition((myLocation) => {
+        this.latitude = myLocation.coords.latitude;
+        this.longitude = myLocation.coords.longitude;
+      });
+
       this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
-      // console.log(this.currentUser);
 
       this.route.params
       .subscribe(
@@ -62,6 +73,24 @@ export class AddspaceComponent implements OnInit {
 
     ngOnDestroy(): void {
       this.componentActive = false;
+    }
+
+    onLocationSelect(event) {
+      this.latitude = event.coords.lat;
+      this.longitude = event.coords.lng;
+      this.httpClient.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${event.coords.lat},${event.coords.lng}&key=AIzaSyDqDa-Jf1KhEOO0FXyJwReGiquRMCaz9Bs`).subscribe(res => {
+        const { formatted_address } = res['results'][0];
+        console.log(res);
+        this.selectedLocation = formatted_address;
+        console.log(this.selectedLocation);
+      })
+      // console.log(event.coords);
+      
+    }
+
+    onPinSelect(event) {
+      console.log('Marker clicked', event);
+      
     }
 
     private initializeForm() {

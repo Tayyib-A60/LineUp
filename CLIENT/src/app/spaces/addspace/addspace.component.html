@@ -1,9 +1,16 @@
 <section class="basic-elements">
-    <div class="row text-left">
-        <div class="col-sm-12">
+	<div class="row text-left">
+		<div class="col-sm-12">
 			<div class="content-header">Add Space</div>
         </div>
     </div>
+    <!-- <div *ngIf='editMode' class="row text-left">
+		<div class="col-sm-12">
+			<agm-map [latitude]='latitude' [longitude]='longitude' (mapClick)='onLocationSelect($event)'>
+				<agm-marker (markerClick)='onPinSelect($event)' [latitude]='latitude' [longitude]='longitude'></agm-marker>
+			</agm-map>
+        </div>
+    </div> -->
     <div class="row text-left">
         <div class="col-md-8">
             <div class="card">
@@ -49,10 +56,10 @@
 		                                    <input formControlName="locationLat" type="text" name="locationLat" class="form-control" id="locationLat">
 		                                </fieldset>
 		                            </div>
-		                            <div class="col-xl-6 col-lg-6 col-md-12 mb-1">
+		                            <div class="col-xl-6 editMode? col-lg-6 : col-lg-12 col-md-12 mb-1">
 		                                <fieldset class="form-group">
 		                                    <label for="size">Size</label>
-		                                    <input formControlName="size" type="text" name="size" class="form-control" id="size" >
+		                                    <input formControlName="size" type="number" name="size" class="form-control" id="size" >
 		                                </fieldset>
 		                            </div>
 		                            <div *ngIf='editMode' class="col-xl-6 col-lg-6 col-md-12 mb-1">

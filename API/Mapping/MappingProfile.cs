@@ -19,10 +19,12 @@ namespace API.Mapping
             CreateMap<SpaceToUpdateDTO, Space>();
             CreateMap<SpaceTypeDTO, SpaceTypeDTO>();
             CreateMap<UserDTO, User>();
+            CreateMap<UserToReturnDTO, User>();
             CreateMap<UserToLoginDTO, User>();
             CreateMap<UserToSignUpDTO, User>();
             CreateMap<SpaceQueryDTO, SpaceQuery>();
             CreateMap<BookingQueryDTO, BookingQuery>();
+            CreateMap<PhotoForCreationDTO, Photo>();
 
             // Domain to API Resource
             CreateMap<Amenity, AmenityDTO>();
@@ -33,8 +35,10 @@ namespace API.Mapping
             CreateMap<Space, SpaceToUpdateDTO>();
             CreateMap<SpaceType, SpaceType>();
             CreateMap<User, UserDTO>();
+            CreateMap<User, UserToReturnDTO>();
             CreateMap<User, UserToLoginDTO>();
             CreateMap<User, UserToSignUpDTO>();
+            CreateMap<Photo, PhotoForCreationDTO>();
 
         }
     }

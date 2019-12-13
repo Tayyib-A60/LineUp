@@ -22,9 +22,9 @@ export class BookingService {
         return this.httpClient.get(url, { headers });
     }
     
-    getMerchantReservations(id: number) {
+    getMerchantReservations(id: number, queryParams: any) {
         const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-        const url = this.url + `/lineUp/getMerchantBookings/${id}`;
+        const url = this.url + `/lineUp/getMerchantBookings/${id}?${this.toQueryString(queryParams)}`;
         return this.httpClient.get(url, { headers });
     }
 
@@ -34,4 +34,15 @@ export class BookingService {
         const url = this.url + `/lineUp/getBookedTimes/${requestBody['id']}`;
         return this.httpClient.post(url,{From, To}, { headers });
     }
+
+    private toQueryString(obj) {
+        const parts = [];
+        for (const property in obj) {
+          const value = obj[property];
+          if (value != null && value !== undefined) {
+            parts.push(encodeURIComponent(property) + '=' + encodeURIComponent(value));
+          }
+        }
+        return parts.join('&');
+      }
 }

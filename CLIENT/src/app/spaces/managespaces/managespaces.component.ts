@@ -1,3 +1,4 @@
+import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DatatableComponent } from '@swimlane/ngx-datatable/release'
 
@@ -16,25 +17,52 @@ import { SpaceQueryResult } from '../models/spaceQueryResult';
 export class ManagespacesComponent implements OnInit {
 
   @ViewChild(DatatableComponent, {static: false}) table: DatatableComponent;
-  spaceQueryResult: SpaceQueryResult;
-  componentActive = true;
   
-    constructor(private store: Store<spaceReducer.SpaceState>) {
+  spaceQueryResult = <SpaceQueryResult>{items: [], totalItems: 0} ;
+  componentActive = true;
+  currentPage: number;
+  spaces = [];
+  loaded: boolean;
+  merchantId = localStorage.getItem('currentUser')? 
+  JSON.parse(localStorage.getItem('currentUser'))['id'] : 0;
+  merchantQuery = {
+    userId: this.merchantId,
+    currentPage: this.currentPage,
+    pageSize: null
+  };
+  
+    constructor(private store: Store<spaceReducer.SpaceState>,
+                private route: ActivatedRoute) {
     }
 
     ngOnInit() {
-      this.store.dispatch(new spaceActions.GetMerchantSpaces());
+      this.route.params.subscribe(params => {
+        this.merchantQuery = { userId: this.merchantId, currentPage: 1, pageSize: 3 };
+        this.store.dispatch(new spaceActions.GetMerchantSpaces(this.merchantQuery));
+      });
 
       this.store.pipe(select(spaceSelectors.getMerchantSpaces),
       takeWhile(() => this.componentActive))
       .subscribe(spaceQR => {
-        this.spaceQueryResult = spaceQR
-        console.log(this.spaceQueryResult);
+        this.spaceQueryResult = spaceQR;
+        this.spaces = spaceQR['items'];
       });
     }
 
     deleteSpace(id: number) {
+      // confirm('Confirm Space delete?')
       this.store.dispatch(new spaceActions.DeleteSpace(id));
+    }
+
+    onPageChange(page: number) {
+      this.merchantQuery = { ...this.merchantQuery, currentPage: page };
+      this.store.dispatch(new spaceActions.GetMerchantSpaces(this.merchantQuery));
+  
+      this.store.pipe(select(spaceSelectors.getMerchantSpaces),
+      takeWhile(() => this.componentActive))
+      .subscribe(spaceQR => {
+        this.spaceQueryResult = spaceQR
+      });
     }
 
 }

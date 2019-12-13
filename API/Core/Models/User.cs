@@ -23,7 +23,7 @@ namespace API.Core.Models
         [Required]
         public byte[] PasswordSalt { get; set; }
         public DateTime DateRegistered { get; set; }
-        public Photo Photo { get; set; }
+        // public Photo Photo { get; set; }
         public Role Role { get; set; }
         public bool Enabled { get; set; }
         public bool EmailVerified { get; set; }

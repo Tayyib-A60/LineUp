@@ -149,20 +149,19 @@ namespace api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<DateTime>("DateCreated");
+
                     b.Property<string>("FileName");
 
                     b.Property<bool>("IsMain");
 
-                    b.Property<int>("SpaceId");
+                    b.Property<string>("PublicId");
 
-                    b.Property<int>("UserId");
+                    b.Property<int>("SpaceId");
 
                     b.HasKey("Id");
 
                     b.HasIndex("SpaceId");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
 
                     b.ToTable("Photos");
                 });
@@ -173,9 +172,9 @@ namespace api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<double>("Price");
+                    b.Property<double>("Discount");
 
-                    b.Property<double>("discount");
+                    b.Property<double>("Price");
 
                     b.HasKey("Id");
 
@@ -332,11 +331,6 @@ namespace api.Migrations
                     b.HasOne("API.Core.Models.Space")
                         .WithMany("Photos")
                         .HasForeignKey("SpaceId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("API.Core.Models.User")
-                        .WithOne("Photo")
-                        .HasForeignKey("API.Core.Models.Photo", "UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

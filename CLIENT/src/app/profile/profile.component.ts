@@ -24,6 +24,7 @@ export class ProfileComponent implements OnInit {
   upcomingReservations = [];
   previousReservations = [];
   currentRate: any;
+  firstRating: any;
   firstRate: any;
 
   constructor(private route: ActivatedRoute,

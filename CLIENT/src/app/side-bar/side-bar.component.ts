@@ -13,6 +13,17 @@ import { customAnimations } from '../helpers/animations/custom.animation';
 })
 export class SideBarComponent implements OnInit, OnDestroy {
 
+  depth: number;
+  activeTitle: string;
+  activeTitles: string[] = [];
+  expanded: boolean;
+  nav_collapsed_open = false;
+  logoUrl = 'assets/img/logo.png';
+  public config: any = {};
+  layoutSub: Subscription;
+  currentUser: any;
+  isSuperAdmin = false;
+
   @ViewChild('toggleIcon', {static: false}) toggleIcon: ElementRef;
   public menuItems =  [{
     path: '', title: 'Add Space', route: '/admin/add-space', icon: 'ft-home', badgeClass: 'badge badge-pill badge-danger float-right mr-1 mt-1', isExternalLink: false
@@ -26,17 +37,11 @@ export class SideBarComponent implements OnInit, OnDestroy {
     path: '', title: 'View Enquiries', route: '/admin/manage-enquiries', icon: 'ft-home', badgeClass: 'badge badge-pill badge-danger float-right mr-1 mt-1', isExternalLink: false
   },{
     path: '', title: 'Manage Bookings', route: '/admin/manage-bookings', icon: 'ft-home', badgeClass: 'badge badge-pill badge-danger float-right mr-1 mt-1', isExternalLink: false
-  },{
+  },
+  {
     path: '', title: 'Analytics', route: '/admin/analytics', icon: 'ft-home', badgeClass: 'badge badge-pill badge-danger float-right mr-1 mt-1', isExternalLink: false
-  }];
-  depth: number;
-  activeTitle: string;
-  activeTitles: string[] = [];
-  expanded: boolean;
-  nav_collapsed_open = false;
-  logoUrl = 'assets/img/logo.png';
-  public config: any = {};
-  layoutSub: Subscription;
+  }
+];
 
 
   constructor(
@@ -85,7 +90,11 @@ export class SideBarComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.config = this.configService.templateConf;
-
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    console.log(this.currentUser);
+    if(this.currentUser['roles'] === 'AnySpaces'){
+      this.isSuperAdmin = true;
+    }
     // this.menuItems = [
     //     {
     //       path: '', title: 'Add Space', icon: 'ft-home', badge: '2', badgeClass: 'badge badge-pill badge-danger float-right mr-1 mt-1', isExternalLink: false
