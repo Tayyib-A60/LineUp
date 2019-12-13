@@ -41,6 +41,12 @@ export enum SpaceActionTypes {
     GetMerchants = '[GetMerchants] Get Merchants',
     GetMerchantsSuccess = '[GetMerchants] Get Merchants Success',
     GetMerchantsFailure = '[GetMerchants] Get Merchants Failure',
+    DeleteSpacePhoto = '[Space] Delete Space Photo',
+    DeleteSpacePhotoSuccess = '[Space] Delete Space Photo Success',
+    DeleteSpacePhotoFailure = '[Space] Delete Space Photo Failure',
+    SetMainPhoto = '[Space] Set Main Photo',
+    SetMainPhotoSuccess = '[Space] Set Main Photo Success',
+    SetMainPhotoFailure = '[Space] Set Main Photo Failure',
 };
 
 export function containsSuccess(type: string) {

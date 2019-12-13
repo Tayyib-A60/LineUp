@@ -69,6 +69,18 @@ export class SpaceService {
     const url = this.url + '/lineUp/deleteSpace/' + id;
     return this.httpClient.delete(url, { headers });
   }
+  
+  deletePhoto(id: number): Observable<any> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    const url = this.url + '/photos/' + id;
+    return this.httpClient.delete(url, { headers });
+  }
+
+  setMainPhoto(id: number): Observable<any> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    const url = this.url + '/photos/setMain';
+    return this.httpClient.post(url, { id }, { headers });
+  }
 
   getMerchants(filter?: any) {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });

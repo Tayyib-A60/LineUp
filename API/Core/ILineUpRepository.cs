@@ -14,6 +14,8 @@ namespace API.Core
          Task<bool> SaveAllChanges();
          Task<Enquiry> GetEnquiry(int enquiryId);
          Task<Space> GetSpace(int spaceId);
+         Task<Photo> GetPhoto(int id);
+         Task<Photo> GetMainPhoto(int id);
          void CreateBookingFromReservation(int id);
          Task<QueryResult<Space>> GetSpaces(SpaceQuery query);
          Task<QueryResult<Space>> GetMerchantSpaces(SpaceQuery query);
@@ -28,6 +30,7 @@ namespace API.Core
          Task<IEnumerable<Amenity>> GetAmenities();
          Task<List<BookedTimes>> GetBookedTimes(int spaceId, BookedTimes proposedBookingTime);
          Task<Booking> GetBooking(int bookingId);
+         string ComposeMessage(MessageParams messageParams);
         //  Task<IEnumerable<Booking>> GetBookings(int userId);
     }
 }

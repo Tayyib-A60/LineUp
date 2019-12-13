@@ -82,7 +82,7 @@ export class GetCustomerBookingsFailure implements Action {
 export class GetMerchantBookings implements Action {
     readonly type = BookingActionTypes.GetMerchantBookings;
 
-    constructor(public payload: number) {
+    constructor(public payload: any) {
         this.type = BookingActionTypes.GetMerchantBookings;
     }
 }

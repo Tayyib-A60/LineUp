@@ -35,7 +35,7 @@ export class HomeComponent implements OnInit {
   }
   
   ngOnInit() {
-    this.store.dispatch(new spaceActions.GetSpaces());
+    // this.store.dispatch(new spaceActions.GetSpaces());
 
     this.store.pipe(select(spaceSelectors.getSpaceQueryResult),
     takeWhile(() => this.componentActive))

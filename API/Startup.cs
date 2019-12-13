@@ -43,6 +43,7 @@ namespace api
             services.AddAutoMapper();
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
             services.Configure<PhotoSettings>(Configuration.GetSection("PhotoSettings"));
+            services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
             services.AddDbContext<LineUpContext>(options => {
                 string connectionString;
                 var environmentVariable = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONEMT");

@@ -179,7 +179,7 @@ namespace API.Controllers {
             var existingBookingTimes = await _lineUpRepository.GetBookedTimes(bookingToCreate.SpaceBooked.Id, bookingToCreateBT);
             if(existingBookingTimes.Count() > 0)
                 return BadRequest("You can't select from a range of booking that already exists");
-            bookingToCreate.Status = BookingStatus.Booked;
+            bookingToCreate.Status = BookingStatus.Reserved;
             bookingToCreate.BookingTime = DateTime.Now;
             _lineUpRepository.Add(bookingToCreate);
             await _lineUpRepository.SaveAllChanges();
@@ -203,7 +203,7 @@ namespace API.Controllers {
                 return BadRequest("Time from must be behind/be the same as time to");
             if(await _lineUpRepository.EntityExists(bookingToCreate))
                 return BadRequest("Booking already exists");
-            bookingToCreate.Status = BookingStatus.Reserved;
+            bookingToCreate.Status = BookingStatus.Booked;
             bookingToCreate.BookingTime = DateTime.Now;
             _lineUpRepository.Add(bookingToCreate);
             await _lineUpRepository.SaveAllChanges();
@@ -224,7 +224,19 @@ namespace API.Controllers {
         [HttpGet("getMerchantBookings/{userId}")]
         public async Task<QueryResult<Booking>> GetMerchantBookings(int userId, [FromQuery] BookingQueryDTO queryDTO)
         {
-            var query = _mapper.Map<BookingQuery>(queryDTO);
+            // var query = _mapper.Map<BookingQuery>(queryDTO);
+            var dateStart = DateTime.Parse(queryDTO.DateStart);
+            var dateEnd = DateTime.Parse(queryDTO.DateEnd);
+            var query = new BookingQuery{
+                SortBy = queryDTO.SortBy,
+                SearchString = queryDTO.SearchString,
+                IsSortAscending = queryDTO.IsSortAscending,
+                Page = queryDTO.Page,
+                PageSize = queryDTO.PageSize,
+                CurrentPage = queryDTO.CurrentPage,
+                DateStart = dateStart,
+                DateEnd = dateEnd
+            };
             return await _lineUpRepository.GetBookings(userId, query);
         }
 

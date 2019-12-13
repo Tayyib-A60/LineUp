@@ -97,7 +97,7 @@ export class DeleteSpaceFailure implements Action {
 export class GetSpaces implements Action {
     readonly type = SpaceActionTypes.GetSpaces;
 
-    constructor() {
+    constructor(public payload: any) {
         this.type = SpaceActionTypes.GetSpaces;
     }
 }
@@ -118,7 +118,7 @@ export class GetSpacesFailure implements Action {
 export class GetMerchantSpaces implements Action {
     readonly type = SpaceActionTypes.GetMerchantSpaces;
 
-    constructor() {
+    constructor(public payload: any) {
         this.type = SpaceActionTypes.GetMerchantSpaces;
     }
 }
@@ -288,13 +288,58 @@ export class GetMerchantsFailure implements Action {
         this.type = SpaceActionTypes.GetMerchantsFailure;
     }
 }
+export class DeleteSpacePhoto implements Action {
+    readonly type = SpaceActionTypes.DeleteSpacePhoto;
 
-export type SpaceActions = CreateSpace | UpdateSpace |
-DeleteSpace | CreateSpaceType | UpdateSpaceType | DeleteSpaceType
+    constructor(public payload: number) {
+        this.type = SpaceActionTypes.DeleteSpacePhoto;
+    }
+}
+export class DeleteSpacePhotoSuccess implements Action {
+    readonly type = SpaceActionTypes.DeleteSpacePhotoSuccess;
+
+    constructor(public payload: number) {
+        this.type = SpaceActionTypes.DeleteSpacePhotoSuccess;
+    }
+}
+export class DeleteSpacePhotoFailure implements Action {
+    readonly type = SpaceActionTypes.DeleteSpacePhotoFailure;
+
+    constructor(public payload: string) {
+        this.type = SpaceActionTypes.DeleteSpacePhotoFailure;
+    }
+}
+export class SetMainPhoto implements Action {
+    readonly type = SpaceActionTypes.SetMainPhoto;
+
+    constructor(public payload: number) {
+        this.type = SpaceActionTypes.SetMainPhoto;
+    }
+}
+export class SetMainPhotoSuccess implements Action {
+    readonly type = SpaceActionTypes.SetMainPhotoSuccess;
+
+    constructor(public payload: number) {
+        this.type = SpaceActionTypes.SetMainPhotoSuccess;
+    }
+}
+export class SetMainPhotoFailure implements Action {
+    readonly type = SpaceActionTypes.SetMainPhotoFailure;
+
+    constructor(public payload: string) {
+        this.type = SpaceActionTypes.SetMainPhotoFailure;
+    }
+}
+
+
+export type SpaceActions = CreateSpace | UpdateSpace 
+| DeleteSpace | CreateSpaceType | UpdateSpaceType | DeleteSpaceType
 | CreateSpaceSuccess | CreateSpaceFailure | UpdateSpaceSuccess | UpdateSpaceFailure
 | DeleteSpaceSuccess | DeleteSpaceFailure | CreateSpaceTypeSuccess | CreateSpaceTypeFailure
 | UpdateSpaceTypeSuccess | UpdateSpaceTypeFailure | DeleteSpaceTypeSuccess | DeleteSpaceTypeFailure
-| CreateAmenity | CreateAmenitySuccess | CreateAmenityFailure 
-| GetSpaces | GetSpacesSuccess | GetSpacesFailure | GetMerchantSpaces | GetMerchantSpacesSuccess 
-| GetMerchantSpacesFailure | GetSpaceTypes | GetSpaceTypesSuccess | GetSpaceTypesFailure
-| GetSingleSpace | GetSingleSpaceSuccess | GetSingleSpaceFailure | SuccessNotification | FailureNotification | NotificationDisplayed | GetMerchants | GetMerchantsSuccess | GetMerchantsFailure; 
+| CreateAmenity | CreateAmenitySuccess | CreateAmenityFailure | GetSpaces | GetSpacesSuccess 
+| GetSpacesFailure | GetMerchantSpaces | GetMerchantSpacesSuccess | GetMerchantSpacesFailure 
+| GetSpaceTypes | GetSpaceTypesSuccess | GetSpaceTypesFailure | GetSingleSpace | GetSingleSpaceSuccess 
+| GetSingleSpaceFailure | SuccessNotification | FailureNotification | NotificationDisplayed 
+| GetMerchants | GetMerchantsSuccess | GetMerchantsFailure| DeleteSpacePhoto | DeleteSpacePhotoSuccess 
+| DeleteSpacePhotoFailure | SetMainPhoto | SetMainPhotoSuccess | SetMainPhotoFailure; 

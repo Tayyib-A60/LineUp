@@ -13,13 +13,13 @@ export class NotificationService {
     }
 
     // Success Type
-    typeInfo() {
-        this.toastr.info('We do have the Kapua suite available.', 'Turtle Bay Resort');
+    typeInfo(message, heading) {
+        this.toastr.info(message, heading);
     }
 
     // Success Type
-    typeWarning() {
-        this.toastr.warning('My name is Inigo Montoya. You killed my father, prepare to die!');
+    typeWarning(message, heading) {
+        this.toastr.warning(message, heading);
     }
 
     // Success Type

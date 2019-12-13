@@ -1,6 +1,5 @@
 import { AuthGuardService } from './../services/authguard.service';
 import { Component, Output, EventEmitter, OnDestroy, OnInit, AfterViewInit } from '@angular/core';
-// import { TranslateService } from '@ngx-translate/core';
 import { LayoutService } from '../services/layout.service';
 import { Subscription } from 'rxjs';
 import { ConfigService } from '../services/config.service';
@@ -54,11 +53,12 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
 
   merchantIsAuthenticated() {
     if(this.currentUser) {      
-      return this.currentUser['roles'] == 'Merchant' || 'AnySpaces'? true: false;
+      return this.currentUser['roles'] === 'Merchant' || 'AnySpaces'? true: false;
     }    
   }
 
   signOut() {
+    localStorage.removeItem('currentUser');
     this.store.dispatch(new userActions.SignOutUser());
     this.router.navigate(['']);
   }
