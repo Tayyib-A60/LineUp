@@ -1,3 +1,11 @@
+// $bp-largest: 75em; //1200px
+// $bp-large: 62.5em;  //900px
+// $bp-medium: 50em;  //800px
+// $bp-small: 37.5em; //600px
+// $bp-smallest: 31.25em; //500px/16
+// $bp-mobile: 25em; //500px/16
+
+
 .home-footer {
     padding: 5rem 3rem 1rem 3rem;
     opacity: 0.9;
@@ -8,6 +16,13 @@
     color: #fff;
     font-size: .8rem;
     vertical-align: bottom;
+
+    @media only screen and (max-width: 75em) {
+      padding: 5rem 2rem 1rem 2rem ;
+    }
+    @media only screen and (max-width: 62.5em) {
+      padding: 5rem 1rem 1rem 1rem ;
+    }
   
     &-head {
       font-size: 1.5rem;
@@ -27,6 +42,23 @@
       margin-top: 1rem;
       margin-right: 2rem;
       color: #fff;
+
+      @media only screen and (max-width: 50em) {
+        font-size:  1.5rem !important;
+      }
     }
   }
+
+.md-margin {
+  @media only screen and (max-width: 1000px) {
+    margin-top: 1rem;
+  }
+}
+
+.md-margin-bottom {
+
+  @media only screen and (max-width: 1000px) {
+    margin-bottom: .5rem !important;
+  }
+}
   
