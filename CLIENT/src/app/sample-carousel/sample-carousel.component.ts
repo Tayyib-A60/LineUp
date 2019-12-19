@@ -22,9 +22,9 @@ export class SampleCarouselComponent implements OnInit {
   ];
   carouselItems = [
     {type: 'Event Space', imgUrl: 'https://cdn.pixabay.com/photo/2013/03/02/02/41/city-89197__180.jpg', content: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam quo molestias reiciendis necessitatibus sint nobis quasi', url: 'event'},
-    {type: 'Office Space', imgUrl: 'https://cdn.pixabay.com/photo/2019/11/16/18/43/image-4630827_960_720.jpg', content: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam quo molestias reiciendis necessitatibus sint nobis quasi', url: 'gym'},
+    {type: 'Office Space', imgUrl: 'https://cdn.pixabay.com/photo/2019/11/16/18/43/image-4630827_960_720.jpg', content: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam quo molestias reiciendis necessitatibus sint nobis quasi', url: 'office'},
     {type: 'Shared Apartment', imgUrl: 'https://cdn.pixabay.com/photo/2019/11/16/18/43/image-4630827_960_720.jpg', content: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam quo molestias reiciendis necessitatibus sint nobis quasi', url: 'apartment'},
-    {type: 'Gym Space', imgUrl: 'https://cdn.pixabay.com/photo/2013/03/02/02/41/city-89197__180.jpg', content: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam quo molestias reiciendis necessitatibus sint nobis quasi', url: 'office'},
+    {type: 'Gym Space', imgUrl: 'https://cdn.pixabay.com/photo/2013/03/02/02/41/city-89197__180.jpg', content: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam quo molestias reiciendis necessitatibus sint nobis quasi', url: 'gym'},
     {type: 'Meeting Space', imgUrl: 'https://cdn.pixabay.com/photo/2019/11/16/18/43/image-4630827_960_720.jpg', content: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam quo molestias reiciendis necessitatibus sint nobis quasi', url: 'shared'},
     {type: 'Chilling Space', imgUrl: 'https://cdn.pixabay.com/photo/2013/03/02/02/41/city-89197__180.jpg', content: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam quo molestias reiciendis necessitatibus sint nobis quasi', url: 'chilling'}
   ]

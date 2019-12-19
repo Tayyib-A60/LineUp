@@ -7,13 +7,15 @@ import { mergeMap, map, catchError } from 'rxjs/operators';
 import { of, Observable } from 'rxjs';
 import { Action } from '@ngrx/store';
 import { NotificationService } from '../../services/notification.service';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class BookingEffects {
 
     constructor(private actions$: Actions,
                 private bookingService: BookingService,
-                private notification: NotificationService) { }
+                private notification: NotificationService,
+                private router: Router) { }
 
     // @Effect()
     // successNotification$ = this.actions$.pipe(
@@ -39,6 +41,7 @@ export class BookingEffects {
             this.bookingService.createReservation(booking).pipe(
                 map(res => {
                     this.notification.typeSuccess('Your reservation was added', 'Success');
+                    this.router.navigate(['profile']);
                     return new bookingActions.CreateReservationSuccess(res);
                 }),
                 catchError(err => {
@@ -69,7 +72,9 @@ export class BookingEffects {
         map((action: bookingActions.GetBookingTimes) => action.payload),
         mergeMap((requestBody: any) =>
             this.bookingService.getBookingTimes(requestBody).pipe(
-                map(res => new bookingActions.GetBookingTimesSuccess(res) ),
+                map(res => {
+                    return new bookingActions.GetBookingTimesSuccess(res) 
+                }),
                 catchError(err => {
                     this.notification.typeError('Please check your internet connection', 'Failed');
                     return of(new bookingActions.GetBookingTimesFailure(err));

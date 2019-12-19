@@ -36,12 +36,12 @@ export class SignInComponent implements OnInit {
   signIn() {
     this.store.dispatch(new userActions.SignInUser(this.signInForm.value));
     this.signInForm.reset();
-    this.store.pipe(select(userSelectors.getCurrentUser),
-    takeWhile(() => this.componentActive))
-    .subscribe(currentUser => {
-      if(currentUser)
-        this.router.navigate(['../'], {relativeTo: this.route});
-    });  
+    // this.store.pipe(select(userSelectors.getCurrentUser),
+    // takeWhile(() => this.componentActive))
+    // .subscribe(currentUser => {
+    //   if(currentUser)
+    //     this.router.navigate(['../'], {relativeTo: this.route});
+    // });  
   }
 
 }

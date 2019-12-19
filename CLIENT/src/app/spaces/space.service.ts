@@ -76,10 +76,10 @@ export class SpaceService {
     return this.httpClient.delete(url, { headers });
   }
 
-  setMainPhoto(id: number): Observable<any> {
+  setMainPhoto(ids): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     const url = this.url + '/photos/setMain';
-    return this.httpClient.post(url, { id }, { headers });
+    return this.httpClient.post(url, ids, { headers });
   }
 
   getMerchants(filter?: any) {

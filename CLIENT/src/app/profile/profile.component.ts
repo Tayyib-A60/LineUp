@@ -43,16 +43,19 @@ export class ProfileComponent implements OnInit {
     takeWhile(() => this.componentActive))
     .subscribe(bookingQR => {
       this.reservations = bookingQR['items'];
+      
       if(this.reservations) {
-        this.reservations.forEach(item => {
-          if(item['usingFrom'] > Date.now) {
-            this.previousReservations.push(item);
-          } else if(item['usingFrom'] < Date.now){
+        this.upcomingReservations = [];
+        this.previousReservations = [];
+        bookingQR['items'].forEach(item => {
+          if(item['usingFrom'] > Date()) {
             this.upcomingReservations.push(item);
+          } else if(item['usingFrom'] < Date()){
+            this.previousReservations.push(item);
           }
         });
+
       }
-      console.log(this.previousReservations, this.upcomingReservations);
       
     });
   }

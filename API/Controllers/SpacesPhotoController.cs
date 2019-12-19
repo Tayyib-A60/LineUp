@@ -97,17 +97,19 @@ namespace API.Controllers
         [HttpPost("setMain")]
         public async Task<IActionResult> SetMain(SetMainPhotoId setMainPhoto)
         {
-            var photo = await _repository.GetPhoto(setMainPhoto.Id);
+            var photo = await _repository.GetPhoto(setMainPhoto.NewMainId);
 
             if(photo == null)
                 return BadRequest("Photo does not exist");
             if(photo.IsMain)
                 return BadRequest("Photo is already main photo");
-
-            var currentMainPhoto = await _repository.GetMainPhoto(setMainPhoto.Id);
             
-            if(currentMainPhoto != null){
-                currentMainPhoto.IsMain = false;
+            if(setMainPhoto.CurrentMainId != 0) {
+                var currentMainPhoto = await _repository.GetMainPhoto(setMainPhoto.CurrentMainId);
+                
+                if(currentMainPhoto != null){
+                    currentMainPhoto.IsMain = false;
+                }
             }
 
             photo.IsMain = true;

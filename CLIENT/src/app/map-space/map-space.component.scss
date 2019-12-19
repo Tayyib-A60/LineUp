@@ -2,6 +2,19 @@
     background-color: #fff;
 }
 
+.amenity-tag {
+    background-color: #2a2e42;
+    border-radius: 3px;
+    color: #fff;
+    padding: 4px;
+    margin: .3rem;
+    font-size: 14px;
+    float: left;
+}
+
+agm-map {
+    height: 500px;
+}
 
 // select {
 //     font-size: 1rem !important;
