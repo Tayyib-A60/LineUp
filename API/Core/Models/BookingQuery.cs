@@ -13,5 +13,6 @@ namespace API.Core.Models
         public string SearchString { get; set; }
         public DateTime DateStart { get; set; }
         public DateTime DateEnd { get; set; }
+        public DateTime TimeBooked { get; set; }
     }
 }

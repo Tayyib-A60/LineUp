@@ -111,7 +111,6 @@ namespace API.Persistence
                                     .Include(space => space.PricePH)
                                     .Include(space => space.PricePD)
                                     .Include(space => space.PricePW)
-                                    // .Include(sp => sp.Photos.Where(p => p.IsMain == true))
                                     .AsQueryable();
             spaces = FilterSpaces(query, spaces);
             int count = spaces.Count();
@@ -130,9 +129,9 @@ namespace API.Persistence
                                     .Include(sp => sp.Type)
                                     .Include(space => space.Location)
                                     .Include(space => space.PricePH)
-                                    // .Include(space => space.PricePD)
-                                    // .Include(space => space.PricePD)
-                                    // .Include(sp => sp.Photos.Where(p => p.IsMain == true))
+                                    .Include(space => space.PricePD)
+                                    .Include(space => space.PricePW)
+                                    .Include(sp => sp.Photos)
                                     .AsQueryable();
             spaces = FilterSpaces(query, spaces);
             int count = spaces.Count();
@@ -175,17 +174,28 @@ namespace API.Persistence
             queryResult.Items = await bookings.ToListAsync();
             return queryResult;
         }
+
+        public async Task<Booking> GetBookingDetails(int bookedById, BookingQuery query)
+        {
+            var bookingDetails = await _context.Bookings
+                                .Where(b => b.BookedById == bookedById)
+                                .Where(b => b.BookingTime == query.TimeBooked)
+                                .FirstOrDefaultAsync();
+            return bookingDetails;
+        }
         private IQueryable<Space> FilterSpaces(SpaceQuery query, IQueryable<Space> spaces)
         {
             if(query.Price > 0)
                 spaces = spaces.Where(sp => (sp.PricePH.Price <= query.Price || sp.PricePD.Price <= query.Price || sp.PricePW.Price <= query.Price));
+            if(query.Price > 500000)
+                spaces = spaces.Where(sp => (sp.PricePH.Price >= query.Price || sp.PricePD.Price >= query.Price || sp.PricePW.Price >= query.Price));
             if(!string.IsNullOrWhiteSpace(query.Location))
                 spaces = spaces.Where(sp => sp.Location.Name.ToLower().Contains(query.Location));
             if(!string.IsNullOrWhiteSpace(query.SearchString))
                 spaces = spaces.Where(sp => sp.Location.Name.ToLower().StartsWith(query.SearchString) || sp.Location.Name.ToLower().Contains(query.SearchString) || sp.Name.StartsWith(query.SearchString) || sp.Name.ToLower().Contains(query.SearchString) || sp.Description.Contains(query.SearchString));
             if(query.Size > 0)
                 spaces = spaces.Where(sp => Convert.ToInt64(sp.Size) >= query.Size);
-            if(!string.IsNullOrWhiteSpace(query.SpaceType))
+            if(!string.IsNullOrWhiteSpace(query.SpaceType) && query.SpaceType.Length > 0) 
                 spaces = spaces.Where(sp => sp.Type.Type.ToLower().Contains(query.SpaceType.ToLower()));
             return spaces;            
         }

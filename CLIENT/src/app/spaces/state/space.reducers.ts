@@ -191,14 +191,14 @@ const INITIAL_STATE: SpaceState = {
                 };
             case SpaceActionTypes.SetMainPhotoSuccess:
                 const formerMain = state.spaceToEdit.photos.find(p => p.isMain === true);
-                if(formerMain) {
+                if(formerMain !== undefined) {
                     formerMain.isMain = false;
                 }
                 const newMain = state.spaceToEdit.photos.find(p => p.id === action.payload);
                 newMain.isMain = true;
                 return {
                     ...state,
-                    spaceToEdit: {...state.spaceToEdit, photos: [...state.spaceToEdit.photos.filter(p => p.id === newMain.Id || formerMain.id), newMain, formerMain ]},
+                    spaceToEdit: {...state.spaceToEdit, photos: [...state.spaceToEdit.photos.filter(p => p.id !== newMain.Id || p.id !== formerMain.id), newMain, formerMain ]},
                     error: ''
                 };
             case SpaceActionTypes.SetMainPhotoFailure:

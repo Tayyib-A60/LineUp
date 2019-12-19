@@ -1,3 +1,4 @@
+import { SharedService } from './../services/shared.service';
 import { NotificationService } from './../services/notification.service';
 import { Store, select } from '@ngrx/store';
 import { Component, OnInit } from '@angular/core';
@@ -12,7 +13,7 @@ import { SpaceState } from '../spaces/state/space.reducers';
 import { takeWhile } from 'rxjs/operators';
 import { UserState } from '../state/user.reducers';
 import { BookingState } from '../state/booking/booking.reducer';
-import { Space } from '../spaces/models/space.model';
+import { Space, Amenity } from '../spaces/models/space.model';
 
 @Component({
   selector: 'app-new-space',
@@ -33,6 +34,15 @@ export class NewSpaceComponent implements OnInit {
     minute: 0,
     second: 0
   };
+  contactUsForm = {
+    name: '',
+    email: '',
+    phone: '',
+    message: '',
+    user234SpacesEmail: '',
+    spaceOwnerId: 0
+  };
+  amenitiesSelected = <Amenity[]>[];
   minuteStep = 0;
   meridian = true;
   firstRating: any;
@@ -43,8 +53,11 @@ export class NewSpaceComponent implements OnInit {
   componentActive = true;
   thisSpace = <Space>{};
   currentUser = {};
+  totalCost = 0;
   bookingTimes = [];
   loaded: boolean;
+  latitude: number;
+  longitude: number;
   
   constructor(private carouselConfig: NgbCarouselConfig,
               private route: ActivatedRoute,
@@ -52,7 +65,8 @@ export class NewSpaceComponent implements OnInit {
               private userStore: Store<UserState>,
               private bookingStore: Store<BookingState>,
               private router: Router,
-              private notification: NotificationService) {
+              private notification: NotificationService,
+              private sharedService: SharedService) {
     carouselConfig.showNavigationArrows = true;
     carouselConfig.interval = 0;
   }
@@ -70,8 +84,40 @@ export class NewSpaceComponent implements OnInit {
           this.thisSpace = space;
           this.loaded = true; 
     });
-    
+    navigator.geolocation.getCurrentPosition((myLocation) => {
+      this.latitude = myLocation.coords.latitude;
+      this.longitude = myLocation.coords.longitude;
+    });
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+  }
+
+  amenityChecked(event) {    
+    if(event.target.checked) {
+      const amenityIndex = this.thisSpace.amenities.findIndex(a => a['id'] === Number(event.target.value));
+      this.totalCost += this.thisSpace.amenities[amenityIndex].price;
+      this.amenitiesSelected.push(this.thisSpace.amenities[amenityIndex]);
+    }
+    if(!event.target.checked) {
+      const index = this.amenitiesSelected.findIndex(a => a['id'] === Number(event.target.value));
+      this.totalCost -= this.amenitiesSelected[index].price;
+      this.amenitiesSelected.splice(index, 1);
+    }
+    // this.amenitiesSelected.forEach(amenity => {
+    //   this.totalCost += amenity.price;
+    // });
+  }
+
+  sendEnquiry() {
+    this.contactUsForm.user234SpacesEmail = this.currentUser['email'];
+    this.contactUsForm.spaceOwnerId = this.thisSpace.userId;
+    this.sharedService.postEnquiry(this.contactUsForm)
+    .subscribe((res) => {
+      this.notification.typeSuccess('Success', 'Your message was sent successfully')
+    }, (err) => {
+      this.notification.typeError('Failed', `${err.message}`);
+    })
+    console.log(this.contactUsForm);
+    
   }
 
   bookSpace() {
@@ -91,6 +137,11 @@ export class NewSpaceComponent implements OnInit {
     let secondTo = this.timeTo['second'];
     const dateFrom = new Date(year, month-1, day, hour+1, minute, second);
     const dateTo = new Date(yearTo, monthTo-1, dayTo, hourTo+1, minuteTo, secondTo);
+
+    let amenitiesPrice = 0;
+    this.amenitiesSelected.forEach(amenity => {
+      amenitiesPrice += amenity.price;
+    });
     const booking = {
       userId: this.thisSpace['userId'],
       spaceBooked: {
@@ -100,7 +151,7 @@ export class NewSpaceComponent implements OnInit {
       usingTill: dateTo,
       status: 'Reserved',
       bookedById: this.currentUser['id'],
-      totalPrice: this.thisSpace['price']
+      totalPrice: this.thisSpace['price'] + amenitiesPrice
     };
     console.log(booking);    
     this.spaceStore.dispatch(new bookingActions.CreateReservation(booking));

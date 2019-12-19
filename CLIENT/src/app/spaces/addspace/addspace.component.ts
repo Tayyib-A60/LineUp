@@ -27,10 +27,10 @@ export class AddspaceComponent implements OnInit {
   spaceTypes: SpaceType[];
   spaceToEdit = <Space>{};
   currentUser: any;
-  latitude: number;
-  longitude: number;
+  latitude = 0;
+  longitude = 0;
   infoWindow: any;
-  selectedLocation: string;
+  selectedLocation = '';
     constructor(private formBuilder: FormBuilder,
                 private store: Store<spaceReducer.SpaceState>,
                 private route: ActivatedRoute,
@@ -78,14 +78,16 @@ export class AddspaceComponent implements OnInit {
     onLocationSelect(event) {
       this.latitude = event.coords.lat;
       this.longitude = event.coords.lng;
-      this.httpClient.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${event.coords.lat},${event.coords.lng}&key=AIzaSyDqDa-Jf1KhEOO0FXyJwReGiquRMCaz9Bs`).subscribe(res => {
+      this.spaceForm.get('locationLong').patchValue(event.coords.lng);
+      this.spaceForm.get('locationLat').patchValue(event.coords.lat);
+      this.httpClient.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${event.coords.lat},
+      ${event.coords.lng}&key=AIzaSyDqDa-Jf1KhEOO0FXyJwReGiquRMCaz9Bs`).subscribe(res => {
         const { formatted_address } = res['results'][0];
         console.log(res);
+        this.spaceForm.get('locationName').patchValue(formatted_address);
         this.selectedLocation = formatted_address;
         console.log(this.selectedLocation);
-      })
-      // console.log(event.coords);
-      
+      })      
     }
 
     onPinSelect(event) {
@@ -142,9 +144,9 @@ export class AddspaceComponent implements OnInit {
         // fetch the space to edit nd initialize the form to contain it's properties here.
         let amenitiesArray = new FormArray([]);
         let name = '';
-        let locationName = '';
-        let locationLong = '';
-        let locationLat = '';
+        let locationName = this.selectedLocation;
+        let locationLong = this.longitude.toString();
+        let locationLat = this.latitude.toString();
         let size = null;
         let type = {type: '', id: null};
         let st = '';

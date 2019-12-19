@@ -312,7 +312,7 @@ export class DeleteSpacePhotoFailure implements Action {
 export class SetMainPhoto implements Action {
     readonly type = SpaceActionTypes.SetMainPhoto;
 
-    constructor(public payload: number) {
+    constructor(public payload: any) {
         this.type = SpaceActionTypes.SetMainPhoto;
     }
 }

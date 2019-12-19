@@ -24,6 +24,7 @@
                     <th>Price</th> -->
                     <th>Size</th>
                     <th>Actions</th>
+                    <th>Completed</th>
                   </tr>
                 </thead>
                 <tbody *ngIf='spaces'>
@@ -38,12 +39,15 @@
                         <a [routerLink]="['../edit-space/' + space.id]" class="success p-0" data-original-title="" title="">
                             <i class="ft-edit-2 font-medium-3 mr-2"></i>
                           </a>
-                          <a [routerLink]="['../upload-images/' + space.id]" class="success p-0" data-original-title="" title="">
-                            <i class="ft-edit-2 font-medium-3 mr-2"></i>
+                        <a style="margin-right: .7rem;" [routerLink]="['../upload-images/' + space.id]" class="success p-0" data-original-title="" title="">
+                            <i class="fa fa-upload"></i>
                         </a>
                         <a (click)='deleteSpace(space.id)' class="danger p-0" data-original-title="" title="">
                           <i class="ft-x font-medium-3 mr-2"></i>
                         </a>
+                    </td>
+                    <td>
+                      {{!(space?.location == null || space?.pricePD == null || space?.pricePW == null || space?.pricePH == null || space?.photos?.length < 1)}}
                     </td>
                   </tr>
                 </tbody>

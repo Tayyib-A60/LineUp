@@ -53,7 +53,7 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
 
   merchantIsAuthenticated() {
     if(this.currentUser) {      
-      return this.currentUser['roles'] === 'Merchant' || 'AnySpaces'? true: false;
+      return this.currentUser['roles'] === 'Merchant' || this.currentUser['roles'] === 'AnySpaces'? true: false;
     }    
   }
 
