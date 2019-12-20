@@ -71,17 +71,22 @@ export class ImageEditorComponent implements OnInit {
     this.uploader.onAfterAddingFile = file => file.withCredentials = false; 
     this.uploader.onSuccessItem = (item, response, status, headers) => {
       if (response) {
-        const res: Photo = JSON.parse(response);
-        const photo: Photo = {
-          id: res.id,
-          fileName: res.fileName,
-          dateCreated: res.dateCreated,
-          isMain: res.isMain,
-          userId: res.userId,
-          spaceId: res.spaceId,
-          publicId: res.publicId
-        };
-        this.photos.push(photo);
+        this.store.pipe(select(spaceSelectors.getSingleSpace),
+          takeWhile(() => this.componentActive))
+          .subscribe(space => {
+            this.space = space;
+          });
+        // const res: Photo = JSON.parse(response);
+        // const photo: Photo = {
+        //   id: res.id,
+        //   fileName: res.fileName,
+        //   dateCreated: res.dateCreated,
+        //   isMain: res.isMain,
+        //   userId: res.userId,
+        //   spaceId: res.spaceId,
+        //   publicId: res.publicId
+        // };
+        // this.photos.push(photo);
         // if (photo.isMain) {
         //   this.authService.changeMemberPhoto(photo.url);
         //   this.authService.currentUser.photoUrl = photo.url;
@@ -91,22 +96,18 @@ export class ImageEditorComponent implements OnInit {
   }
 
   setMainPhoto(id: number) {
-    this.store.dispatch(new spaceActions.SetMainPhoto(Number(id)));
+    const currentMain = this.space.photos.find(p => p.isMain === true);
+    console.log(currentMain);
+    
+    const currentMainId = currentMain !== undefined ? currentMain['id'] : 0;
+    console.log({ newMainId: Number(id), currentMainId });
+    
+    this.store.dispatch(new spaceActions.SetMainPhoto({ newMainId: Number(id), currentMainId }));
     this.store.pipe(select(spaceSelectors.getSingleSpace),
           takeWhile(() => this.componentActive))
           .subscribe(space => {
             this.space = space;
           });
-    // this.userService.setMainPhoto(this.authService.decodedToken.nameid, photo.id).subscribe(() => {
-    //   this.currentMain = this.photos.filter(p => p.isMain === true)[0];
-    //   this.currentMain.isMain = false;
-    //   photo.isMain = true;
-    //   this.authService.changeMemberPhoto(photo.url);
-    //   this.authService.currentUser.photoUrl = photo.url;
-    //   localStorage.setItem('user', JSON.stringify(this.authService.currentUser));
-    // }, error => {
-    //   this.alertify.error(error);
-    // });
   }
 
   deletePhoto(id: number) {
@@ -116,14 +117,5 @@ export class ImageEditorComponent implements OnInit {
           .subscribe(space => {
             this.space = space;
           });
-
-    // this.alertify.confirm('Are you sure you want to delete this photo?', () => {
-    //   this.userService.deletePhoto(this.authService.decodedToken.nameid, id).subscribe(() => {
-    //     this.photos.splice(this.photos.findIndex(p => p.id === id), 1);
-    //     this.alertify.success('Photo has been deleted');
-    //   }, error => {
-    //     this.alertify.error('Failed to delete the photo');
-    //   });
-    // });
   }
 }

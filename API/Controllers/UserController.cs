@@ -85,7 +85,7 @@ namespace API.Controllers {
                     message.ToName = user.Name;
                     message.ToEmail = user.Email;
                     message.PlainContent = null;
-                    message.HtmlContent = MailString(origin, token);
+                    message.HtmlContent = FormattedEmailBody("Account Confirmation", $"Please confirm that {user.Email} is your email address by clicking on the button below", $"{origin.ToString()}/confirm-email?token={token}", "Confirm Account", true);
                     _userRepository.EmailSender(message);
                 }
                 return Ok ();
@@ -116,7 +116,7 @@ namespace API.Controllers {
                     message.ToName = user.Name;
                     message.ToEmail = user.Email;
                     message.PlainContent = null;
-                    message.HtmlContent = MailString(origin, token);
+                    message.HtmlContent = FormattedEmailBody("Account Confirmation", $"Please confirm that {user.Email} is your email address by clicking on the button below", $"{origin.ToString()}/confirm-email?token={token}", "Confirm Account", true);
                     _userRepository.EmailSender(message);
                 }
                 return Ok ();
@@ -146,7 +146,7 @@ namespace API.Controllers {
                     message.ToName = user.Name;
                     message.ToEmail = user.Email;
                     message.PlainContent = null;
-                    message.HtmlContent = MailString(origin, token);
+                    message.HtmlContent = FormattedEmailBody("Account Confirmation", $"Please confirm that {user.Email} is your email address by clicking on the button below", $"{origin.ToString()}/confirm-email?token={token}", "Confirm Account", true);
                     _userRepository.EmailSender(message);
                 }
                 return Ok ();
@@ -154,6 +154,7 @@ namespace API.Controllers {
                 return BadRequest (ex.Message);
             }
         }
+
         [AllowAnonymous]
         [HttpPost("resendMailForEmailVerification")]
         public async Task<IActionResult> ResendVerificationEmail([FromBody] UserToSignUpDTO userToSignUpDTO)
@@ -173,7 +174,7 @@ namespace API.Controllers {
                 message.ToName = user.Name;
                 message.ToEmail = user.Email;
                 message.PlainContent = null;
-                message.HtmlContent = MailString("origin", token);
+                message.HtmlContent = FormattedEmailBody("Account Confirmation", $"Please confirm that {user.Email} is your email address by clicking on the button below", $"{origin.ToString()}/confirm-email?token={token}", "Confirm Account", true);
                 _userRepository.EmailSender(message);
                 return Ok();
             }
@@ -265,6 +266,14 @@ namespace API.Controllers {
         private string MailString(string origin, string token)
         {
             return $"<br/><br/><div style='background-color: #FFEFD5; height: 60% !important;'><h2 style='text-align: center; padding-top: 15px;'><strong>Welcome to 234Spaces</strong></h2><p>To verify your email, please click the button or link below to verify your email</p> <br> <a class='resetBtn' href='{origin.ToString()}/confirm-email?token={token}' style='background-color: #00FF7F; color: #0c0b0b; padding: 6px; border-radius: 3px; text-decoration: none;'>Verify Email</a><br><p>&nbsp;<p><p>{origin.ToString()}/confirm-email?token={token}</p></div>";
+        }
+        private string FormattedEmailBody(string heading, string body, string buttonLink, string buttonName, bool hasButton)
+        {
+            string first = "<!DOCTYPE html> <html lang='en'> <head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'><meta http-equiv='X-UA-Compatible' content='ie=edge'><title>234Spaces</title><link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'><link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css'></head><body><style>*,*::before { padding: 0; box-sizing: inherit;}html {box-sizing: border-box;}@media only screen and (max-width: 37.5em) { html {font-size: 62.5%; }}@media only screen and (max-width: 25em) {html { font-size: 50%;}}body {font-family: 'Nunito', sans-serif;color: #6D5D4B;font-weight: 300; outline: none; line-height: 1.6;   max-width: 100%;}.content {height: 100vh;}@media only screen and (max-width: 31.25em) {.header {padding: .2rem !important;}.header-link {padding: 0 1rem 0 1rem !important;}.booking {text-align: center !important;}}.header-link, .header-link:hover {color: #EAEAEA;font-size: 1.5rem;text-decoration: none;}.booking {font-size: 1rem;text-transform: uppercase;}.sub-head {padding: 1.5rem 0 1.5rem 0;border-bottom: 1px solid #aaa;margin-bottom: .5rem;}.logo{height: 25%;width: 25%;}.btn-2 {padding: .375rem .75rem !important;}.footer {line-height: .5; margin-bottom: 1.5rem;font-size: .8rem;}@media only screen and (max-width: 25em) { .footer { font-size: 1rem; }.footer-icon {height: 2rem !important;width: 2rem !important;padding: 2.22px !important;font-size: 1.3rem !important;}.footer-icon {height: 2.5rem;width: 2.5rem;padding: 6px;font-size: 1.465rem;vertical-align: middle;text-align: center;border-radius: 50%;background-color: #2B2C2E;color: #EBEBEB;}</style><div class='content'><div class='header'><a href='#' class='px-5 header-link'><img class='logo' src='https://res.cloudinary.com/dro0fy3gz/image/upload/v1576489895/Logo/234Spaces_logo_PNG_2_qxc8rn.png'></a></div><div class='px-3'><h3 class='pt-1 pb-1 text-center'>" + heading + "</h3><div class='sub-head'><div class='d-flex justify-content-center align-item-center'><div class='lead'><p>" + body + "</p></div></div></div>";
+            string second = hasButton? "<div class='sub-head'><div class='d-flex justify-content-center align-item-center'><div><a href='" + buttonLink + "' class='btn btn-primary btn-lg'>"+ buttonName +"</a></div></div></div>" : "";
+            string third = "</div><div class='jumbotron p-3'><div class='d-flex justify-content-end mb-4 mt-5'><a href=''><i class='fa fa-facebook mx-2 footer-icon'></i></a><a href=''><i class='fa fa-twitter mx-2 footer-icon'></i></a><a href=''><i class='fa fa-linkedin mx-2 footer-icon'></i></a> </div><div class='footer'><p>234Spaces Inc., 2019. All rights reserved.</p><p>229 West 43rd Street 5th Floor New York, NY 10036</p></div></div></div></body></html>}}}";
+
+            return first + second + third;
         }
     }
 }

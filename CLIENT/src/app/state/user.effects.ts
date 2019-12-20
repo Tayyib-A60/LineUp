@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { NotificationService } from './../services/notification.service';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
@@ -14,7 +15,8 @@ export class UserEffects {
 
     constructor(private action$: Actions,
                 private userService: UserService,
-                private notification: NotificationService) { }
+                private notification: NotificationService,
+                private router: Router) { }
     
     @Effect()
     createUser$: Observable<Action> = this.action$.pipe(
@@ -42,6 +44,7 @@ export class UserEffects {
             this.userService.createUserAsMerchant(user).pipe(
                 map(response => {
                     this.notification.typeSuccess('Sign up was successful', 'Sign up success');
+                    this.router.navigate['sign-in'];
                     return new userActions.CreateUserSuccess(response);
                 }),
                 catchError(err => {
@@ -60,6 +63,7 @@ export class UserEffects {
             this.userService.signInUser(user).pipe(
                 map(user => {
                     this.notification.typeSuccess('Sign in was successful', 'Sign in success');
+                    this.router.navigate(['space-home']);
                     return new userActions.SignInUserSuccess(user);
                 }),
                 catchError(err => {

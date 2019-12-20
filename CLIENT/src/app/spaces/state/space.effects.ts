@@ -229,11 +229,11 @@ export class SpaceEffects {
     setMainPhoto$: Observable<Action> = this.actions$.pipe(
         ofType(SpaceActionTypes.SetMainPhoto),
         map((action: spaceActions.SetMainPhoto) => action.payload),
-        mergeMap((id: number) => 
-            this.spaceService.setMainPhoto(id).pipe(
+        mergeMap((ids) => 
+            this.spaceService.setMainPhoto(ids).pipe(
                 map((res) => {
                     this.notification.typeSuccess('Main photo is set', 'Success');
-                    return new spaceActions.SetMainPhotoSuccess(id)
+                    return new spaceActions.SetMainPhotoSuccess(ids['newMainId'])
                 }),
                 catchError(err => {
                     this.notification.typeError(`${err.message}`, 'Error');

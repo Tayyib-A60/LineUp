@@ -13,7 +13,7 @@
           <ng-template *ngFor='let photo of thisSpace.photos' ngbSlide>
             <img class='img_banner' [src]="photo.fileName" alt="Random first slide">
             <div class="caption_container">
-                <h4 class="caption_text">{{thisSpace?.pricePH || thisSpace?.pricePD}}</h4>
+                <h4 class="caption_text">NGN {{thisSpace?.pricePH?.price + ' per Hr' || thisSpace?.pricePD?.price + ' per Day' || thisSpace?.pricePW?.price + ' per Wk'}}</h4>
                 <i class="fa fa-users"></i>
                 <span>&nbsp;{{thisSpace?.size}} People</span>
             </div>
@@ -55,18 +55,22 @@
               <div class="mt-4 mb-4">
                   <h4 class="text-bold-500">{{thisSpace?.location?.name}}</h4>
               </div>
-              <div class="h6 mb-3">
-                <a href="">View venue page &#62;</a>
-              </div>
-              <div class="space_text">
-                <p>{{thisSpace?.description}}</p>
+              <div class="mt-4">
+                <h4 class="text-bold-500">Description</h4>
+                <div class="d-flex">
+                    <div class="space_text">
+                      <p>{{thisSpace?.description}}</p>
+                    </div>
+                  </div>
               </div>
               <div class="mt-4">
                   <h4 class="text-bold-500">Amenities</h4>
                   <div class="d-flex">
                       <div *ngFor='let amenity of thisSpace.amenities' class="custom-control custom-checkbox pr-4 space_content">
-                          <input style="color: blue;" type="checkbox" class="custom-control-input" checked>
-                          <label class="custom-control-label">&nbsp; {{amenity?.name}}</label>
+                          <!-- <div class="custom-control custom-checkbox"> -->
+                              <input (change)='amenityChecked($event)' [value]='amenity["id"]' type="checkbox" class="custom-control-input" [id]="amenity['id']">
+                              <label class="custom-control-label" [for]="amenity['id']">&nbsp; {{amenity?.name}} ({{amenity?.price | currency : 'NGN' : 'symbol-narrow'}})</label>
+                            <!-- </div> -->
                       </div>
                   </div>
               </div>
@@ -75,16 +79,16 @@
                     <h2 class="space_form-head">Send an enquiry to know more about this space, multi-use area...</h2>
                     <div class="space_form-input">
                         <div class="form-group space_form-input-group">
-                            <label class="space_form-input-field text-bold-400" for="userinput1">Name*</label>
-                            <input type="text" id="userinput1" class="form-control" name="name" placeholder="" required>
+                            <label class="space_form-input-field text-bold-400" for="name">Name*</label>
+                            <input type="text" [(ngModel)]='contactUsForm.name' id="name" class="form-control" name="name" placeholder="Your name..." required>
                         </div>
                         <div class="form-group space_form-input-group">
-                            <label class="space_form-input-field text-bold-400" for="userinput1">Email*</label>
-                            <input type="text" id="userinput1" class="form-control" name="name" placeholder="" required>
+                            <label class="space_form-input-field text-bold-400" for="email">Email*</label>
+                            <input type="email" [(ngModel)]='contactUsForm.email' id="email" class="form-control" name="name" placeholder="Your email..." required>
                         </div>
                         <div class="form-group space_form-input-group">
-                            <label class="space_form-input-field text-bold-400" for="userinput1">Phone</label>
-                            <input type="text" id="userinput1" class="form-control" name="name" placeholder="" required>
+                            <label class="space_form-input-field text-bold-400" for="phone">Phone</label>
+                            <input type="text" [(ngModel)]='contactUsForm.phone' id="phone" class="form-control" name="name" placeholder="Your phone number..." required>
                         </div>
                         <!-- <div class="form-group space_form-input-group">
                             <label class="space_form-input-field text-bold-400 pb-2" for="userinput1">I'd like to</label>
@@ -102,8 +106,8 @@
                             </div>
                         </div> -->
                         <div class="form-group space_form-input-group">
-                            <label class="space_form-input-field text-bold-400" for="userinput1">Your Message</label>
-                            <textarea class="form-control" id="message" name="message" rows="4" placeholder="Hi T-boy, I'm interested in your listing on 234Spaces and would like some further details."></textarea>
+                            <label class="space_form-input-field text-bold-400" for="message">Your Message</label>
+                            <textarea class="form-control" [(ngModel)]='contactUsForm.message' id="message" name="message" rows="6" placeholder="Hi, I'm interested in your listing on 234Spaces and would like some further details."></textarea>
                             <!-- <span class="space_form-input-group-counter" aria-label="Character counter" id="counter">500</span> -->
                         </div>
                         <div><p>*Required Information</p></div>
@@ -121,7 +125,7 @@
                         </div>
                     </div>
                     <div class="space_form-input-footer">
-                      <button class="space_form-btn">Send Enquiry</button> 
+                      <button [disabled]='!contactUsForm.email || !contactUsForm.name || !contactUsForm.message.length' (click)='sendEnquiry()' class="space_form-btn">Send Enquiry</button> 
                       </div>    
                 </form>
               </div>
@@ -215,17 +219,18 @@
                           </div>
                           <div>
                             <button (click)='bookSpace()' type="button" class="btn btn-raised px-2 mb-0"style="background-color: #565f73; color: #f3f3f3">
-                              <span class="d-lg-inline-block d-none space_btn">Book now</span>
+                              <span class="d-lg-inline-block d-none space_btn">Reserve space</span>
                             </button>
                           </div>
                       </div>
+                      <br>
                     </div>
                   <!-- </div> -->
-                      <div class="space_bg">
+                      <!-- <div class="space_bg">
                         <h3 class="lead text-bold-700 mb-3 mt-4">Cancellation Rules</h3>
-                      </div>
+                      </div> -->
                 </div>
-                <div class="space_form">
+                <!-- <div class="space_form">
                   <div class="space_form-head">Contact Details</div>
                   <div class="space_form-input pb-1">
                     <h4 class="space_form-input-field text-bold-400">Linda Whiteside</h4>
@@ -239,7 +244,36 @@
                       <button class="btn btn-outline-secondary btn-block">0421*** ***</button>
                     </div>
                   </div>
+                </div> -->
+                <br>
+                <div class="space_form space_content space_right-bg px-3 pt-3 pb-3">
+                  <div>
+                    <i class="ft-credit-card"></i>
+                    <span class="h4 text-bold-500"> Total Cost</span>
+                  </div>
+                  <div class="space_content">
+                      <!-- <h4 class="space_form-input-field text-bold-500 mt-3 pb-1">Cost</h4> -->
+                      <p class="space_form-input-data space_right-cursor mb-0">Cost&nbsp;<span class="text-bold-500">{{totalCost | currency : 'NGN' : 'symbol-narrow'}} </span></p>
+                  </div>
+                  <!-- <div class="">
+                      <h4 class="space_form-input-field text-bold-500 mt-3 pb-1">Opening hours</h4>
+                      <p class="space_right-p mb-1">Present Story is open to the public 6 days a week. Access after these hours will be by arrangement.</p>
+                      <p class="space_form-input-data space_right-cursor mb-0">Monday - Sunday &nbsp; <span class="text-bold-500">7:00am – 12:00am</span></p>
+                  </div> -->
                 </div>
+                <div class="d-flex ">
+                  <div>
+                    <!-- <button [disabled]='!dateFrom || !dateTo' (click)='checkAvailability()' type="button" class="btn btn-raised px-2 mb-0" style="background-color: #565f73; color: #f3f3f3">
+                      <span class="d-lg-inline-block d-none space_btn">Check Availablity</span>
+                    </button> -->
+                  </div>
+                  <div>
+                    <button (click)='bookSpace()' type="button" class="btn btn-raised px-2 mb-0"style="background-color: #565f73; color: #f3f3f3">
+                      <span class="d-lg-inline-block d-none space_btn">Book now</span>
+                    </button>
+                  </div>
+              </div>
+              <br>
                 <div class="space_form space_content space_right-bg px-3 pt-3 pb-3">
                   <div>
                     <i class="ft-menu"></i>
@@ -251,13 +285,15 @@
                   </div>
                   <div class="space_content">
                       <h4 class="space_form-input-field text-bold-500 mt-3 pb-1">Pricing options</h4>
-                      <p class="space_form-input-data space_right-cursor mb-0">Per hour: &nbsp;<span class="text-bold-500">$45</span></p>
+                      <p class="space_form-input-data space_right-cursor mb-0">Per Hour: &nbsp;<span class="text-bold-500">{{thisSpace?.pricePH?.price | currency : 'NGN' : 'symbol-narrow'}}</span></p>
+                      <p class="space_form-input-data space_right-cursor mb-0">Per Day: &nbsp;<span class="text-bold-500">{{thisSpace?.pricePD?.price | currency : 'NGN' : 'symbol-narrow'}}</span></p>
+                      <p class="space_form-input-data space_right-cursor mb-0">Per Week: &nbsp;<span class="text-bold-500">{{thisSpace?.pricePW?.price | currency : 'NGN' : 'symbol-narrow'}}</span></p>
                   </div>
-                  <div class="">
+                  <!-- <div class="">
                       <h4 class="space_form-input-field text-bold-500 mt-3 pb-1">Opening hours</h4>
                       <p class="space_right-p mb-1">Present Story is open to the public 6 days a week. Access after these hours will be by arrangement.</p>
                       <p class="space_form-input-data space_right-cursor mb-0">Monday - Sunday &nbsp; <span class="text-bold-500">7:00am – 12:00am</span></p>
-                  </div>
+                  </div> -->
                 </div>
                 <!-- <div class="space_form">
                     <img class='img_banner' src="assets/img/photos/space5.jpg" height="10rem" width="10rem" alt="Random first slide">
@@ -274,7 +310,9 @@
         </div>
 </div>
 <div id="location" class="jumbotron">
-  <h1>Map would be here</h1>
+    <agm-map [latitude]='latitude' [longitude]='longitude'>
+          <agm-marker [latitude]='thisSpace?.location?.lat' [longitude]='thisSpace?.location?.long'></agm-marker>
+    </agm-map>
 </div>
 <div id="similar" class="space_container">
   <h2 class="text-bold-700 mb-3">Discover similar spaces you’ll love.</h2>

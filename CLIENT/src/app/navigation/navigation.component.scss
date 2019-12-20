@@ -1,7 +1,13 @@
 .header {
   background-color: #333F48;
   padding: .5rem 1rem;
-  
+}
+.logo{
+  height: 20%;
+  width: 20%;
+}
+
+.nav {
 
   &_container {
     display: flex;
@@ -20,6 +26,15 @@
       opacity: 0;
     }
   }
+  &_btn {
+        
+        border: 1px solid #000;
+        background-color: #000;
+        color: #fff;
+        padding: .5rem .5rem;
+        border-radius: 2rem;
+        margin-left: .3rem;
+    }
   
   &_input {  
     // height: 3rem;
@@ -37,7 +52,7 @@
 
     &:focus{
       border: 2px solid rgba(#7038BA, 0.5);
-    }
+    } 
     ::-webkit-input-placeholder{
       color: #C1C3BE;
     }
@@ -61,8 +76,6 @@
     color: #fff;
     width: 20%;
     // padding-right: 3rem;
-  
-    
   }
 
 
