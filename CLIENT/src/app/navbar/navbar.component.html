@@ -47,6 +47,9 @@
                     <li class="nav-item" ngbDropdown [placement]="placement">
                         <a [routerLink]="['/profile']" class="nav-link position-relative"><span class="nav-name">Profile</span></a>
                     </li>
+                    <li class="nav-item" ngbDropdown [placement]="placement">
+                        <a [routerLink]="['/navigation']" class="nav-link position-relative"><span class="nav-name">navigation</span></a>
+                    </li>
                     <li *ngIf='anyUserIsAuthenticated()' class="nav-item" ngbDropdown [placement]="placement">
                         <a [routerLink]="['/booking-request']" class="nav-link position-relative"><span class="nav-name">Booking Request</span></a>
                     </li>

@@ -1,3 +1,7 @@
+.header {
+  background-color: #333F48;
+  padding: .5rem 1rem;
+}
 .logo{
   height: 20%;
   width: 20%;
@@ -5,15 +9,24 @@
 
 .nav {
 
-    // &_container {
+  &_container {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
   
-    // }
-    &_logo {
-      font-size: 2rem;
-      font-weight: 300;
+  &_search {
+    flex-grow: 1;
+    // background-color: #21282E;
+    // width: 100%;
+    @media only screen and (max-width: 50em) {
+      flex-grow: 0;
+      position: absolute;
+      top: 0;
+      opacity: 0;
     }
-  
-    &_btn {
+  }
+  &_btn {
         
         border: 1px solid #000;
         background-color: #000;
@@ -23,4 +36,80 @@
         margin-left: .3rem;
     }
   
+  &_input {  
+    // height: 3rem;
+    padding: .8rem 0;
+    border-top-left-radius: 25rem;
+    border-bottom-left-radius: 25rem;
+    width: 70%;
+    background-color: #21282E;
+    color: #fff;
+    // background-image: url('searchicon.png');
+    background-position: 10px 10px;
+    background-repeat: no-repeat;
+    padding-left: 40px;
+    border: none;
+
+    &:focus{
+      border: 2px solid rgba(#7038BA, 0.5);
+    } 
+    ::-webkit-input-placeholder{
+      color: #C1C3BE;
+    }
   }
+
+  span {
+    background-color: #21282E;
+    border-bottom-right-radius: 25rem;
+    border-top-right-radius: 25rem;
+    padding: .8rem 0;
+    width: 20%;
+    
+  }
+  &_select {
+    // height: 3rem;
+    border-bottom-right-radius: 25rem;
+    border-top-right-radius: 25rem;
+    padding: .8rem 0;
+    border: none;
+    background-color: inherit;
+    color: #fff;
+    width: 20%;
+    // padding-right: 3rem;
+  }
+
+
+  &_search-1 {
+    margin: 0 auto;
+    padding: .8rem 0;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    opacity: 0;
+    
+    @media only screen and (max-width: 50em) {
+      width: 110%;
+      opacity: 1;
+      // margin: 0 auto;
+      position: relative;
+      transition: all;
+
+    }
+  }
+}
+
+.bb {
+  @media only screen and (max-width: 500px) {
+    margin: 0 !important;
+    margin-right: .2rem !important;
+    padding: .2rem 1rem !important;
+
+  }
+  @media only screen and (max-width: 330px) {
+    margin-right: .125rem !important;
+    padding: .2rem .6rem !important;
+
+  }
+}
+
+

@@ -15,6 +15,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { BookingRequestComponent } from './booking-request/booking-request.component';
 import { BookingRequestTwoComponent } from './booking-request-two/booking-request-two.component';
 import { SpaceDisplayComponent } from './space-display/space-display.component';
+import { NavigationComponent } from './navigation/navigation.component';
 
 import { AddPropsComponent } from './spaces/add-props/add-props.component';
 import { MerchantAuthGuardService } from './services/merchantAuthGuardService';
@@ -47,6 +48,7 @@ const routes: Routes = [
   { path: 'confirm-email', component: ResetPasswordComponent },
   { path: 'list-your-space', component: ListYourSpaceComponent },
   { path: 'profile', component: ProfileComponent },
+  { path: 'navigation', component: NavigationComponent },
   { path: 'booking-request', component: BookingRequestComponent },
   { path: 'booking-request-two', component: BookingRequestTwoComponent },
   { path: 'map-space/:spaceType', component: MapSpaceComponent },
