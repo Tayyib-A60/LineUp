@@ -30,7 +30,7 @@ namespace API.Core
          Task<IEnumerable<Amenity>> GetAmenities();
          Task<List<BookedTimes>> GetBookedTimes(int spaceId, BookedTimes proposedBookingTime);
          Task<Booking> GetBooking(int bookingId);
-         Task<Booking> GetBookingDetails(int bookedById, BookingQuery query);
+         Task<List<Booking>> GetBookingDetails(int bookedById, BookingQuery query);
          string ComposeMessage(MessageParams messageParams);
         //  Task<IEnumerable<Booking>> GetBookings(int userId);
     }

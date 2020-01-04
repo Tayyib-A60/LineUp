@@ -17,12 +17,14 @@ namespace API.Controllers
         private IMapper _mapper { get; }
         private ILineUpRepository _lineUpRepository { get; }
         private IUserRepository _userRepository { get; }
+
         public LineUpController(ILineUpRepository lineUpRepository, IMapper mapper, IUserRepository userRepository)
         {
             _userRepository = userRepository;
             _lineUpRepository = lineUpRepository;
             _mapper = mapper;
         }
+
         [HttpPost("createSpace")]
         public async Task<IActionResult> CreateSpace([FromBody] SpaceDTO spaceDTO)
         {
@@ -183,8 +185,8 @@ namespace API.Controllers
             return Ok();
         }
 
-        [HttpPost("createReservation")]
-        public async Task<IActionResult> CreateReservation([FromBody] BookingDTO bookingDTO)
+        [HttpPost("createReservationPrev")]
+        public async Task<IActionResult> CreateReservahshtion([FromBody] BookingDTO bookingDTO)
         {
             var bookingToCreate = _mapper.Map<Booking>(bookingDTO);
             if (bookingToCreate == null)
@@ -219,38 +221,63 @@ namespace API.Controllers
             message.ToName = user.Name;
             message.ToEmail = user.Email;
             message.PlainContent = null;
-            message.HtmlContent = FormattedEmailBody("Your Reservation", $"A reservation has been placed for you, your reservation reference is {bookingDetails.Id.ToString()}, kindly pay #{bookingDetails.TotalPrice.ToString()} to confirm the reservation", "", "", false);
+            if(bookingDetails.Count() > 1) {
+                var reservationIdList = String.Empty;
+                var totalPrice = 0.00;
+                foreach (var item in bookingDetails)
+                {
+                    reservationIdList += item.Id.ToString() + " ,";
+                    totalPrice  += item.TotalPrice;
+                }
+                message.HtmlContent = FormattedEmailBody("Your Reservations", $"The following reservations has been placed for you, your reservation references are {reservationIdList.ToString()}, kindly pay #{totalPrice.ToString()} to confirm the reservation", "", "", false);
+            } else {
+                message.HtmlContent = FormattedEmailBody("Your Reservation", $"A reservation has been placed for you, your reservation reference is {bookingDetails[0].Id.ToString()}, kindly pay #{bookingDetails[0].TotalPrice.ToString()} to confirm the reservation", "", "", false);
+            }
             _userRepository.EmailSender(message);
             return Ok();
         }
 
         [HttpPost("createBooking")]
-        public async Task<IActionResult> CreateBooking([FromBody] BookingDTO bookingDTO)
+        public async Task<IActionResult> CreateBooking([FromBody] BookingFromClientDTO bookingFromClientDTO)
         {
-            var bookingToCreate = _mapper.Map<Booking>(bookingDTO);
-            var bookingToCreateBT = new BookedTimes();
-            bookingToCreateBT.From = bookingToCreate.UsingFrom;
-            bookingToCreateBT.To = bookingToCreate.UsingTill;
-            var existingBookingTimes = await _lineUpRepository.GetBookedTimes(bookingToCreate.SpaceBooked.Id, bookingToCreateBT);
-            if (existingBookingTimes.Count() > 0)
-                return BadRequest("You can't select from a range of booking that already exists");
-            if (bookingToCreate == null)
-                return BadRequest("Booking cannot be null");
-            if (bookingToCreate.UsingFrom < DateTime.Now)
-                return BadRequest("You can't create a booking for a date that has passed");
-            if (bookingToCreate.UsingFrom >= bookingToCreate.UsingTill)
-                return BadRequest("Time from must be behind/be the same as time to");
-            if (await _lineUpRepository.EntityExists(bookingToCreate))
-                return BadRequest("Booking already exists");
-            bookingToCreate.Status = BookingStatus.Booked;
-            bookingToCreate.BookingTime = DateTime.Now;
-            _lineUpRepository.Add(bookingToCreate);
+            var bookingDTO = new BookingDTO {
+                SpaceBooked = bookingFromClientDTO.SpaceBooked,
+                UserId = bookingFromClientDTO.UserId,
+                BookingTime = bookingFromClientDTO.BookingTime,
+                TotalPrice = bookingFromClientDTO.TotalPrice,
+                Chat = bookingFromClientDTO.Chat,
+                BookedById = bookingFromClientDTO.BookedById,
+                Status = bookingFromClientDTO.Status
+            };
+            var bookingToCreate = new Booking();
+            foreach (var time in bookingFromClientDTO.UsingTimes)
+            {
+                bookingToCreate.UsingFrom = time.UsingFrom;
+                bookingToCreate.UsingTill = time.UsingTill;
+                var bookingToCreateBT = new BookedTimes();
+                bookingToCreateBT.From = bookingToCreate.UsingFrom;
+                bookingToCreateBT.To = bookingToCreate.UsingTill;
+                var existingBookingTimes = await _lineUpRepository.GetBookedTimes(bookingToCreate.SpaceBooked.Id, bookingToCreateBT);
+                if (existingBookingTimes.Count() > 0)
+                    return BadRequest("You can't select from a range of booking that already exists");
+                if (bookingToCreate == null)
+                    return BadRequest("Booking cannot be null");
+                if (bookingToCreate.UsingFrom < DateTime.Now)
+                    return BadRequest("You can't create a booking for a date that has passed");
+                if (bookingToCreate.UsingFrom >= bookingToCreate.UsingTill)
+                    return BadRequest("Time from must be behind/be the same as time to");
+                if (await _lineUpRepository.EntityExists(bookingToCreate))
+                    return BadRequest("Booking already exists");
+                bookingToCreate.Status = BookingStatus.Booked;
+                bookingToCreate.BookingTime = DateTime.Now;
+                _lineUpRepository.Add(bookingToCreate);
+            }
             await _lineUpRepository.SaveAllChanges();
             BookingQuery query = new BookingQuery {
-                TimeBooked = bookingToCreate.BookingTime
+                TimeBooked = bookingToCreate.BookingTime.Date
             };
-            var bookingDetails = await _lineUpRepository.GetBookingDetails(bookingToCreate.BookedById, query);
             var user = await _userRepository.GetUser(bookingToCreate.BookedById);
+            var bookingDetails = await _lineUpRepository.GetBookingDetails(bookingToCreate.BookedById, query);
             Message message = new Message();
             message.Subject = "Booking";
             message.FromEmail = "noreply@234spaces.com";
@@ -258,7 +285,82 @@ namespace API.Controllers
             message.ToName = user.Name;
             message.ToEmail = user.Email;
             message.PlainContent = null;
-            message.HtmlContent = FormattedEmailBody("Your Booking", $"Your booking has been confirmed, your bookingReference is {bookingDetails.Id.ToString()}", "", "", false);
+            if(bookingDetails.Count() > 1) {
+                var reservationIdList = String.Empty;
+                var totalPrice = 0.00;
+                foreach (var item in bookingDetails)
+                {
+                    reservationIdList += item.Id.ToString() + " ,";
+                    totalPrice  += item.TotalPrice;
+                }
+                message.HtmlContent = FormattedEmailBody("Your Booking", $"The following bookings has been placed for you, your booking references are {reservationIdList.ToString()}.", "", "", false);
+            } else {
+                message.HtmlContent = FormattedEmailBody("Your Booking", $"Your booking has been confirmed, your bookingReference is {bookingDetails[0].Id.ToString()}", "", "", false);
+            }
+            _userRepository.EmailSender(message);
+
+            return Ok();
+        }
+        [HttpPost("createReservation")]
+        public async Task<IActionResult> CreateReservation([FromBody] BookingFromClientDTO bookingFromClientDTO)
+        {
+            var bookingDTO = new BookingDTO {
+                SpaceBooked = bookingFromClientDTO.SpaceBooked,
+                UserId = bookingFromClientDTO.UserId,
+                BookingTime = bookingFromClientDTO.BookingTime,
+                TotalPrice = bookingFromClientDTO.TotalPrice,
+                Chat = bookingFromClientDTO.Chat,
+                BookedById = bookingFromClientDTO.BookedById,
+                Status = bookingFromClientDTO.Status
+            };
+            var bookingToCreate = new Booking();
+            foreach (var time in bookingFromClientDTO.UsingTimes)
+            {
+                bookingToCreate.UsingFrom = time.UsingFrom;
+                bookingToCreate.UsingTill = time.UsingTill;
+                var bookingToCreateBT = new BookedTimes();
+                bookingToCreateBT.From = bookingToCreate.UsingFrom;
+                bookingToCreateBT.To = bookingToCreate.UsingTill;
+                var existingBookingTimes = await _lineUpRepository.GetBookedTimes(bookingToCreate.SpaceBooked.Id, bookingToCreateBT);
+                // if (existingBookingTimes.Count() > 0)
+                //     return BadRequest("You can't select from a range of booking that already exists");
+                if (bookingToCreate == null)
+                    return BadRequest("Booking cannot be null");
+                if (bookingToCreate.UsingFrom < DateTime.Now)
+                    return BadRequest("You can't create a booking for a date that has passed");
+                if (bookingToCreate.UsingFrom >= bookingToCreate.UsingTill)
+                    return BadRequest("Time from must be behind/be the same as time to");
+                if (await _lineUpRepository.EntityExists(bookingToCreate))
+                    return BadRequest("Booking already exists");
+                bookingToCreate.Status = BookingStatus.Reserved;
+                bookingToCreate.BookingTime = DateTime.Now;
+                _lineUpRepository.Add(bookingToCreate);
+            }
+            await _lineUpRepository.SaveAllChanges();
+            BookingQuery query = new BookingQuery {
+                TimeBooked = bookingToCreate.BookingTime.Date
+            };
+            var user = await _userRepository.GetUser(bookingToCreate.BookedById);
+            var bookingDetails = await _lineUpRepository.GetBookingDetails(bookingToCreate.BookedById, query);
+            Message message = new Message();
+            message.Subject = "Booking";
+            message.FromEmail = "noreply@234spaces.com";
+            message.FromName = "234Spaces Admin";
+            message.ToName = user.Name;
+            message.ToEmail = user.Email;
+            message.PlainContent = null;
+            if(bookingDetails.Count() > 1) {
+                var reservationIdList = String.Empty;
+                var totalPrice = 0.00;
+                foreach (var item in bookingDetails)
+                {
+                    reservationIdList += item.Id.ToString() + " ,";
+                    totalPrice  += item.TotalPrice;
+                }
+                message.HtmlContent = FormattedEmailBody("Your Reservations", $"The following reservations has been placed for you, your reservation references are {reservationIdList.ToString()}, kindly pay #{totalPrice.ToString()} to confirm the reservation", "", "", false);
+            } else {
+                message.HtmlContent = FormattedEmailBody("Your Reservation", $"A reservation has been placed for you, your reservation reference is {bookingDetails[0].Id.ToString()}, kindly pay #{bookingDetails[0].TotalPrice.ToString()} to confirm the reservation", "", "", false);
+            }
             _userRepository.EmailSender(message);
 
             return Ok();

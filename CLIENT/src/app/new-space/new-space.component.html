@@ -74,7 +74,7 @@
                       </div>
                   </div>
               </div>
-              <div class="space_form">
+              <!-- <div class="space_form">
                 <form action="">
                     <h2 class="space_form-head">Send an enquiry to know more about this space, multi-use area...</h2>
                     <div class="space_form-input">
@@ -90,25 +90,9 @@
                             <label class="space_form-input-field text-bold-400" for="phone">Phone</label>
                             <input type="text" [(ngModel)]='contactUsForm.phone' id="phone" class="form-control" name="name" placeholder="Your phone number..." required>
                         </div>
-                        <!-- <div class="form-group space_form-input-group">
-                            <label class="space_form-input-field text-bold-400 pb-2" for="userinput1">I'd like to</label>
-                            <div class="custom-control custom-checkbox mb-2">
-                              <input type="checkbox" class="custom-control-input lead" id="defaultUnchecked">
-                              <label class="custom-control-label space_form-input-checkbox" for="defaultUnchecked">&nbsp;Enquire about a booking</label>
-                            </div>
-                            <div class="custom-control custom-checkbox mb-2">
-                              <input type="checkbox" class="custom-control-input lead" id="defaultUnchecked">
-                              <label class="custom-control-label space_form-input-checkbox" for="defaultUnchecked">&nbsp;Request a tour</label>
-                            </div>
-                            <div class="custom-control custom-checkbox mb-2">
-                              <input type="checkbox" class="custom-control-input lead" id="defaultUnchecked">
-                              <label class="custom-control-label space_form-input-checkbox" for="defaultUnchecked">&nbsp;Make a general enquiry</label>
-                            </div>
-                        </div> -->
                         <div class="form-group space_form-input-group">
                             <label class="space_form-input-field text-bold-400" for="message">Your Message</label>
                             <textarea class="form-control" [(ngModel)]='contactUsForm.message' id="message" name="message" rows="6" placeholder="Hi, I'm interested in your listing on 234Spaces and would like some further details."></textarea>
-                            <!-- <span class="space_form-input-group-counter" aria-label="Character counter" id="counter">500</span> -->
                         </div>
                         <div><p>*Required Information</p></div>
                         <div class="pb-2">
@@ -128,7 +112,7 @@
                       <button [disabled]='!contactUsForm.email || !contactUsForm.name || !contactUsForm.message.length' (click)='sendEnquiry()' class="space_form-btn">Send Enquiry</button> 
                       </div>    
                 </form>
-              </div>
+              </div> -->
               
             </div>
             <div class="col-md-1"></div>

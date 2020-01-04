@@ -175,12 +175,14 @@ namespace API.Persistence
             return queryResult;
         }
 
-        public async Task<Booking> GetBookingDetails(int bookedById, BookingQuery query)
+        public async Task<List<Booking>> GetBookingDetails(int bookedById, BookingQuery query)
         {
+            TimeSpan timeSpan20 = new TimeSpan(0, 20, 0);
+            TimeSpan timeSpan10 = new TimeSpan(0, 10, 0);
             var bookingDetails = await _context.Bookings
                                 .Where(b => b.BookedById == bookedById)
-                                .Where(b => b.BookingTime == query.TimeBooked)
-                                .FirstOrDefaultAsync();
+                                .Where(b => b.BookingTime.TimeOfDay <= query.TimeBooked.TimeOfDay - timeSpan20 || b.BookingTime.TimeOfDay >= query.TimeBooked.TimeOfDay - timeSpan10)
+                                .ToListAsync();
             return bookingDetails;
         }
         private IQueryable<Space> FilterSpaces(SpaceQuery query, IQueryable<Space> spaces)
@@ -266,6 +268,7 @@ namespace API.Persistence
             var bookings = await _context.Bookings
                             .Include(bk => bk.SpaceBooked)
                             .Where(bk => bk.SpaceBooked.Id == spaceId)
+                            .Where(bk => bk.Status == BookingStatus.Booked)
                             .ToListAsync();
         //Check for the existing bookings that UsingFrom or UsingTill falls in between the proposed using from nd to
             var existing = new List<Booking>();
