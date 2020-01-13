@@ -3,6 +3,11 @@ import { BookingState } from './booking.reducer';
 
 export const getBookingFeatureState = createFeatureSelector<BookingState>('booking');
 
+export const getBookingToCreate = createSelector(
+    getBookingFeatureState,
+    bookingState => bookingState.bookingToCreate
+);
+
 export const getCurrentBooking = createSelector(
     getBookingFeatureState,
     bookingState => bookingState.currentBooking

@@ -47,7 +47,7 @@ const routes: Routes = [
   { path: 'confirm-email', component: ResetPasswordComponent },
   { path: 'list-your-space', component: ListYourSpaceComponent },
   { path: 'profile', component: ProfileComponent },
-  { path: 'booking-request', component: BookingRequestComponent },
+  { path: 'booking-request/:id', component: BookingRequestComponent },
   { path: 'booking-request-two', component: BookingRequestTwoComponent },
   { path: 'map-space/:spaceType', component: MapSpaceComponent },
   { path: 'map-space', component: MapSpaceComponent },

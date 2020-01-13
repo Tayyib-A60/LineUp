@@ -491,10 +491,11 @@ namespace API.Controllers
             return first + second + third;
         }
 
-        // [HttpGet("getMetrics")]
-        // public async Task<IActionResult> GetMerchantMetrics()
-        // {
-
-        // }
+        [HttpGet("getMetrics/{userId}")]
+        public async Task<IActionResult> GetMerchantMetrics(int userId)
+        {
+            var metrics = await _lineUpRepository.GetMerchantMetrics(userId);
+            return Ok(metrics);
+        }
     }
 }

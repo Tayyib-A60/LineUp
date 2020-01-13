@@ -1,7 +1,9 @@
+import { Component, OnInit, ViewEncapsulation, Input } from '@angular/core';
+import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+
 import { SharedService } from './../services/shared.service';
 import { NotificationService } from './../services/notification.service';
 import { Store, select } from '@ngrx/store';
-import { Component, OnInit } from '@angular/core';
 import { NgbCarouselConfig } from '@ng-bootstrap/ng-bootstrap';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import * as spaceActions from '../spaces/state/space.actions';
@@ -24,12 +26,25 @@ export class NewSpaceComponent implements OnInit {
 
   id: number;
   date: any;
+  dateStart: any;
+  noOfPersons: number;
+  modalNoOfPersons: number;
   timeFrom = {
     hour: 6,
     minute: 0,
     second: 0
   };
   timeTo = {
+    hour: 12,
+    minute: 0,
+    second: 0
+  };
+  modalTimeFrom = {
+    hour: 6,
+    minute: 0,
+    second: 0
+  };
+  modalTimeTo = {
     hour: 12,
     minute: 0,
     second: 0
@@ -49,6 +64,8 @@ export class NewSpaceComponent implements OnInit {
   currentRate: any;
   dateFrom: any;
   dateTo: any;
+  modalDateFrom: any;
+  modalDateTo: any;
   isDisabled: any;
   componentActive = true;
   thisSpace = <Space>{};
@@ -58,6 +75,12 @@ export class NewSpaceComponent implements OnInit {
   loaded: boolean;
   latitude: number;
   longitude: number;
+  closeResult: string;
+  usingTimes = [];
+  beginsOn: any;
+  endOn: any;
+  usingTimeArray = [];
+  numberOfGuests: number;
   
   constructor(private carouselConfig: NgbCarouselConfig,
               private route: ActivatedRoute,
@@ -66,12 +89,13 @@ export class NewSpaceComponent implements OnInit {
               private bookingStore: Store<BookingState>,
               private router: Router,
               private notification: NotificationService,
-              private sharedService: SharedService) {
+              private sharedService: SharedService,
+              private modalService: NgbModal) {
     carouselConfig.showNavigationArrows = true;
     carouselConfig.interval = 0;
   }
   
-  ngOnInit() {
+  ngOnInit() { 
     this.route.params.subscribe(
       (params: Params) => {
       this.id = params['id'];
@@ -89,6 +113,24 @@ export class NewSpaceComponent implements OnInit {
       this.longitude = myLocation.coords.longitude;
     });
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+  }
+
+  open(content) {
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return  `with: ${reason}`;
+    }
   }
 
   amenityChecked(event) {    
@@ -120,7 +162,105 @@ export class NewSpaceComponent implements OnInit {
     
   }
 
+  addAdditionalBooking() {
+    const { year, month, day } = this.modalDateFrom;
+    let yearTo = this.modalDateTo['year'];
+    let monthTo = this.modalDateTo['month'];
+    let dayTo = this.modalDateTo['day'];
+    
+    const {hour, minute, second } = this.modalTimeFrom;
+    let hourTo = this.modalTimeTo['hour'];
+    let minuteTo = this.modalTimeTo['minute'];
+    let secondTo = this.modalTimeTo['second'];
+    
+    const modalDateFrom = new Date(year, month-1, day, hour+1, minute, second);
+    const modalDateTo = new Date(yearTo, monthTo-1, dayTo, hourTo+1, minuteTo, secondTo);
+
+    this.usingTimeArray.push({ from: modalDateFrom, to: modalDateTo });
+
+    if(dayTo > day && month === monthTo) {
+      for(let i = day; i <= dayTo; i++) {
+        const from = new Date(year, month-1, i, hour+1, minute, second);
+        const to = new Date(yearTo, monthTo-1, i, hourTo+1, minuteTo, secondTo);
+        this.usingTimes.push({usingFrom: from, usingTill: to});
+      }
+    }
+    if(month < monthTo) {
+      let lastDay = new Date(modalDateFrom.getFullYear(), modalDateFrom.getMonth() + 1, 0);
+      for(let i = day; i <= day + (lastDay.getDate() - day) + dayTo; i++) {        
+        const from = new Date(year, month-1, i, hour+1, minute, second);
+        const to = new Date(yearTo, month-1, i, hourTo+1, minuteTo, secondTo);
+        this.usingTimes.push({usingFrom: from, usingTill: to})
+      }
+    }
+    console.log(this.usingTimes);
+  }
+
   bookSpace() {
+    if(this.currentUser === null) {
+      this.notification.typeInfo('Please sign in to book this space', 'Info');
+      return;
+    } 
+
+    const { year, month, day } = this.dateFrom;
+    let yearTo = this.dateTo['year'];
+    let monthTo = this.dateTo['month'];
+    let dayTo = this.dateTo['day'];
+
+    const {hour, minute, second } = this.timeFrom;
+    let hourTo = this.timeTo['hour'];
+    let minuteTo = this.timeTo['minute'];
+    let secondTo = this.timeTo['second'];
+
+    const dateFrom = new Date(year, month-1, day, hour+1, minute, second);
+    const dateTo = new Date(yearTo, monthTo-1, dayTo, hourTo+1, minuteTo, secondTo);
+
+    this.usingTimeArray.push({ from: dateFrom, to: dateTo });
+    this.usingTimeArray.sort((a,b) => a.to - b.to);
+
+    let amenitiesPrice = 0;
+    this.amenitiesSelected.forEach(amenity => {
+      amenitiesPrice += amenity.price;
+    });
+
+    if(dayTo > day && month === monthTo) {
+      for(let i = day; i <= dayTo; i++) {
+        const from = new Date(year, month-1, i, hour+1, minute, second);
+        const to = new Date(yearTo, monthTo-1, i, hourTo+1, minuteTo, secondTo);
+        this.usingTimes.push({usingFrom: from, usingTill: to});
+      }
+    }
+    if(month < monthTo) {
+      let lastDay = new Date(dateFrom.getFullYear(), dateFrom.getMonth() + 1, 0);
+      for(let i = day; i <= day + (lastDay.getDate() - day) + dayTo; i++) {        
+        const from = new Date(year, month-1, i, hour+1, minute, second);
+        const to = new Date(yearTo, month-1, i, hourTo+1, minuteTo, secondTo);
+        this.usingTimes.push({usingFrom: from, usingTill: to})
+      }
+    }    
+    const booking = {
+      userId: this.thisSpace['userId'],
+      spaceBooked: {
+        id: this.thisSpace['id']
+      },
+      usingTimes: [
+        ...this.usingTimes
+      ],
+      timeToUseSpace: {
+        from: this.usingTimeArray[0].from,
+        to: this.usingTimeArray[this.usingTimeArray.length-1].to
+      },
+      status: 'Booked',
+      bookedById: this.currentUser['id'],
+      numberOfGuests: this.numberOfGuests,
+      totalPrice: this.thisSpace['price']
+    };
+    localStorage.setItem('bookingToCreate', JSON.stringify(booking));
+    this.spaceStore.dispatch(new bookingActions.AddBookingToStore(booking));
+    this.router.navigate([`/booking-request/${this.thisSpace['id']}`]);
+  }
+
+  reserveSpace() {
     if(this.currentUser === null) {
       this.notification.typeInfo('Please sign in to book this space', 'Info');
       return;
@@ -129,8 +269,6 @@ export class NewSpaceComponent implements OnInit {
     let yearTo = this.dateTo['year'];
     let monthTo = this.dateTo['month'];
     let dayTo = this.dateTo['day'];
-    console.log(this.timeFrom);
-    
     const {hour, minute, second } = this.timeFrom;
     let hourTo = this.timeTo['hour'];
     let minuteTo = this.timeTo['minute'];
@@ -142,41 +280,68 @@ export class NewSpaceComponent implements OnInit {
     this.amenitiesSelected.forEach(amenity => {
       amenitiesPrice += amenity.price;
     });
+    let usingTimes = [];
+
+    if(dayTo > day && month === monthTo) {
+      for(let i = day; i <= dayTo; i++) {
+        const from = new Date(year, month-1, i, hour+1, minute, second);
+        const to = new Date(yearTo, monthTo-1, i, hourTo+1, minuteTo, secondTo);
+        usingTimes.push({usingFrom: from, usingTill: to});
+        console.log(usingTimes);
+      }
+    }
+    if(month < monthTo) {
+      let lastDay = new Date(dateFrom.getFullYear(), dateFrom.getMonth() + 1, 0);
+      console.log(lastDay.getDate());
+      
+      for(let i = day; i <= day + (lastDay.getDate() - day) + dayTo; i++) {        
+        const from = new Date(year, month-1, i, hour+1, minute, second);
+        const to = new Date(yearTo, month-1, i, hourTo+1, minuteTo, secondTo);
+        usingTimes.push({usingFrom: from, usingTill: to})
+      }
+      console.log(usingTimes);
+    }
+
     const booking = {
       userId: this.thisSpace['userId'],
       spaceBooked: {
         id: this.thisSpace['id']
       },
-      usingFrom: dateFrom,
-      usingTill: dateTo,
+      usingTimes: [
+        ...usingTimes
+      ],
       status: 'Reserved',
       bookedById: this.currentUser['id'],
       totalPrice: this.thisSpace['price'] + amenitiesPrice
     };
     console.log(booking);    
-    this.spaceStore.dispatch(new bookingActions.CreateReservation(booking));
+    // this.spaceStore.dispatch(new bookingActions.CreateReservation(booking));
     // this.router.navigate(['/profile'], {relativeTo: this.route});
   }
 
-  checkAvailability() {
+  checkForAvailablity(event) {   
+      if(event.target.checked) {
+        this.checkAvailability();
+      }
+  }
+  private checkAvailability() {
     const { year, month, day } = this.dateFrom;
     let yearTo = this.dateTo['year'];
     let monthTo = this.dateTo['month'];
     let dayTo = this.dateTo['day'];
+
     const {hour, minute, second } = this.timeFrom;
-    console.log(this.timeFrom);
-    
     let hourTo = this.timeTo['hour'];
     let minuteTo = this.timeTo['minute'];
     let secondTo = this.timeTo['second'];
     const dateFrom = new Date(year, month-1, day, hour+1, minute, second);
     const dateTo = new Date(yearTo, monthTo-1, dayTo, hourTo+1, minuteTo, secondTo);
+
     const requestBody = {
       id: Number(this.id),
       From: dateFrom,
       To: dateTo
     };
-    // console.log(requestBody);
     
     this.spaceStore.dispatch(new bookingActions.GetBookingTimes(requestBody));
     this.spaceStore.pipe(select(bookingSelectors.getBookingTimes),

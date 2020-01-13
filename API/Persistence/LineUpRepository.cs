@@ -299,6 +299,78 @@ namespace API.Persistence
             return await _context.Photos.Where(p => p.IsMain)
                                         .FirstOrDefaultAsync(p => p.Id == id);
         }
+        public async Task<MerchantMetrics> GetMerchantMetrics(int userId)
+        {
+            var metrics = new MerchantMetrics();
+            var bookingsNdReservations = await _context.Bookings
+                                            .Where(bk => bk.UserId == userId)
+                                            .Include(bk => bk.SpaceBooked)
+                                            .ToListAsync();
+            var bookings = new List<Booking>();
+            var reservations = new List<Booking>();
+            var bookingOverviewDict = new Dictionary<int, UsageOverview>();
+
+            bookingsNdReservations.ForEach(booking => {
+                if(booking.Status == BookingStatus.Booked) {
+                    bookings.Add(booking);
+                    metrics.TotalRevenue += booking.TotalPrice;
+                    // bookingOverviewDict.FirstOrDefault(x => x.Key == booking.SpaceBooked.Id);
+                    var usageOverview = new UsageOverview {
+                        SpaceId = booking.SpaceBooked.Id,
+                        HoursUsed = (booking.UsingTill - booking.UsingFrom).TotalHours,
+                        RevenueAccumulated = booking.TotalPrice
+                    };
+                    if(bookingOverviewDict.ContainsKey(booking.SpaceBooked.Id)) {
+                        // var index = bookingsDict.Keys.ToList().IndexOf(booking.SpaceBooked.Id);
+                        var previousValue = bookingOverviewDict[booking.SpaceBooked.Id];
+                        var newValue = new UsageOverview{
+                            SpaceId = previousValue.SpaceId,
+                            RevenueAccumulated = previousValue.RevenueAccumulated + usageOverview.RevenueAccumulated,
+                            HoursUsed = previousValue.HoursUsed + usageOverview.HoursUsed 
+                        };
+                        bookingOverviewDict[booking.SpaceBooked.Id] = usageOverview;
+                    } 
+                    else if(!bookingOverviewDict.ContainsKey(booking.SpaceBooked.Id)) {
+                        bookingOverviewDict.Add(booking.SpaceBooked.Id, usageOverview);
+                    }
+
+                } 
+                if(booking.Status == BookingStatus.Reserved){
+                    reservations.Add(booking);
+                }
+            });
+            double maxHours = 0, maxRev = 0;
+            int spaceWithMaxHoursId = 0, spaceWithMaxRevId = 0;
+
+            foreach (var item in bookingOverviewDict)
+            {
+                if (maxRev < item.Value.RevenueAccumulated)
+                {
+                    maxRev = item.Value.RevenueAccumulated;
+                    spaceWithMaxRevId = item.Value.SpaceId;
+                }
+                if (maxHours < item.Value.HoursUsed)
+                {
+                    maxHours = item.Value.HoursUsed;
+                    spaceWithMaxHoursId = item.Value.SpaceId;
+                }
+            }
+            // var bookingOverviewListForMaxHours = bookingOverviewDict.Values.OrderBy(x => x.HoursUsed).ToList();
+            // var bookingOverviewListForMaxRevenue = bookingOverviewDict.Values.OrderBy(x => x.RevenueAccumulated).ToList();
+            metrics.TotalSpaceBooking = bookings.Count;
+            metrics.TotalSpaceReservation = reservations.Count;
+
+            metrics.TopSpaceHoursUsed = new TopSpaceUsage {
+                SpaceId = spaceWithMaxHoursId,
+                TotalUsageInHours = maxHours             
+            };
+
+            metrics.TopSpaceRevenueUsage = new TopSpaceUsage {
+                SpaceId = spaceWithMaxRevId,
+                TopSpaceRevenue = maxRev
+            };
+            return metrics;
+        }
         public string ComposeMessage(MessageParams messageParams)
         {
             return "";

@@ -16,6 +16,13 @@ export class BookingFailureNotification implements Action {
         this.type = BookingActionTypes.BookingFailureNotification;
     }
 }
+export class AddBookingToStore implements Action {
+    readonly type = BookingActionTypes.AddBookingToStore;
+
+    constructor(public payload: any) {
+        this.type = BookingActionTypes.AddBookingToStore;
+    }
+}
 export class CreateBooking implements Action {
     readonly type = BookingActionTypes.CreateBooking;
 
@@ -127,4 +134,4 @@ export type BookingActions = CreateBooking | CreateBookingSuccess | CreateBookin
 | GetCustomerBookingsSuccess | GetCustomerBookingsFailure | GetMerchantBookings
 | GetMerchantBookingsSuccess | GetMerchantBookingsFailure | GetBookingTimes
 | GetBookingTimesSuccess | GetBookingTimesFailure | BookingSuccessNotification
-| BookingFailureNotification;
+| BookingFailureNotification | AddBookingToStore;

@@ -8,7 +8,8 @@ export interface BookingState {
     currentBooking: any,
     error: string,
     response: any,
-    bookingTimes: any
+    bookingTimes: any,
+    bookingToCreate: any
 }
 
 const INITIAL_STATE: BookingState = {
@@ -18,11 +19,18 @@ const INITIAL_STATE: BookingState = {
     currentBooking: null,
     error: '',
     response: null,
-    bookingTimes: null
+    bookingTimes: null,
+    bookingToCreate: null
 };
 
 export function reducer(state = INITIAL_STATE, action: BookingActions) {
     switch (action.type) {
+        case BookingActionTypes.AddBookingToStore:
+            return {
+                ...state,
+                bookingToCreate: action.payload,
+                error: null
+            };
         case BookingActionTypes.CreateBookingSuccess:
             return {
                 ...state,

@@ -1,4 +1,4 @@
-<app-navbar (toggleHideSidebar)="toggleHideSidebar($event)"></app-navbar>
+<app-navbar></app-navbar>
 <div class="booking_container">
   <div class="container-fluid">
     <div class="row">
@@ -12,32 +12,31 @@
             <div class="card">
               <div class="card-content card-bg">
                 <div class="card-img">
-                  <img class="card-img-top img-fluid card-radius" src="assets/img/photos/14.jpg" alt="Card image cap">
-                  <h4 class="card-title home-card-title">NGN 3,000 per day</h4>
-                  <a class="btn btn-floating halfway-fab bg-warning"><i class="ft-heart"></i></a>
+                    <ngb-carousel>
+                      <ng-template *ngFor='let photo of space.photos' ngbSlide>
+                        <img class='img_banner' [src]="photo?.fileName" [alt]="photo?.fileName">
+                      </ng-template>
+                    </ngb-carousel>
+                  <!-- <img class="card-img-top img-fluid card-radius" [src]="space?.photos[0]?.fileName" alt="Card image cap"> -->
+                <h4 class="card-title home-card-title"> NGN {{space?.pricePH?.price}} per Hour</h4>
+                  <!-- <a class="btn btn-floating halfway-fab bg-warning"><i class="ft-heart"></i></a> -->
                 </div>
                 <div class="card-body home_body-pad">
                   <div class="row justify-content-between">
                     <div class="col-6">
-                        <h3 class="home-card-text">Landmark Towers</h3>
+                        <h3 class="home-card-text">{{space?.location?.name}}</h3>
                     </div>
-                        <div class="col-3">
-                          <ngb-rating max="5" [(rate)]="currentRate"></ngb-rating>
-                        </div>
-                        <div class="col-3">
-                            <p><b>{{currentRate}}</b></p>
-                        </div>
                   </div>
-                  <p class="card-text">Creative workspace in Lekki overlooking the atlantic ocean.</p>
+                  <p class="card-text">{{space?.description}}</p>
                   <div class="card-footer home_card-footer mb-2">
                       <div class="row">
                           <div class="col-5">
                             <i class="fa fa-users"></i>
-                            <span>&nbsp;25 People</span>
+                            <span>&nbsp;{{space?.size}} People</span>
                           </div>
                           <div class="col-7">
                             <i class="fa fa-map-marker"></i>
-                            <span>&nbsp;Lekki Admiralty road</span>
+                            <span>&nbsp;{{space?.location?.name}}</span>
                           </div>
                       </div>
                   </div>
@@ -45,29 +44,26 @@
                     <h3 class="home-card-text text-bold-600 mt-2 mb-2">BOOKING RECAP</h3>
                     <div class="d-flex flex-row justify-content-between">
                       <p class="card-text">Venue hire</p>
-                      <p class="card-text">NGN 13,000</p>
+                      <p class="card-text">{{booking?.totalPrice | currency : 'NGN' : 'symbol-narrow'}}</p>
                     </div>
                   </div>
                   <div class="card-footer home_card-footer">
                     <h3 class="home-card-text text-bold-600 mb-2">TIME</h3>
                     <div class="d-flex flex-row justify-content-between">
                       <p class="card-text">From</p>
-                      <p class="card-text">NGN 13,000</p>
+                      <p class="card-text">{{booking?.timeToUseSpace['from'] | date: 'MMM, d, y h:mm a'}}</p>
                     </div>
                     <div class="d-flex flex-row justify-content-between">
                       <p class="card-text">To</p>
-                      <p class="card-text">NGN 13,000</p>
+                      <p class="card-text">{{booking?.timeToUseSpace['to'] | date: 'MMM, d, y h:mm a'}}</p>
                     </div>
                   </div>
                   <div class="card-footer home_card-footer">
                     <h3 class="home-card-text text-bold-600 mb-2">EXTRAS</h3>
                     <div class="d-flex flex-row justify-content-between">
-                      <p class="card-text">Coffee & Tea</p>
-                      <p class="card-text">Free</p>
-                    </div>
-                    <div class="d-flex flex-row justify-content-between">
-                      <p class="card-text">Lunch Budget</p>
-                      <p class="card-text">Free</p>
+                      <div *ngFor='let freeAmenity of freeAmenities'>
+                        <p class="card-text">{{freeAmenity?.name}}</p>
+                      </div>
                     </div>
                   </div>
                   <div class="card-footer home_card-footer">
@@ -103,13 +99,13 @@
                       <div class="col-lg-6 col-md-12 col-sm-12">
                         <div class="form-group">
                             <label class="booking_label" for="userinput1">CHECK IN</label>
-                            <input type="text" id="userinput1" class="form-control" name="name" placeholder="">
+                            <input type="text" id="userinput1" [value]="booking.timeToUseSpace['from'] | date: 'MMM, d, y h:mm a'" class="form-control" name="name" disabled='true' placeholder="">
                         </div>                          
                       </div>
                       <div class="col-lg-6 col-md-12 col-sm-12">
                         <div class="form-group">
                             <label class="booking_label" for="userinput1">CHECK OUT</label>
-                            <input type="text" id="userinput1" class="form-control" name="name" placeholder="">
+                            <input type="text" [value]="booking.timeToUseSpace['to'] | date: 'MMM, d, y h:mm a'" id="userinput1" class="form-control" disabled='true' name="name" placeholder="">
                         </div>                          
                       </div>
                       
@@ -118,7 +114,7 @@
                       <div class="col-lg-6 col-md-12 col-sm-12">
                         <div class="form-group">
                             <label class="booking_label" for="userinput1">NUMBER OF GUESTS</label>
-                            <input type="text" id="userinput1" class="form-control" name="name" placeholder="">
+                            <input type="number" disabled='true' [value]="booking?.numberOfGuests" id="userinput1" class="form-control" name="name" placeholder="">
                         </div>                          
                       </div>
                   </div>
@@ -135,61 +131,7 @@
                             <input type="checkbox" class="custom-control-input lead" id="defaultUnchecked">
                             <label class="custom-control-label text-bold-400" for="defaultUnchecked">&nbsp; Free Wifi</label>
                           </div>
-                        </div>
-                        <div class="col-md-4 col-sm-12">    
-                          <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="defaultUnchecked">
-                            <label class="custom-control-label text-bold-400" for="defaultUnchecked">&nbsp; Dedicated Telephone</label>
-                          </div>
-                        </div>
-                        <div class="col-md-4 col-sm-12">    
-                          <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="defaultUnchecked">
-                            <label class="custom-control-label text-bold-400" for="defaultUnchecked">&nbsp; Projector Machine</label>
-                          </div>
-                        </div>
-                        
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-md-4 col-sm-12">    
-                          <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input lead" id="defaultUnchecked">
-                            <label class="custom-control-label text-bold-400" for="defaultUnchecked">&nbsp; Fax</label>
-                          </div>
-                        </div>
-                        <div class="col-md-4 col-sm-12">    
-                          <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="defaultUnchecked">
-                            <label class="custom-control-label text-bold-400" for="defaultUnchecked">&nbsp; White Board</label>
-                          </div>
-                        </div>
-                        <div class="col-md-4 col-sm-12">    
-                          <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="defaultUnchecked">
-                            <label class="custom-control-label text-bold-400" for="defaultUnchecked">&nbsp; Printer/Photocopier</label>
-                          </div>
-                        </div>
-                        
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-md-4 col-sm-12">    
-                          <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input lead" id="defaultUnchecked">
-                            <label class="custom-control-label text-bold-400" for="defaultUnchecked">&nbsp; Kichenette</label>
-                          </div>
-                        </div>
-                        <div class="col-md-4 col-sm-12">    
-                          <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="defaultUnchecked">
-                            <label class="custom-control-label text-bold-400" for="defaultUnchecked">&nbsp; Front Desk</label>
-                          </div>
-                        </div>
-                        <div class="col-md-4 col-sm-12">    
-                          <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="defaultUnchecked">
-                            <label class="custom-control-label text-bold-400" for="defaultUnchecked">&nbsp; Coffee/Tea</label>
-                          </div>
-                        </div>   
+                        </div>                        
                     </div>
                 </div>
                 <div class="container-fluid">

@@ -14,6 +14,8 @@ namespace API.Controllers.DTOs
         public PricingDTO PricePH { get; set; }
         public PricingDTO PricePD { get; set; }
         public PricingDTO PricePW { get; set; }  
+        public PricingOption SelectedPricingOption { get; set; }
+        public string MinimumTerm { get; set; } 
         public string Description { get; set; }
         public string Size { get; set; }
         public SpaceType Type { get; set; }
