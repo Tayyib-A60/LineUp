@@ -5,6 +5,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { TagInputModule } from 'ngx-chips';
+import { ChartistModule } from 'ng-chartist';
 
 import { AddspaceComponent } from './addspace/addspace.component';
 import { AdminComponent } from './admin/admin.component';
@@ -32,6 +33,7 @@ import { ImageEditorComponent } from './image-editor/image-editor.component';
 import { FileUploadModule } from 'ng2-file-upload';
 import { NguCarouselModule } from '@ngu/carousel';
 import { AdminPaginationComponent } from './admin-pagination/admin-pagination.component';
+import { AutocompleteComponent } from '../autocomplete/autocomplete.component';
 
 @NgModule({
   declarations: [
@@ -52,6 +54,7 @@ import { AdminPaginationComponent } from './admin-pagination/admin-pagination.co
     DashboardComponent,
     ImageEditorComponent,
     AdminPaginationComponent,
+    AutocompleteComponent,
     // PaginationComponent
   ],
   imports: [
@@ -70,6 +73,7 @@ import { AdminPaginationComponent } from './admin-pagination/admin-pagination.co
     StoreModule.forFeature('spaces', reducer),
     EffectsModule.forFeature([SpaceEffects]),
     NgSelectModule,
+    ChartistModule
   ],
   providers: [SidebarDirective]
 })

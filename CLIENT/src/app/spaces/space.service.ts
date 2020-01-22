@@ -26,10 +26,14 @@ export class SpaceService {
     const url = `${this.url}/lineUp/getSpace/${id}`;
     return this.httpClient.get(url, { headers });
   }
+
+  getMerchantMetrics(merchantId: number) {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    const url = `${this.url}/lineUp/getMetrics/${merchantId}`;
+    return this.httpClient.get(url, { headers });
+  }
   
   updateSpace(id: number, space: Space) {
-    console.log(id, space);
-    
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     const url = `${this.url}/lineUp/updateSpace/${id}`;
     return this.httpClient.put(url, space, { headers });

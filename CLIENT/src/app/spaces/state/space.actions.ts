@@ -330,6 +330,27 @@ export class SetMainPhotoFailure implements Action {
         this.type = SpaceActionTypes.SetMainPhotoFailure;
     }
 }
+export class GetMerchantMetrics implements Action {
+    readonly type = SpaceActionTypes.GetMerchantMetrics;
+
+    constructor(public payload: number) {
+        this.type = SpaceActionTypes.GetMerchantMetrics;
+    }
+}
+export class GetMerchantMetricsSuccess implements Action {
+    readonly type = SpaceActionTypes.GetMerchantMetricsSuccess;
+
+    constructor(public payload: any) {
+        this.type = SpaceActionTypes.GetMerchantMetricsSuccess;
+    }
+}
+export class GetMerchantMetricsFailure implements Action {
+    readonly type = SpaceActionTypes.GetMerchantMetricsFailure;
+
+    constructor(public payload: string) {
+        this.type = SpaceActionTypes.GetMerchantMetricsFailure;
+    }
+}
 
 
 export type SpaceActions = CreateSpace | UpdateSpace 
@@ -342,4 +363,5 @@ export type SpaceActions = CreateSpace | UpdateSpace
 | GetSpaceTypes | GetSpaceTypesSuccess | GetSpaceTypesFailure | GetSingleSpace | GetSingleSpaceSuccess 
 | GetSingleSpaceFailure | SuccessNotification | FailureNotification | NotificationDisplayed 
 | GetMerchants | GetMerchantsSuccess | GetMerchantsFailure| DeleteSpacePhoto | DeleteSpacePhotoSuccess 
-| DeleteSpacePhotoFailure | SetMainPhoto | SetMainPhotoSuccess | SetMainPhotoFailure; 
+| DeleteSpacePhotoFailure | SetMainPhoto | SetMainPhotoSuccess | SetMainPhotoFailure
+| GetMerchantMetrics | GetMerchantMetricsSuccess | GetMerchantMetricsFailure; 

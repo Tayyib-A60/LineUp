@@ -24,6 +24,7 @@ import { MapSpaceComponent } from './map-space/map-space.component';
 import { SpaceHomeComponent } from './space-home/space-home.component';
 import { NewSpaceComponent } from './new-space/new-space.component';
 import { SampleCarouselComponent } from './sample-carousel/sample-carousel.component';
+import { DashboardComponent } from './spaces/dashboard/dashboard.component';
 
 
 const routes: Routes = [
@@ -37,6 +38,7 @@ const routes: Routes = [
     { path: 'manage-enquiries', component: ManageenquiriesComponent },
     { path: 'create-addons', component: AddPropsComponent },
     { path: 'merchants', component: ManageMerchantsComponent },
+    { path: 'analytics', component: DashboardComponent },
   ]},
   { path: '', component: HomeComponent },
   { path: 'sign-in', component: SignInComponent },

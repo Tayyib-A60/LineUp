@@ -1,6 +1,8 @@
 export interface Space {
     id: number;
     name: string;
+    pricingOption: PricingOptions;
+    minimumTerm: string;
     location: Location;
     description: string;
     size: number;
@@ -29,7 +31,18 @@ export interface Amenity {
     price: number;
 }
 
+export enum PricingOptions {
+    PerHour,
+    PerDay
+}
+
 export interface Type {
     type: string;
     id: number;
+}
+
+export interface LocationDetails {
+    locationName: string;
+    lat: string;
+    long: string;
 }

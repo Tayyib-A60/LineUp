@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone, AfterViewInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import * as spaceReducer from '../state/space.reducers';
@@ -8,7 +8,7 @@ import { Params, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { SpaceType } from '../models/spaceType.model';
 import { takeWhile } from 'rxjs/operators';
-import { Space } from '../models/space.model';
+import { Space, LocationDetails } from '../models/space.model';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
@@ -16,8 +16,10 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: './addspace.component.html',
   styleUrls: ['./addspace.component.scss']
 })
-export class AddspaceComponent implements OnInit {
+export class AddspaceComponent implements OnInit, AfterViewInit {
+
   amenityItems = [ ];
+  someLocation: string;
   selectedSpaceType = '';
   spaceForm: FormGroup;
   id: string;
@@ -25,23 +27,37 @@ export class AddspaceComponent implements OnInit {
   spaceTypes$: Observable<SpaceType[]>;
   componentActive = true;
   spaceTypes: SpaceType[];
+  selectedPricingOption: any;
+  pricingOptions: any[];
   spaceToEdit = <Space>{};
   currentUser: any;
   latitude = 0;
   longitude = 0;
   infoWindow: any;
   selectedLocation = '';
+
+  address: Object;
+  establishmentAddress: Object;
+
+  formattedAddress: string;
+  formattedEstablishmentAddress: string;
+  phone: string;
+
     constructor(private formBuilder: FormBuilder,
                 private store: Store<spaceReducer.SpaceState>,
                 private route: ActivatedRoute,
-                private httpClient: HttpClient) { }
+                private httpClient: HttpClient,
+                public zone: NgZone) { }
                 
     ngOnInit() {
+      this.pricingOptions = [{id: 1, type: 'PerHour'}, {id: 2, type: 'PerDay'}];
+      if(!this.editMode) {
+        navigator.geolocation.getCurrentPosition((myLocation) => {
+          this.latitude = myLocation.coords.latitude;
+          this.longitude = myLocation.coords.longitude;
 
-      navigator.geolocation.getCurrentPosition((myLocation) => {
-        this.latitude = myLocation.coords.latitude;
-        this.longitude = myLocation.coords.longitude;
-      });
+        });
+      }
 
       this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
 
@@ -57,8 +73,9 @@ export class AddspaceComponent implements OnInit {
         takeWhile(() => this.componentActive))
         .subscribe(space => {
           this.spaceToEdit = space;
-          if(this.spaceToEdit)
+          if(this.spaceToEdit){
             this.intializeFormWtValues();
+          }
         });
       }
       this.store.dispatch(new spaceActions.GetSpaceTypes());
@@ -71,33 +88,87 @@ export class AddspaceComponent implements OnInit {
         this.initializeForm();
     }
 
+   
+
     ngOnDestroy(): void {
       this.componentActive = false;
     }
 
+    ngAfterViewInit() {
+      // if(this.spaceToEdit){
+      //   this.latitude = Number(this.spaceToEdit.location.lat);
+      //   this.longitude = Number(this.spaceToEdit.location.long);
+      // }
+    }
+
+    getAddress(place: object) {
+      // this.address = place['formatted_address'];
+      // this.phone = this.getPhone(place);
+      this.formattedAddress = place['formatted_address'];
+      this.zone.run(() => {
+        this.formattedAddress = place['formatted_address'];
+      });
+    }
+    getAddressDetails(locationDetails: LocationDetails) {
+      const { locationName, long, lat } = locationDetails;
+      this.latitude = Number(lat);
+      this.longitude = Number(long);
+      this.zone.run(() => {
+        this.spaceForm.get('locationLong').patchValue(long);
+        this.spaceForm.get('locationLat').patchValue(lat);
+        this.spaceForm.get('locationName').patchValue(locationName);
+      });
+    }
+
+    getPhone(place) {
+      const COMPONENT_TEMPLATE = { formatted_phone_number: 'formatted_phone_number' },
+        phone = this.getAddrComponent(place, COMPONENT_TEMPLATE);
+      return phone;
+    }
+
+    getAddrComponent(place, componentTemplate) {
+      let result;
+  
+      for (let i = 0; i < place.address_components.length; i++) {
+        const addressType = place.address_components[i].types[0];
+        if (componentTemplate[addressType]) {
+          result = place.address_components[i][componentTemplate[addressType]];
+          return result;
+        }
+      }
+      return;
+    }
+
     onLocationSelect(event) {
-      this.latitude = event.coords.lat;
-      this.longitude = event.coords.lng;
-      this.spaceForm.get('locationLong').patchValue(event.coords.lng);
-      this.spaceForm.get('locationLat').patchValue(event.coords.lat);
-      this.httpClient.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${event.coords.lat},
-      ${event.coords.lng}&key=AIzaSyDqDa-Jf1KhEOO0FXyJwReGiquRMCaz9Bs`).subscribe(res => {
-        const { formatted_address } = res['results'][0];
-        console.log(res);
-        this.spaceForm.get('locationName').patchValue(formatted_address);
-        this.selectedLocation = formatted_address;
-        console.log(this.selectedLocation);
-      })      
+      // this.latitude = event.coords.lat;
+      // this.longitude = event.coords.lng;
+      // this.spaceForm.get('locationLong').patchValue(event.coords.lng);
+      // this.spaceForm.get('locationLat').patchValue(event.coords.lat);
+      // this.httpClient.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${event.coords.lat},
+      // ${event.coords.lng}&key=AIzaSyDqDa-Jf1KhEOO0FXyJwReGiquRMCaz9Bs`).subscribe(res => {
+      //   const { formatted_address } = res['results'][0];
+      //   console.log(res);
+      //   this.spaceForm.get('locationName').patchValue(formatted_address);
+      //   this.selectedLocation = formatted_address;
+      //   console.log(this.selectedLocation);
+      // })      
     }
 
     onPinSelect(event) {
-      console.log('Marker clicked', event);
-      
+      // console.log('Marker clicked', event);
+      // let myCenter =new google.maps.LatLng(this.latitude, this.longitude);
+
+      // let marker = new google.maps.Marker({
+      //     position:myCenter,
+      //     animation:google.maps.Animation.DROP
+      // });
     }
 
     private initializeForm() {
       let amenitiesArray = new FormArray([]);
       let name = '';
+      let minimumTerm = '';
+      let pricingOption = '';
       let locationName = '';
       let locationLong = '';
       let locationLat = '';
@@ -117,9 +188,9 @@ export class AddspaceComponent implements OnInit {
       this.spaceForm = new FormGroup({
         'name': new FormControl(name, [Validators.required,  Validators.minLength(3),
                                       Validators.maxLength(50)]),
-        // 'locationName': new FormControl(locationName, Validators.required),
-        // 'locationLong': new FormControl(locationLong, Validators.required),
-        // 'locationLat': new FormControl(locationLat, Validators.required),
+        'minimumTerm': new FormControl(minimumTerm, [Validators.required,  Validators.minLength(3),
+                                      Validators.maxLength(50)]),
+        'pricingOption': new FormControl(pricingOption, Validators.required),
         'description': new FormControl(description, Validators.required),
         'size': new FormControl(size, Validators.required),
         // 'pricePH': new FormControl(pricePH, Validators.required),
@@ -144,6 +215,8 @@ export class AddspaceComponent implements OnInit {
         // fetch the space to edit nd initialize the form to contain it's properties here.
         let amenitiesArray = new FormArray([]);
         let name = '';
+        let minimumTerm = '';
+        let pricingOption = '';
         let locationName = this.selectedLocation;
         let locationLong = this.longitude.toString();
         let locationLat = this.latitude.toString();
@@ -162,6 +235,12 @@ export class AddspaceComponent implements OnInit {
             
             // this.spaceToEdit = space;
         name = this.spaceToEdit.name;
+        minimumTerm = this.spaceToEdit.minimumTerm;
+        // pricingOption = 
+        console.log(this.pricingOptions[Number(this.spaceToEdit.pricingOption)]);
+        if(this.spaceToEdit) console.log(this.spaceToEdit);
+        
+        
         if(this.spaceToEdit.location) {
           locationName = this.spaceToEdit.location.name;
           locationLong = this.spaceToEdit.location.long;
@@ -182,6 +261,11 @@ export class AddspaceComponent implements OnInit {
           st = this.spaceToEdit.type.type;
           stid = this.spaceToEdit.type.id;
         }
+        if(this.spaceToEdit.pricingOption) {
+          pricingOption = this.spaceToEdit.pricingOption.toString();
+          this.selectedPricingOption = this.spaceToEdit.pricingOption.toString() === 'PerHour' ? this.pricingOptions[0] : this.pricingOptions[1];
+        }
+        // this.selectedPricingOption = pricingOption;
         this.selectedSpaceType = st;
         const amenities = this.spaceToEdit.amenities;
         // console.log(amenities);
@@ -202,6 +286,9 @@ export class AddspaceComponent implements OnInit {
           'id': new FormControl(this.id, Validators.required),
           'name': new FormControl(name, [Validators.required,  Validators.minLength(3),
                                         Validators.maxLength(50)]),
+          'minimumTerm': new FormControl(minimumTerm, [Validators.required,  Validators.minLength(3),
+                                        Validators.maxLength(50)]),
+          'pricingOption': new FormControl(pricingOption, Validators.required),
           'locationName': new FormControl(locationName, Validators.required),
           'locationLong': new FormControl(locationLong, Validators.required),
           'locationLat': new FormControl(locationLat, Validators.required),
@@ -250,7 +337,7 @@ export class AddspaceComponent implements OnInit {
       if(item.currentTarget.checked) {
         this.amenityItems.push(item.currentTarget.id);
       } else {
-        this.amenityItems.splice((this.amenityItems.indexOf(item.currentTarget.id),1))
+        this.amenityItems.splice((this.amenityItems.indexOf(item.currentTarget.id),1));
       }
     }
 
@@ -261,6 +348,10 @@ export class AddspaceComponent implements OnInit {
         type: this.selectedSpaceType,
         id: spaceTypeId
       });
+      this.spaceForm.get('pricingOption').patchValue(this.selectedPricingOption);
+      console.log(this.selectedPricingOption);
+      
+
       if(this.editMode) {
         // console.log(this.spaceForm.value);
         const spaceToUpdate = {
@@ -270,6 +361,8 @@ export class AddspaceComponent implements OnInit {
             type: this.selectedSpaceType,
             id: spaceTypeId
           },
+          minimumTerm: this.spaceForm.controls['minimumTerm'].value,
+          pricingOption: this.spaceForm.controls['pricingOption'].value >= 0 ? this.pricingOptions[this.spaceForm.controls['pricingOption'].value].type: null,
           name: this.spaceForm.controls['name'].value,
           location: {
             id: this.spaceToEdit.location?this.spaceToEdit.location.id : 0,
@@ -296,7 +389,7 @@ export class AddspaceComponent implements OnInit {
           size: this.spaceForm.controls['size'].value,
           amenities: [...this.spaceForm.controls['amenities'].value]
         }
-        // console.log(spaceToUpdate);
+        console.log(spaceToUpdate);
         
         this.store.dispatch(new spaceActions.UpdateSpace(<Space>(spaceToUpdate)));
       }
@@ -329,11 +422,15 @@ export class AddspaceComponent implements OnInit {
           size: this.spaceForm.controls['size'].value
 
         }
+        console.log(spaceToCreate);
+        
         this.store.dispatch(new spaceActions.CreateSpace(<Space>(spaceToCreate)));
       }
       // console.log(this.spaceForm.value);
       this.spaceForm.reset();
       this.selectedSpaceType = '';  
     }
+
+
 
 }

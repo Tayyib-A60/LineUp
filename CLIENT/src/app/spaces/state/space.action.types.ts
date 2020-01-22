@@ -47,6 +47,9 @@ export enum SpaceActionTypes {
     SetMainPhoto = '[Space] Set Main Photo',
     SetMainPhotoSuccess = '[Space] Set Main Photo Success',
     SetMainPhotoFailure = '[Space] Set Main Photo Failure',
+    GetMerchantMetrics = '[Space] Get Merchant Metrics',
+    GetMerchantMetricsSuccess = '[Space] Get Merchant Metrics Success',
+    GetMerchantMetricsFailure = '[Space] Get Merchant Metrics Failure',
 };
 
 export function containsSuccess(type: string) {

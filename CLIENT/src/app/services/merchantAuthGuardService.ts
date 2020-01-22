@@ -10,7 +10,6 @@ export class MerchantAuthGuardService implements CanActivate {
     constructor(private router: Router) { }
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         const currentUser = localStorage.getItem('currentUser');
-        
         if(JSON.parse(currentUser)['roles'] === 'Merchant' || 'AnySpaces') {
             return true;
         }

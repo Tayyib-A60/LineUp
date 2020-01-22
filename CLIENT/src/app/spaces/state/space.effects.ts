@@ -16,16 +16,16 @@ import { QueryResult } from '../models/queryResult.model';
 
 @Injectable()
 export class SpaceEffects {
-    merchantId = localStorage.getItem('currentUser')? JSON.parse(localStorage.getItem('currentUser'))['id'] : 0;
+    // merchantId = localStorage.getItem('currentUser')? JSON.parse(localStorage.getItem('currentUser'))['id'] : 0;
     query = {
         currentPage: 1,
         pageSize: 10
     };
-    merchantQuery = {
-        userId: this.merchantId,
-        currentPage: 1,
-        pageSize: 10
-    };
+    // merchantQuery = {
+    //     userId: this.merchantId,
+    //     currentPage: 1,
+    //     pageSize: 10
+    // };
     constructor(private actions$: Actions,
                 private spaceService: SpaceService,
                 private notification: NotificationService,
@@ -238,6 +238,24 @@ export class SpaceEffects {
                 catchError(err => {
                     this.notification.typeError(`${err.message}`, 'Error');
                     return of(new spaceActions.SetMainPhotoFailure(err))
+                })
+            )
+        )
+    );
+
+    @Effect()
+    getMerchantMetrics$: Observable<Action> = this.actions$.pipe(
+        ofType(SpaceActionTypes.GetMerchantMetrics),
+        map((action: spaceActions.GetMerchantMetrics) => action.payload),
+        mergeMap((merchantId) => 
+            this.spaceService.getMerchantMetrics(merchantId).pipe(
+                map((res) => {                
+                    this.notification.typeSuccess('Analytics generated', 'Success');
+                    return new spaceActions.GetMerchantMetricsSuccess(res)
+                }),
+                catchError(err => {
+                    this.notification.typeError(`${err.message}`, 'Error');
+                    return of(new spaceActions.GetMerchantMetricsFailure(err))
                 })
             )
         )

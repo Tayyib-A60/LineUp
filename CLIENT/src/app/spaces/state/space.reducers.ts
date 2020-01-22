@@ -1,7 +1,7 @@
 import { QueryResult } from './../models/queryResult.model';
 import { Space } from '../models/space.model';
 import { SpaceType } from '../models/spaceType.model';
-import { SpaceActions } from './space.actions';
+import { SpaceActions, GetMerchantMetricsSuccess } from './space.actions';
 import { SpaceActionTypes } from './space.action.types';
 import { Amenity } from '../models/amenity.model';
 import { SpaceQueryResult } from '../models/spaceQueryResult';
@@ -16,7 +16,8 @@ export interface SpaceState {
     error: string;
     response: string;
     spaceToEdit: Space,
-    merchants: QueryResult
+    merchants: QueryResult,
+    merchantMetrics: any;
 }
 
 const INITIAL_STATE: SpaceState = {
@@ -29,7 +30,8 @@ const INITIAL_STATE: SpaceState = {
     response: '',
     amenities: [],
     spaceToEdit: <Space>{},
-    merchants: <QueryResult>{}
+    merchants: <QueryResult>{},
+    merchantMetrics: null
 }
     
 
@@ -206,6 +208,18 @@ const INITIAL_STATE: SpaceState = {
                     ...state,
                     error: action.payload
                 }
+            case SpaceActionTypes.GetMerchantMetricsSuccess:
+                return {
+                    ...state,
+                    merchantMetrics: action.payload,
+                    error: ''
+                };
+            case SpaceActionTypes.GetMerchantMetricsFailure:
+                return {
+                    ...state,
+                    merchantMetrics: null,
+                    error: action.payload
+                };
             default:
                 return state;
         }

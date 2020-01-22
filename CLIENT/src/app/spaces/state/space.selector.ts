@@ -37,3 +37,8 @@ export const getMerchantsQueryResult = createSelector(
     getSpaceFeatureState,
     spaceState => spaceState.merchants
 );
+
+export const getMerchantMetrics = createSelector(
+    getSpaceFeatureState,
+    spaceState => spaceState.merchantMetrics
+);

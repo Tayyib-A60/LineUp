@@ -20,6 +20,8 @@ export class BookingRequestComponent implements OnInit {
   loaded: boolean;
   booking: any;
   freeAmenities = [];
+  amenitiesSelected = [];
+  totalCost: number;
 
   constructor(private route: ActivatedRoute,
               private spaceStore: Store<SpaceState>,
@@ -55,6 +57,19 @@ export class BookingRequestComponent implements OnInit {
     //       this.booking = booking;
     //       this.loaded = true; 
     // });
+  }
+
+  amenityChecked(event) {    
+    if(event.target.checked) {
+      const amenityIndex = this.space.amenities.findIndex(a => a['id'] === Number(event.target.value));
+      this.totalCost += this.space.amenities[amenityIndex].price;
+      this.amenitiesSelected.push(this.space.amenities[amenityIndex]);
+    }
+    if(!event.target.checked) {
+      const index = this.amenitiesSelected.findIndex(a => a['id'] === Number(event.target.value));
+      this.totalCost -= this.amenitiesSelected[index].price;
+      this.amenitiesSelected.splice(index, 1);
+    }
   }
 
 }

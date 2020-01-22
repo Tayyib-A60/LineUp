@@ -146,6 +146,7 @@ namespace API.Persistence
         {
             var bookings =  _context.Bookings
                             .Where(b => b.UserId == userId)
+                            .Where(b => b.Status == query.Status)
                             .Include(b => b.SpaceBooked)
                             .Include(b => b.Chat)
                             .AsQueryable();

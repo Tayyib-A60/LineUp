@@ -34,6 +34,7 @@ namespace API.Controllers
             if (await _lineUpRepository.EntityExists(spaceToCreate))
                 return BadRequest("Space has already been created");
             spaceToCreate.DateCreated = DateTime.Now;
+            // if(spaceToCreate.pr)
             _lineUpRepository.Add(spaceToCreate);
             await _lineUpRepository.SaveAllChanges();
             return Ok();
@@ -44,7 +45,9 @@ namespace API.Controllers
             var space = await _lineUpRepository.GetSpace(spaceId);
             if (space == null)
                 return NotFound("Space does not exist");
-            return Ok(_mapper.Map<SpaceDTO>(space));
+            var spaceToReturn = _mapper.Map<SpaceToEdit>(space);
+            spaceToReturn.SelectedPricingOption = spaceToReturn.SelectedPricingOption.ToString();
+            return Ok(spaceToReturn);
         }
         [HttpPut("updateSpace/{spaceId}")]
         public async Task<IActionResult> UpdateSpace(int spaceId, [FromBody] SpaceDTO spaceDTO)
@@ -391,6 +394,7 @@ namespace API.Controllers
                 SearchString = queryDTO.SearchString,
                 IsSortAscending = queryDTO.IsSortAscending,
                 Page = queryDTO.Page,
+                Status = queryDTO.Status,
                 PageSize = queryDTO.PageSize,
                 CurrentPage = queryDTO.CurrentPage,
                 DateStart = dateStart,

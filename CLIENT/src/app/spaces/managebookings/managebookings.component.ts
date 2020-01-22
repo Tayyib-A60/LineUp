@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./managebookings.component.scss']
 })
 export class ManagebookingsComponent implements OnInit {
-  currentOrientation = 'horizontal'
+  currentOrientation = 'horizontal';
   bookingQueryResult = {totalItems: 0, items: [] }
   currentUser: any;
   searchString: string;
@@ -37,26 +37,19 @@ export class ManagebookingsComponent implements OnInit {
     currentPage: this.currentPage,
     pageSize: 1,
     searchString: this.searchString,
+    status: 'Booked',
     dateStart: '01/01/0001',
     dateEnd: '01/01/0001'
   };
+  upcomingBookings: any[];
+  previousBookings: any[];
 
   constructor(private bookingStore: Store<BookingState>,
               private router: Router) { }
 
   ngOnInit() {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
-
-    this.bookingStore.dispatch(new bookingActions.GetMerchantBookings(this.merchantBookingQuery));
-    this.bookingStore.pipe(select(bookingSelectors.getMerchantBookings),
-                      takeWhile(() => this.componentActive))
-                      .subscribe(bookings => {
-                        this.bookingQueryResult = <{totalItems: 0, items: []}>bookings;
-                        this.bookings = bookings['items'];
-                        // if(this.bookings) {
-                        //   const currentBookingTime = this.bookings[0]['usingFrom'];
-                        // }             
-    });
+    this.fetchBookings();
   }
 
   
@@ -64,37 +57,13 @@ export class ManagebookingsComponent implements OnInit {
   search() {
     const dates = this.formatDates();
     this.merchantBookingQuery = { ...this.merchantBookingQuery, dateStart: dates.dateStart.toDateString(), dateEnd: dates.dateEnd.toDateString(), searchString: this.searchString };
-    
-    this.bookingStore.dispatch(new bookingActions.GetMerchantBookings(this.merchantBookingQuery));
-    this.bookingStore.pipe(select(bookingSelectors.getMerchantBookings),
-                      takeWhile(() => this.componentActive))
-                      .subscribe(bookings => {
-                        this.bookingQueryResult = <{totalItems: 0, items: []}>bookings;
-                        console.log(this.bookingQueryResult);
-                        this.bookings = bookings['items'];
-                        if(this.bookings.length > 1) {
-                          const currentBookingTime = this.bookings[0]['usingFrom'];
-                          // console.log(new Date(currentBookingTime));
-                      }             
-    });
+    this.fetchBookings();
   }
 
   onPageChange(page: number) {
     this.merchantBookingQuery = { ...this.merchantBookingQuery, currentPage: page };
     this.currentPage = page;
-
-    this.bookingStore.dispatch(new bookingActions.GetMerchantBookings(this.merchantBookingQuery));
-    
-    this.bookingStore.pipe(select(bookingSelectors.getMerchantBookings),
-                      takeWhile(() => this.componentActive))
-                      .subscribe(bookings => {
-                        this.bookingQueryResult = <{totalItems: 0, items: []}>bookings;
-                        this.bookings = bookings['items'];
-                        if(this.bookings) {
-                          const currentBookingTime = this.bookings[0]['usingFrom'];
-                          console.log(new Date(currentBookingTime));
-                        }             
-    });
+    this.fetchBookings();
   }
 
   private formatDates() {
@@ -108,6 +77,27 @@ export class ManagebookingsComponent implements OnInit {
     console.log(dateFrom, dateTo);
     
     return { dateStart: dateFrom, dateEnd: dateTo };  
+  }
+
+  private fetchBookings() {
+    this.bookingStore.dispatch(new bookingActions.GetMerchantBookings(this.merchantBookingQuery));
+    this.bookingStore.pipe(select(bookingSelectors.getMerchantBookings),
+                      takeWhile(() => this.componentActive))
+                      .subscribe(bookings => {
+                        this.bookingQueryResult = <{totalItems: 0, items: []}>bookings;
+                        this.bookings = bookings['items'];
+                        if(this.bookings) {
+                          this.upcomingBookings = [];
+                          this.previousBookings = [];
+                          bookings['items'].forEach(item => {
+                            if(item['usingFrom'] > Date()) {
+                              this.upcomingBookings.push(item);
+                            } else if(item['usingFrom'] < Date()){
+                              this.previousBookings.push(item);
+                            }
+                          });            
+                        }
+    });
   }
 
 }
