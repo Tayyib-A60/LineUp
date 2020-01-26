@@ -43,6 +43,7 @@ import {CarouselModule} from 'primeng/carousel';
 import { NavigationComponent } from './navigation/navigation.component';
 
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -60,7 +61,8 @@ import { NavigationComponent } from './navigation/navigation.component';
     NewSpaceComponent,
     SampleCarouselComponent,
     PaginationComponent,
-    NavigationComponent
+    NavigationComponent,
+    
   ],
   imports: [
     AppRoutingModule,
