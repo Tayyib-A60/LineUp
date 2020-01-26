@@ -29,7 +29,7 @@ export class NotificationDisplayed implements Action {
 export class CreateSpace implements Action {
     readonly type = SpaceActionTypes.CreateSpace;
 
-    constructor(public payload: Space) {
+    constructor(public payload: any) {
         this.type = SpaceActionTypes.CreateSpace;
     }
 }
@@ -51,7 +51,7 @@ export class CreateSpaceFailure implements Action {
 export class UpdateSpace implements Action {
     readonly type = SpaceActionTypes.UpdateSpace;
 
-    constructor(public payload: Space) {
+    constructor(public payload: any) {
         this.type = SpaceActionTypes.UpdateSpace;
     }
 }
@@ -351,6 +351,49 @@ export class GetMerchantMetricsFailure implements Action {
         this.type = SpaceActionTypes.GetMerchantMetricsFailure;
     }
 }
+export class CreatePricingOption implements Action {
+    readonly type = SpaceActionTypes.CreatePricingOption;
+
+    constructor(public payload: any) {
+        this.type = SpaceActionTypes.CreatePricingOption;
+    }
+}
+export class CreatePricingOptionSuccess implements Action {
+    readonly type = SpaceActionTypes.CreatePricingOptionSuccess;
+
+    constructor() {
+        this.type = SpaceActionTypes.CreatePricingOptionSuccess;
+    }
+}
+export class CreatePricingOptionFailure implements Action {
+    readonly type = SpaceActionTypes.CreatePricingOptionFailure;
+
+    constructor(public payload: string) {
+        this.type = SpaceActionTypes.CreatePricingOptionFailure;
+    }
+}
+export class GetPricingOptions implements Action {
+    readonly type = SpaceActionTypes.GetPricingOptions;
+
+    constructor() {
+        this.type = SpaceActionTypes.GetPricingOptions;
+    }
+}
+export class GetPricingOptionsSuccess implements Action {
+    readonly type = SpaceActionTypes.GetPricingOptionsSuccess;
+
+    constructor(public payload: any) {
+        this.type = SpaceActionTypes.GetPricingOptionsSuccess;
+    }
+}
+
+export class GetPricingOptionsFailure implements Action {
+    readonly type = SpaceActionTypes.GetPricingOptionsFailure;
+
+    constructor(public payload: string) {
+        this.type = SpaceActionTypes.GetPricingOptionsFailure;
+    }
+}
 
 
 export type SpaceActions = CreateSpace | UpdateSpace 
@@ -364,4 +407,6 @@ export type SpaceActions = CreateSpace | UpdateSpace
 | GetSingleSpaceFailure | SuccessNotification | FailureNotification | NotificationDisplayed 
 | GetMerchants | GetMerchantsSuccess | GetMerchantsFailure| DeleteSpacePhoto | DeleteSpacePhotoSuccess 
 | DeleteSpacePhotoFailure | SetMainPhoto | SetMainPhotoSuccess | SetMainPhotoFailure
-| GetMerchantMetrics | GetMerchantMetricsSuccess | GetMerchantMetricsFailure; 
+| GetMerchantMetrics | GetMerchantMetricsSuccess | GetMerchantMetricsFailure | CreatePricingOption
+| CreatePricingOptionSuccess | CreatePricingOptionFailure | GetPricingOptions | GetPricingOptionsSuccess
+| GetPricingOptionsFailure; 

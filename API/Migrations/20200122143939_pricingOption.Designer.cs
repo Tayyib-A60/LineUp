@@ -4,14 +4,16 @@ using API.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace api.Migrations
 {
     [DbContext(typeof(LineUpContext))]
-    partial class LineUpContextModelSnapshot : ModelSnapshot
+    [Migration("20200122143939_pricingOption")]
+    partial class pricingOption
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -206,7 +208,7 @@ namespace api.Migrations
 
                     b.Property<string>("Description");
 
-                    b.Property<int>("LocationId");
+                    b.Property<int?>("LocationId");
 
                     b.Property<string>("MinimumTerm");
 
@@ -218,11 +220,11 @@ namespace api.Migrations
 
                     b.Property<int?>("PricePWId");
 
-                    b.Property<int>("SelectedPricingOptionId");
+                    b.Property<int?>("SelectedPricingOptionId");
 
                     b.Property<string>("Size");
 
-                    b.Property<int>("TypeId");
+                    b.Property<int?>("TypeId");
 
                     b.Property<int>("UserId");
 
@@ -359,8 +361,7 @@ namespace api.Migrations
                 {
                     b.HasOne("API.Core.Models.Location", "Location")
                         .WithMany()
-                        .HasForeignKey("LocationId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("LocationId");
 
                     b.HasOne("API.Core.Models.Pricing", "PricePD")
                         .WithMany()
@@ -376,13 +377,11 @@ namespace api.Migrations
 
                     b.HasOne("API.Core.Models.PricingOption", "SelectedPricingOption")
                         .WithMany()
-                        .HasForeignKey("SelectedPricingOptionId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("SelectedPricingOptionId");
 
                     b.HasOne("API.Core.Models.SpaceType", "Type")
                         .WithMany()
-                        .HasForeignKey("TypeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("TypeId");
 
                     b.HasOne("API.Core.Models.User")
                         .WithMany("Spaces")

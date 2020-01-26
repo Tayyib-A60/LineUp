@@ -50,8 +50,9 @@ export class ManagespacesComponent implements OnInit {
     }
 
     deleteSpace(id: number) {
-      // confirm('Confirm Space delete?')
-      this.store.dispatch(new spaceActions.DeleteSpace(id));
+      if (confirm('Confirm Delete?')) {
+        this.store.dispatch(new spaceActions.DeleteSpace(id));
+      }
     }
 
     onPageChange(page: number) {

@@ -76,6 +76,12 @@ namespace API.Persistence
                     return true;
                 }
                 return false;
+            } else if(entityName is PricingOption) {
+                var pricingOption = entityName as PricingOption;
+                if(await _context.PricingOptions.AnyAsync(po => po.Id == pricingOption.Id || po.Option.ToLower() == pricingOption.Option.ToLower())) {
+                    return true;
+                }
+                return false;
             }
             return false;
         }
@@ -96,6 +102,7 @@ namespace API.Persistence
                             .Include(space => space.Type)
                             .Include(space => space.Amenities)
                             .Include(space => space.Location)
+                            .Include(space => space.SelectedPricingOption)
                             .Include(space => space.PricePH)
                             .Include(space => space.PricePD)
                             .Include(space => space.PricePW)
@@ -219,6 +226,10 @@ namespace API.Persistence
         public async Task<IEnumerable<SpaceType>> GetSpaceTypes()
         {
             return await _context.SpaceTypes.ToListAsync();
+        }
+        public async Task<IEnumerable<PricingOption>> GetPricingOptions()
+        {
+            return await _context.PricingOptions.ToListAsync();
         }
         public async Task<Amenity> GetAmenity(int amenityId)
         {

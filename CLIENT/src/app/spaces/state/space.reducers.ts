@@ -1,7 +1,7 @@
 import { QueryResult } from './../models/queryResult.model';
 import { Space } from '../models/space.model';
 import { SpaceType } from '../models/spaceType.model';
-import { SpaceActions, GetMerchantMetricsSuccess } from './space.actions';
+import { SpaceActions, GetMerchantMetricsSuccess, GetPricingOptionsSuccess, GetPricingOptionsFailure } from './space.actions';
 import { SpaceActionTypes } from './space.action.types';
 import { Amenity } from '../models/amenity.model';
 import { SpaceQueryResult } from '../models/spaceQueryResult';
@@ -18,6 +18,7 @@ export interface SpaceState {
     spaceToEdit: Space,
     merchants: QueryResult,
     merchantMetrics: any;
+    pricingOptions: any[];
 }
 
 const INITIAL_STATE: SpaceState = {
@@ -31,7 +32,8 @@ const INITIAL_STATE: SpaceState = {
     amenities: [],
     spaceToEdit: <Space>{},
     merchants: <QueryResult>{},
-    merchantMetrics: null
+    merchantMetrics: null,
+    pricingOptions: []
 }
     
 
@@ -219,6 +221,18 @@ const INITIAL_STATE: SpaceState = {
                     ...state,
                     merchantMetrics: null,
                     error: action.payload
+                };
+            case SpaceActionTypes.GetPricingOptionsSuccess:
+                return {
+                    ...state,
+                    pricingOptions: action.payload,
+                    error: ''
+                };
+            case SpaceActionTypes.GetPricingOptionsFailure:
+                return {
+                    ...state,
+                    pricingOptions: [],
+                    error: ''
                 };
             default:
                 return state;

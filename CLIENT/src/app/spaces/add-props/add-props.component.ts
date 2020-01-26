@@ -12,7 +12,7 @@ import * as spaceActions from '../state/space.actions';
 })
 export class AddPropsComponent implements OnInit {
 
-  amenityForm: FormGroup;
+  pricingOptionForm: FormGroup;
   spaceTypeForm: FormGroup;
   
     constructor(private formBuilder: FormBuilder,
@@ -23,9 +23,9 @@ export class AddPropsComponent implements OnInit {
     this.initializeForm();
   }
   private initializeForm() {
-    this.amenityForm = this.formBuilder.group({
-      name: ['', Validators.required],
-      price: ''
+    this.pricingOptionForm = this.formBuilder.group({
+      option: ['', Validators.required],
+      description: ''
     });
 
     this.spaceTypeForm = this.formBuilder.group({
@@ -38,9 +38,15 @@ export class AddPropsComponent implements OnInit {
     this.store.dispatch(new spaceActions.CreateSpaceType(this.spaceTypeForm.value));
     this.spaceTypeForm.reset();
   }
-  createAmenity() {
-    // console.log(this.amenityForm.value);
-    this.store.dispatch(new spaceActions.CreateAmenity(this.amenityForm.value));
-    this.amenityForm.reset();
+
+  // createAmenity() {
+  //   // console.log(this.amenityForm.value);
+  //   this.store.dispatch(new spaceActions.CreateAmenity(this.pricingOptionForm.value));
+  //   this.pricingOptionForm.reset();
+  // }
+
+  createPricingOption() {
+    this.store.dispatch(new spaceActions.CreatePricingOption(this.pricingOptionForm.value));
+    this.pricingOptionForm.reset();
   }
 }

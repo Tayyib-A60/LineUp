@@ -50,6 +50,12 @@ export enum SpaceActionTypes {
     GetMerchantMetrics = '[Space] Get Merchant Metrics',
     GetMerchantMetricsSuccess = '[Space] Get Merchant Metrics Success',
     GetMerchantMetricsFailure = '[Space] Get Merchant Metrics Failure',
+    CreatePricingOption = '[Space] Create Pricing Option',
+    CreatePricingOptionSuccess = '[Space] Create Pricing Option Success',
+    CreatePricingOptionFailure = '[Space] Create Pricing Option Failure',
+    GetPricingOptions = '[Space] Get Pricing Options',
+    GetPricingOptionsSuccess = '[Space] Get Pricing Options Success',
+    GetPricingOptionsFailure = '[Space] Get Pricing Options Failure',
 };
 
 export function containsSuccess(type: string) {

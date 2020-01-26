@@ -33,9 +33,11 @@ export class SideBarComponent implements OnInit, OnDestroy {
     path: '', title: 'Manage Space', route: '/admin/manage-space', icon: 'ft-home', badgeClass: 'badge badge-pill badge-danger float-right mr-1 mt-1', isExternalLink: false
   }, {
     path: '', title: 'Manage Reservations', route: '/admin/manage-reservations', icon: 'ft-home', badgeClass: 'badge badge-pill badge-danger float-right mr-1 mt-1', isExternalLink: false
-  }, {
-    path: '', title: 'View Enquiries', route: '/admin/manage-enquiries', icon: 'ft-home', badgeClass: 'badge badge-pill badge-danger float-right mr-1 mt-1', isExternalLink: false
-  },{
+  }, 
+  // {
+  //   path: '', title: 'View Enquiries', route: '/admin/manage-enquiries', icon: 'ft-home', badgeClass: 'badge badge-pill badge-danger float-right mr-1 mt-1', isExternalLink: false
+  // },
+  {
     path: '', title: 'Manage Bookings', route: '/admin/manage-bookings', icon: 'ft-home', badgeClass: 'badge badge-pill badge-danger float-right mr-1 mt-1', isExternalLink: false
   },
   {

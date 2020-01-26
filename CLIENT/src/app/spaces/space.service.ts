@@ -46,14 +46,28 @@ export class SpaceService {
     const url = this.url + '/lineUp/createSpaceType';
     return this.httpClient.post(url, spaceType, { headers });
   }
+
   createAmenity(amenity: Amenity) {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     const url = this.url + '/lineUp/createAmenity';
     return this.httpClient.post(url, amenity, { headers });
   }
+
+  createPricingOption(pricingOption: any) {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    const url = this.url + '/lineUp/createPricingOption';
+    return this.httpClient.post(url, pricingOption, { headers });
+  }
+
   getSpaceTypes() {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     const url = this.url + '/lineUp/getSpaceTypes';
+    return this.httpClient.get(url, { headers });
+  }
+
+  getpricingOptions() {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    const url = this.url + '/lineUp/getPricingOptions';
     return this.httpClient.get(url, { headers });
   }
   

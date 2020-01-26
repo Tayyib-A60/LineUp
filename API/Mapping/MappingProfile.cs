@@ -25,6 +25,7 @@ namespace API.Mapping
             CreateMap<SpaceQueryDTO, SpaceQuery>();
             CreateMap<BookingQueryDTO, BookingQuery>();
             CreateMap<PhotoForCreationDTO, Photo>();
+            CreateMap<PricingOptionDTO, PricingOption>();
 
             // Domain to API Resource
             CreateMap<Amenity, AmenityDTO>();
@@ -39,6 +40,7 @@ namespace API.Mapping
             CreateMap<User, UserToLoginDTO>();
             CreateMap<User, UserToSignUpDTO>();
             CreateMap<Photo, PhotoForCreationDTO>();
+            CreateMap<PricingOption ,PricingOptionDTO>();
 
         }
     }

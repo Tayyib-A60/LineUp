@@ -42,3 +42,7 @@ export const getMerchantMetrics = createSelector(
     getSpaceFeatureState,
     spaceState => spaceState.merchantMetrics
 );
+export const getPricingOptions = createSelector(
+    getSpaceFeatureState,
+    spaceState => spaceState.pricingOptions
+);

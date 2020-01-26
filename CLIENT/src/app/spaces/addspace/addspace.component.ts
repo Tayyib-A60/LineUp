@@ -27,7 +27,7 @@ export class AddspaceComponent implements OnInit, AfterViewInit {
   spaceTypes$: Observable<SpaceType[]>;
   componentActive = true;
   spaceTypes: SpaceType[];
-  selectedPricingOption: any;
+  selectedPricingOption: string;
   pricingOptions: any[];
   spaceToEdit = <Space>{};
   currentUser: any;
@@ -50,7 +50,7 @@ export class AddspaceComponent implements OnInit, AfterViewInit {
                 public zone: NgZone) { }
                 
     ngOnInit() {
-      this.pricingOptions = [{id: 1, type: 'PerHour'}, {id: 2, type: 'PerDay'}];
+      // this.pricingOptions = [{id: 1, type: 'PerHour'}, {id: 2, type: 'PerDay'}];
       if(!this.editMode) {
         navigator.geolocation.getCurrentPosition((myLocation) => {
           this.latitude = myLocation.coords.latitude;
@@ -83,6 +83,12 @@ export class AddspaceComponent implements OnInit, AfterViewInit {
       takeWhile(() => this.componentActive))
       .subscribe(spaceTypes => {
         this.spaceTypes = spaceTypes;
+      });
+      this.store.dispatch(new spaceActions.GetPricingOptions());
+      this.store.pipe(select(spaceSelectors.getPricingOptions),
+      takeWhile(() => this.componentActive))
+      .subscribe(pricingOptions => {
+        this.pricingOptions = pricingOptions;        
       });
       if(this.editMode == false)
         this.initializeForm();
@@ -216,7 +222,6 @@ export class AddspaceComponent implements OnInit, AfterViewInit {
         let amenitiesArray = new FormArray([]);
         let name = '';
         let minimumTerm = '';
-        let pricingOption = '';
         let locationName = this.selectedLocation;
         let locationLong = this.longitude.toString();
         let locationLat = this.latitude.toString();
@@ -224,6 +229,9 @@ export class AddspaceComponent implements OnInit, AfterViewInit {
         let type = {type: '', id: null};
         let st = '';
         let stid = null;
+        let sPriceOption = '';
+        let sPriceOptionId = null;
+        let sPriceOptionDesc = '';
         let description =  '';
         let pricePH = null;
         let discountPH = null;
@@ -232,14 +240,8 @@ export class AddspaceComponent implements OnInit, AfterViewInit {
         let pricePW = null;
         let discountPW = null;
         let currentUserId = this.currentUser['id'];
-            
-            // this.spaceToEdit = space;
         name = this.spaceToEdit.name;
-        minimumTerm = this.spaceToEdit.minimumTerm;
-        // pricingOption = 
-        console.log(this.pricingOptions[Number(this.spaceToEdit.pricingOption)]);
-        if(this.spaceToEdit) console.log(this.spaceToEdit);
-        
+        minimumTerm = this.spaceToEdit.minimumTerm;      
         
         if(this.spaceToEdit.location) {
           locationName = this.spaceToEdit.location.name;
@@ -261,14 +263,14 @@ export class AddspaceComponent implements OnInit, AfterViewInit {
           st = this.spaceToEdit.type.type;
           stid = this.spaceToEdit.type.id;
         }
-        if(this.spaceToEdit.pricingOption) {
-          pricingOption = this.spaceToEdit.pricingOption.toString();
-          this.selectedPricingOption = this.spaceToEdit.pricingOption.toString() === 'PerHour' ? this.pricingOptions[0] : this.pricingOptions[1];
+        if(this.spaceToEdit.selectedPricingOption) {
+          sPriceOption = this.spaceToEdit.selectedPricingOption.option;
+          sPriceOptionId = this.spaceToEdit.selectedPricingOption.id;
         }
         // this.selectedPricingOption = pricingOption;
         this.selectedSpaceType = st;
+        this.selectedPricingOption = sPriceOption;
         const amenities = this.spaceToEdit.amenities;
-        // console.log(amenities);
           
         if(amenities) {                
             amenities.map(a => {
@@ -288,7 +290,7 @@ export class AddspaceComponent implements OnInit, AfterViewInit {
                                         Validators.maxLength(50)]),
           'minimumTerm': new FormControl(minimumTerm, [Validators.required,  Validators.minLength(3),
                                         Validators.maxLength(50)]),
-          'pricingOption': new FormControl(pricingOption, Validators.required),
+          // 'pricingOption': new FormControl(pricingOption, Validators.required),
           'locationName': new FormControl(locationName, Validators.required),
           'locationLong': new FormControl(locationLong, Validators.required),
           'locationLat': new FormControl(locationLat, Validators.required),
@@ -305,6 +307,11 @@ export class AddspaceComponent implements OnInit, AfterViewInit {
           'type': new FormGroup({
             'type': new FormControl(st),
             'id': new FormControl(stid)
+          }),
+          'selectedPricingOption': new FormGroup({
+            'id': new FormControl(sPriceOptionId),
+            'option': new FormControl(sPriceOption),
+            'description': new FormControl(sPriceOptionDesc)
           })
         });        
       }
@@ -344,12 +351,21 @@ export class AddspaceComponent implements OnInit, AfterViewInit {
     createSpace() {
       const spaceTypeIndex = this.spaceTypes.findIndex(c => c.type === this.selectedSpaceType);
       const spaceTypeId = this.spaceTypes[spaceTypeIndex].id;
+      const pricingOptionIndex = this.pricingOptions.findIndex(c => c.option === this.selectedPricingOption);
+      const pricingOptionDesc = this.pricingOptions[pricingOptionIndex] ? this.pricingOptions[pricingOptionIndex].description : null;
+      const pricingOptionId = this.pricingOptions[pricingOptionIndex] ? this.pricingOptions[pricingOptionIndex].id : null;
+      const locationId = this.spaceToEdit.location? this.spaceToEdit.location.id : null;
       this.spaceForm.get('type').patchValue({
         type: this.selectedSpaceType,
         id: spaceTypeId
       });
-      this.spaceForm.get('pricingOption').patchValue(this.selectedPricingOption);
-      console.log(this.selectedPricingOption);
+      this.spaceForm.get('selectedPricingOption').patchValue({
+        id: pricingOptionId,
+        option: this.selectedPricingOption,
+        description: pricingOptionDesc
+      });
+      // this.spaceForm.get('pricingOption').patchValue(this.selectedPricingOption);
+      // console.log(this.selectedPricingOption);
       
 
       if(this.editMode) {
@@ -357,15 +373,21 @@ export class AddspaceComponent implements OnInit, AfterViewInit {
         const spaceToUpdate = {
           id: Number(this.id),
           userId: this.currentUser.id,
-          type: {
-            type: this.selectedSpaceType,
-            id: spaceTypeId
-          },
+          // type: {
+          //   type: this.selectedSpaceType,
+          //   id: spaceTypeId
+          // },
+          // selectedPricingOption: {
+          //   id: pricingOptionId,
+          //   option: this.selectedPricingOption
+          // },
+          typeId: spaceTypeId,
+          selectedPricingOptionId: pricingOptionId,
+          locationId: locationId,
           minimumTerm: this.spaceForm.controls['minimumTerm'].value,
-          pricingOption: this.spaceForm.controls['pricingOption'].value >= 0 ? this.pricingOptions[this.spaceForm.controls['pricingOption'].value].type: null,
           name: this.spaceForm.controls['name'].value,
           location: {
-            id: this.spaceToEdit.location?this.spaceToEdit.location.id : 0,
+            id: this.spaceToEdit.location ? this.spaceToEdit.location.id : 0,
             name: this.spaceForm.controls['locationName'].value,
             long: this.spaceForm.controls['locationLong'].value,
             lat: this.spaceForm.controls['locationLat'].value
@@ -391,7 +413,7 @@ export class AddspaceComponent implements OnInit, AfterViewInit {
         }
         console.log(spaceToUpdate);
         
-        this.store.dispatch(new spaceActions.UpdateSpace(<Space>(spaceToUpdate)));
+        this.store.dispatch(new spaceActions.UpdateSpace(spaceToUpdate));
       }
       else {
         const spaceToCreate = {
@@ -400,6 +422,7 @@ export class AddspaceComponent implements OnInit, AfterViewInit {
             type: this.selectedSpaceType,
             id: spaceTypeId
           },
+          typeId: spaceTypeId,
           name: this.spaceForm.controls['name'].value,
           // location: {
           //   name: this.spaceForm.controls['locationName'].value,
@@ -424,7 +447,7 @@ export class AddspaceComponent implements OnInit, AfterViewInit {
         }
         console.log(spaceToCreate);
         
-        this.store.dispatch(new spaceActions.CreateSpace(<Space>(spaceToCreate)));
+        this.store.dispatch(new spaceActions.CreateSpace((spaceToCreate)));
       }
       // console.log(this.spaceForm.value);
       this.spaceForm.reset();

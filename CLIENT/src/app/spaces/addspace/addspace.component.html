@@ -4,13 +4,12 @@
 			<div class="content-header">Add Space</div>
         </div>
     </div>
-	<div class="row text-left">
+	<div class="row text-left" *ngIf='editMode'>
 		<div class="col-sm-12">
 			<app-autocomplete (setLocationDetails)='getAddressDetails($event)' (setAddress)="getAddress($event)" adressType="geocode"></app-autocomplete>
-			
         </div>
     </div>
-    <div class="row text-left">
+    <div class="row text-left" *ngIf='editMode'>
 		<div class="col-sm-12">
 			<agm-map [latitude]='latitude' [longitude]='longitude' (mapClick)='onLocationSelect($event)'>
 				<agm-marker (markerClick)='onPinSelect($event)' [latitude]='latitude' [longitude]='longitude'></agm-marker>
@@ -35,11 +34,11 @@
 								</fieldset>
 							</div>
 						</div>
-						<div class="row">
+						<div *ngIf='editMode' class="row">
 							<div class="col-xl-12 col-lg-12 col-md-12">
 								<fieldset class="form-group">
 									<label for="description">Pricing Option</label>
-									<ng-select [items]="pricingOptions" [virtualScroll]="true" bindLabel="type" bindValue="type" placeholder="Select pricing option"
+									<ng-select [items]="pricingOptions" [virtualScroll]="true" bindLabel="option" bindValue="option" placeholder="Select pricing option"
 									[(ngModel)]="selectedPricingOption">
 									</ng-select>
 								</fieldset>
@@ -60,7 +59,7 @@
 		                                    <input formControlName="locationName" type="text" name="locationName" class="form-control" id="locationName">
 		                                </fieldset>
 		                            </div>
-		                            <div class="col-xl-6 col-lg-6 col-md-12 mb-1">
+		                            <div *ngIf='editMode' class="col-xl-6 col-lg-6 col-md-12 mb-1">
 		                                <fieldset class="form-group">
 		                                    <label for="minimumTerm">Minimum Term</label>
 		                                    <input formControlName="minimumTerm" type="text" name="minimumTerm" class="form-control" id="minimumTerm">
@@ -78,7 +77,7 @@
 		                                    <input formControlName="locationLat" type="text" name="locationLat" class="form-control" id="locationLat">
 		                                </fieldset>
 		                            </div>
-		                            <div class="col-xl-6 col-lg-6 col-md-12 mb-1">
+		                            <div class="col-xl-12 col-lg-12 col-md-12 mb-1">
 		                                <fieldset class="form-group">
 		                                    <label for="size">Size</label>
 		                                    <input formControlName="size" type="number" name="size" class="form-control" id="size" >

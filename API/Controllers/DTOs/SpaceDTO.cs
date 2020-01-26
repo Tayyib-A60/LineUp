@@ -11,14 +11,17 @@ namespace API.Controllers.DTOs
         public int UserId { get; set; }
         public string Name { get; set; }
         public LocationDTO Location { get; set; }
+        public int LocationId { get; set; }
         public PricingDTO PricePH { get; set; }
         public PricingDTO PricePD { get; set; }
         public PricingDTO PricePW { get; set; }  
         public PricingOption SelectedPricingOption { get; set; }
+        public int SelectedPricingOptionId { get; set; }
         public string MinimumTerm { get; set; } 
         public string Description { get; set; }
         public string Size { get; set; }
         public SpaceType Type { get; set; }
+        public int TypeId { get; set; }
         public ICollection<Photo> Photos { get; set; }
         public ICollection<Amenity> Amenities { get; set; }
         public SpaceDTO()

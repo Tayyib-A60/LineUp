@@ -13,6 +13,7 @@ import { Space } from '../models/space.model';
 import { SpaceQueryResult } from '../models/spaceQueryResult';
 import { NotificationService } from '../../services/notification.service';
 import { QueryResult } from '../models/queryResult.model';
+import { CreatePricingOptionFailure, GetPricingOptionsFailure } from './space.actions';
 
 @Injectable()
 export class SpaceEffects {
@@ -120,6 +121,24 @@ export class SpaceEffects {
     );
 
     @Effect()
+    createPricingOption$: Observable<Action> = this.actions$.pipe(
+        ofType(SpaceActionTypes.CreatePricingOption),
+        map((action: spaceActions.CreatePricingOption) => action.payload),
+        mergeMap((pricingOption: any) => 
+            this.spaceService.createPricingOption(pricingOption).pipe(
+                map(() => {
+                    this.notification.typeSuccess('Pricing option added','Success')
+                    return new spaceActions.CreatePricingOptionSuccess();
+                }),
+                catchError(err => {
+                    this.notification.typeError(`${err.message}`, 'Error');
+                    return of(new spaceActions.CreatePricingOptionFailure(err))
+                })
+            )
+        )
+    );
+
+    @Effect()
     getSingleSpace$: Observable<Action> = this.actions$.pipe(
         ofType(SpaceActionTypes.GetSingleSpace),
         mergeMap((action: spaceActions.GetSingleSpace) => this.spaceService.getSpace(action.payload)
@@ -142,6 +161,20 @@ export class SpaceEffects {
                 catchError(err => {
                     this.notification.typeError(`${err.message}`, 'Error');
                     return of(new spaceActions.GetSpaceTypesFailure(err))
+                })
+            ) 
+        )
+    );
+
+    @Effect()
+    getPricingOptions$: Observable<Action> = this.actions$.pipe(
+        ofType(SpaceActionTypes.GetPricingOptions),
+        mergeMap((action: spaceActions.GetPricingOptions) => this.spaceService.getpricingOptions()
+            .pipe(
+                map((pricingOptions: any[]) => new spaceActions.GetPricingOptionsSuccess(pricingOptions)),
+                catchError(err => {
+                    this.notification.typeError(`${err.message}`, 'Error');
+                    return of(new spaceActions.GetPricingOptionsFailure(err))
                 })
             ) 
         )

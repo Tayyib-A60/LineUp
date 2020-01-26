@@ -45,9 +45,9 @@ namespace API.Controllers
             var space = await _lineUpRepository.GetSpace(spaceId);
             if (space == null)
                 return NotFound("Space does not exist");
-            var spaceToReturn = _mapper.Map<SpaceToEdit>(space);
-            spaceToReturn.SelectedPricingOption = spaceToReturn.SelectedPricingOption.ToString();
-            return Ok(spaceToReturn);
+            // var spaceToReturn = _mapper.Map<SpaceToEdit>(space);
+            // spaceToReturn.SelectedPricingOption = spaceToReturn.SelectedPricingOption.ToString();
+            return Ok(space);
         }
         [HttpPut("updateSpace/{spaceId}")]
         public async Task<IActionResult> UpdateSpace(int spaceId, [FromBody] SpaceDTO spaceDTO)
@@ -107,6 +107,12 @@ namespace API.Controllers
             var spaceTypes = await _lineUpRepository.GetSpaceTypes();
             return spaceTypes;
         }
+        [HttpGet("getPricingOptions")]
+        public async Task<IEnumerable<PricingOption>> GetPricingOptions()
+        {
+            var pricingOptions = await _lineUpRepository.GetPricingOptions();
+            return pricingOptions;
+        }
         [HttpPost("createSpaceType")]
         public async Task<IActionResult> CreateSpaceType([FromBody] SpaceTypeDTO spaceTypeDTO)
         {
@@ -151,11 +157,28 @@ namespace API.Controllers
         public async Task<IActionResult> CreateAmenity([FromBody] AmenityDTO amenityDTO)
         {
             var amenityToCreate = _mapper.Map<Amenity>(amenityDTO);
+            
             if (amenityToCreate == null)
                 return BadRequest("Amenity cannot be null");
             if (await _lineUpRepository.EntityExists(amenityToCreate))
                 return BadRequest("Amenity already exists");
+
             _lineUpRepository.Add(amenityToCreate);
+            await _lineUpRepository.SaveAllChanges();
+            return Ok();
+        }
+
+        [HttpPost("createPricingOption")]
+        public async Task<IActionResult> CreatePricingOption([FromBody] PricingOption pricingOptionDTO)
+        {
+            var pricingOptionToCreate = _mapper.Map<PricingOption>(pricingOptionDTO);
+
+            if(pricingOptionToCreate == null)
+                return BadRequest("Pricing option cannot be null");
+            if(await _lineUpRepository.EntityExists(pricingOptionToCreate))
+                    return BadRequest("Pricing option already exists");
+
+            _lineUpRepository.Add(pricingOptionToCreate);
             await _lineUpRepository.SaveAllChanges();
             return Ok();
         }
