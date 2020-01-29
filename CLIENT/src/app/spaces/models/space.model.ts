@@ -1,22 +1,23 @@
 export interface Space {
     id: number;
     name: string;
+    locationAddress: string;
+    long: string;
+    lat: string;
+    price: number;
+    discount: number;
     selectedPricingOption: PricingOption;
     minimumTerm: string;
-    location: Location;
     description: string;
     size: number;
-    type: Type;
-    pricePH: Pricing;
-    pricePD: Pricing;
-    pricePW: Pricing;
+    typeId: number;
     userId: number;
     amenities: Amenity[];
     photos: any[]
 }
 export interface Location {
     id: number;
-    name: string;
+    locationAddress: string;
     long: string;
     lat: string;
 }
@@ -31,11 +32,11 @@ export interface Amenity {
     price: number;
 }
 
-export interface PricingOption {
-    id: number;
-    option: string;
-    description: string;
-}
+// export interface PricingOption {
+//     id: number;
+//     option: string;
+//     description: string;
+// }
 
 export interface Type {
     type: string;
@@ -46,4 +47,9 @@ export interface LocationDetails {
     locationName: string;
     lat: string;
     long: string;
+}
+
+export enum PricingOption {
+    Hourly,
+    Daily
 }

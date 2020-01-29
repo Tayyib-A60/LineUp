@@ -23,7 +23,6 @@ namespace API.Core.Models
         [Required]
         public byte[] PasswordSalt { get; set; }
         public DateTime DateRegistered { get; set; }
-        // public Photo Photo { get; set; }
         public Role Role { get; set; }
         public bool Enabled { get; set; }
         public bool EmailVerified { get; set; }
@@ -35,12 +34,10 @@ namespace API.Core.Models
         public string LinkedIn { get; set; }
         public ICollection<Space> Spaces { get; set; }
         public ICollection<Booking> Bookings { get; set; }
-        public ICollection<Enquiry> Enquiries { get; set; }
         public User()
         {
             this.Spaces = new Collection<Space>();
             this.Bookings = new Collection<Booking>();
-            this.Enquiries = new Collection<Enquiry>();
         }
 
     }

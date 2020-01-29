@@ -58,6 +58,11 @@ export class SpaceService {
     const url = this.url + '/lineUp/createPricingOption';
     return this.httpClient.post(url, pricingOption, { headers });
   }
+  createAmenities(amenities: any) {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    const url = this.url + '/lineUp/createAmenities';
+    return this.httpClient.post(url, amenities, { headers });
+  }
 
   getSpaceTypes() {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });

@@ -29,7 +29,7 @@ namespace api.Migrations
 
                     b.Property<double>("Price");
 
-                    b.Property<int?>("SpaceId");
+                    b.Property<int>("SpaceId");
 
                     b.HasKey("Id");
 
@@ -50,7 +50,7 @@ namespace api.Migrations
 
                     b.Property<int?>("ChatId");
 
-                    b.Property<int?>("SpaceBookedId");
+                    b.Property<int>("SpaceBookedId");
 
                     b.Property<int>("Status");
 
@@ -121,26 +121,7 @@ namespace api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
-
                     b.ToTable("Enquiries");
-                });
-
-            modelBuilder.Entity("API.Core.Models.Location", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Lat");
-
-                    b.Property<string>("Long");
-
-                    b.Property<string>("Name");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Location");
                 });
 
             modelBuilder.Entity("API.Core.Models.Photo", b =>
@@ -166,36 +147,6 @@ namespace api.Migrations
                     b.ToTable("Photos");
                 });
 
-            modelBuilder.Entity("API.Core.Models.Pricing", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<double>("Discount");
-
-                    b.Property<double>("Price");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Pricing");
-                });
-
-            modelBuilder.Entity("API.Core.Models.PricingOption", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Description");
-
-                    b.Property<string>("Option");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("PricingOptions");
-                });
-
             modelBuilder.Entity("API.Core.Models.Space", b =>
                 {
                     b.Property<int>("Id")
@@ -206,39 +157,29 @@ namespace api.Migrations
 
                     b.Property<string>("Description");
 
-                    b.Property<int>("LocationId");
+                    b.Property<double>("Discount");
+
+                    b.Property<string>("Lat");
+
+                    b.Property<string>("LocationAddress");
+
+                    b.Property<string>("Long");
 
                     b.Property<string>("MinimumTerm");
 
                     b.Property<string>("Name");
 
-                    b.Property<int?>("PricePDId");
+                    b.Property<double>("Price");
 
-                    b.Property<int?>("PricePHId");
-
-                    b.Property<int?>("PricePWId");
-
-                    b.Property<int>("SelectedPricingOptionId");
+                    b.Property<int>("SelectedPricingOption");
 
                     b.Property<string>("Size");
 
                     b.Property<int>("TypeId");
 
-                    b.Property<int>("UserId");
+                    b.Property<int?>("UserId");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("LocationId");
-
-                    b.HasIndex("PricePDId");
-
-                    b.HasIndex("PricePHId");
-
-                    b.HasIndex("PricePWId");
-
-                    b.HasIndex("SelectedPricingOptionId");
-
-                    b.HasIndex("TypeId");
 
                     b.HasIndex("UserId");
 
@@ -311,9 +252,10 @@ namespace api.Migrations
 
             modelBuilder.Entity("API.Core.Models.Amenity", b =>
                 {
-                    b.HasOne("API.Core.Models.Space")
+                    b.HasOne("API.Core.Models.Space", "Space")
                         .WithMany("Amenities")
-                        .HasForeignKey("SpaceId");
+                        .HasForeignKey("SpaceId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("API.Core.Models.Booking", b =>
@@ -324,7 +266,8 @@ namespace api.Migrations
 
                     b.HasOne("API.Core.Models.Space", "SpaceBooked")
                         .WithMany()
-                        .HasForeignKey("SpaceBookedId");
+                        .HasForeignKey("SpaceBookedId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("API.Core.Models.User")
                         .WithMany("Bookings")
@@ -339,17 +282,9 @@ namespace api.Migrations
                         .HasForeignKey("ChatId");
                 });
 
-            modelBuilder.Entity("API.Core.Models.Enquiry", b =>
-                {
-                    b.HasOne("API.Core.Models.User")
-                        .WithMany("Enquiries")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
             modelBuilder.Entity("API.Core.Models.Photo", b =>
                 {
-                    b.HasOne("API.Core.Models.Space")
+                    b.HasOne("API.Core.Models.Space", "Space")
                         .WithMany("Photos")
                         .HasForeignKey("SpaceId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -357,37 +292,10 @@ namespace api.Migrations
 
             modelBuilder.Entity("API.Core.Models.Space", b =>
                 {
-                    b.HasOne("API.Core.Models.Location", "Location")
-                        .WithMany()
-                        .HasForeignKey("LocationId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("API.Core.Models.Pricing", "PricePD")
-                        .WithMany()
-                        .HasForeignKey("PricePDId");
-
-                    b.HasOne("API.Core.Models.Pricing", "PricePH")
-                        .WithMany()
-                        .HasForeignKey("PricePHId");
-
-                    b.HasOne("API.Core.Models.Pricing", "PricePW")
-                        .WithMany()
-                        .HasForeignKey("PricePWId");
-
-                    b.HasOne("API.Core.Models.PricingOption", "SelectedPricingOption")
-                        .WithMany()
-                        .HasForeignKey("SelectedPricingOptionId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("API.Core.Models.SpaceType", "Type")
-                        .WithMany()
-                        .HasForeignKey("TypeId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("API.Core.Models.User")
+                    b.HasOne("API.Core.Models.User", "User")
                         .WithMany("Spaces")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 #pragma warning restore 612, 618
         }

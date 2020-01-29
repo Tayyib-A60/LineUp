@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace API.Core.Models
 {
     public class SpaceType

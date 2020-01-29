@@ -2,10 +2,8 @@
   <div class="col-7 signUp">
     <div class="d-flex justify-content-between signUp-nav">
       <a class='signUp_text' [routerLink]="['/']" routerLinkActive="router-link-active" >234Spaces<span  class="signUp_dash">|</span></a>
-
-      <a href="">Favorites</a>
-      <a href="">Sign In</a>
-      <a href="">Sign Up</a>
+      <a [routerLink]="['/sign-in']">Sign In <span class="signUp_dash"> | </span></a>
+      <a [routerLink]="['/sign-up']">Sign Up</a>
     </div>
   </div>
   <div class="col-5 signUp_col">

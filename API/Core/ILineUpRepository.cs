@@ -33,7 +33,7 @@ namespace API.Core
          Task<List<Booking>> GetBookingDetails(int bookedById, BookingQuery query);
          string ComposeMessage(MessageParams messageParams);
          Task<MerchantMetrics> GetMerchantMetrics(int userId);
-         Task<IEnumerable<PricingOption>> GetPricingOptions();
+        //  Task<IEnumerable<PricingOption>> GetPricingOptions();
         //  Task<IEnumerable<Booking>> GetBookings(int userId);
     }
 }

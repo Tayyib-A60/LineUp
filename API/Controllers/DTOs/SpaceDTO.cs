@@ -7,21 +7,21 @@ namespace API.Controllers.DTOs
 {
     public class SpaceDTO
     {
-        public int Id { get; set; }
+        public UserDTO User { get; set; }
         public int UserId { get; set; }
         public string Name { get; set; }
-        public LocationDTO Location { get; set; }
-        public int LocationId { get; set; }
-        public PricingDTO PricePH { get; set; }
-        public PricingDTO PricePD { get; set; }
-        public PricingDTO PricePW { get; set; }  
-        public PricingOption SelectedPricingOption { get; set; }
-        public int SelectedPricingOptionId { get; set; }
-        public string MinimumTerm { get; set; } 
         public string Description { get; set; }
         public string Size { get; set; }
-        public SpaceType Type { get; set; }
+        public string MinimumTerm { get; set; }   
+        public string LocationAddress { get; set; }
+        public string Long { get; set; }
+        public string  Lat { get; set; }
+        public double Price { get; set; }
+        public double Discount { get; set; }
         public int TypeId { get; set; }
+        public int SelectedPricingOptionId { get; set; }
+        public PricingOption SelectedPricingOption { get; set; }
+        public DateTime DateCreated { get; set; }
         public ICollection<Photo> Photos { get; set; }
         public ICollection<Amenity> Amenities { get; set; }
         public SpaceDTO()

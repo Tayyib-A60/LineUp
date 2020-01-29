@@ -14,7 +14,8 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using SendGrid;
 using SendGrid.Helpers.Mail;
-
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 namespace API.Persistence
 {
     public class UserRepository : IUserRepository
@@ -93,7 +94,7 @@ namespace API.Persistence
             var subject = message.Subject;
             var to = new EmailAddress (message.ToEmail, message.ToName);
             var htmlContent = $"<div style='background-color: #ffffff; margin: 0 auto;  color: rgb(30, 31, 30);'><div  style='background-color: #fcd2d2; padding: 12px; border-top-left-radius: 8px; border-top-right-radius: 8px;'><img src='./logo-1446293_640.png' style='max-height: 36px; max-width: 36px' /></div><div style='background-color: #ffffff; padding: 20px; font-size: 20px'>{message.HtmlContent}</div><div style='background-color: #fcd2d2; padding: 9px; border-bottom-left-radius: 8px;border-bottom-right-radius: 8px;'></div></div>";
-            var msg = MailHelper.CreateSingleEmail (from, to, subject, null, htmlContent);
+            var msg = MailHelper.CreateSingleEmail (from, to, subject, null, message.HtmlContent);
             var response = await sendGridclient.SendEmailAsync (msg);
         }
         public async Task<bool> ForgotPassword (User user) {

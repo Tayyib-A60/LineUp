@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Controllers.DTOs;
@@ -36,6 +37,27 @@ namespace API.Controllers
             spaceToCreate.DateCreated = DateTime.Now;
             // if(spaceToCreate.pr)
             _lineUpRepository.Add(spaceToCreate);
+            await _lineUpRepository.SaveAllChanges();
+            return Ok();
+        }
+        [HttpPost("createAmenities")]
+        public async Task<IActionResult> CreateAmenities([FromBody] AmenitiesToCreate amenitiesDTO)
+        {
+            var space = await _lineUpRepository.GetSpace(amenitiesDTO.SpaceId);
+            space.Amenities = new Collection<Amenity>();
+            await _lineUpRepository.SaveAllChanges();
+            foreach (var amenity in amenitiesDTO.Amenities)
+            {
+                var amenityToCreate = _mapper.Map<Amenity>(amenity);
+                amenity.SpaceId = amenitiesDTO.SpaceId;
+
+                if (amenityToCreate == null)
+                    return BadRequest("Space cannot be null");
+
+                if (await _lineUpRepository.EntityExists(amenityToCreate))
+                    return BadRequest("Space has already been created");
+                space.Amenities.Add(amenityToCreate);
+            }
             await _lineUpRepository.SaveAllChanges();
             return Ok();
         }
@@ -107,12 +129,12 @@ namespace API.Controllers
             var spaceTypes = await _lineUpRepository.GetSpaceTypes();
             return spaceTypes;
         }
-        [HttpGet("getPricingOptions")]
-        public async Task<IEnumerable<PricingOption>> GetPricingOptions()
-        {
-            var pricingOptions = await _lineUpRepository.GetPricingOptions();
-            return pricingOptions;
-        }
+        // [HttpGet("getPricingOptions")]
+        // public async Task<IEnumerable<PricingOption>> GetPricingOptions()
+        // {
+        //     var pricingOptions = await _lineUpRepository.GetPricingOptions();
+        //     return pricingOptions;
+        // }
         [HttpPost("createSpaceType")]
         public async Task<IActionResult> CreateSpaceType([FromBody] SpaceTypeDTO spaceTypeDTO)
         {
@@ -168,20 +190,20 @@ namespace API.Controllers
             return Ok();
         }
 
-        [HttpPost("createPricingOption")]
-        public async Task<IActionResult> CreatePricingOption([FromBody] PricingOption pricingOptionDTO)
-        {
-            var pricingOptionToCreate = _mapper.Map<PricingOption>(pricingOptionDTO);
+        // [HttpPost("createPricingOption")]
+        // public async Task<IActionResult> CreatePricingOption([FromBody] PricingOption pricingOptionDTO)
+        // {
+        //     var pricingOptionToCreate = _mapper.Map<PricingOption>(pricingOptionDTO);
 
-            if(pricingOptionToCreate == null)
-                return BadRequest("Pricing option cannot be null");
-            if(await _lineUpRepository.EntityExists(pricingOptionToCreate))
-                    return BadRequest("Pricing option already exists");
+        //     if(pricingOptionToCreate == null)
+        //         return BadRequest("Pricing option cannot be null");
+        //     if(await _lineUpRepository.EntityExists(pricingOptionToCreate))
+        //             return BadRequest("Pricing option already exists");
 
-            _lineUpRepository.Add(pricingOptionToCreate);
-            await _lineUpRepository.SaveAllChanges();
-            return Ok();
-        }
+        //     _lineUpRepository.Add(pricingOptionToCreate);
+        //     await _lineUpRepository.SaveAllChanges();
+        //     return Ok();
+        // }
 
         [HttpPut("updateAmenity/{amenityId}")]
         public async Task<IActionResult> UpdateAmenity(int amenityId, [FromBody] AmenityDTO amenityDTO)

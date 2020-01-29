@@ -1,12 +1,9 @@
 <div class="row text-left justify-content-center">
   <div class="col-7 signIn">
     <div class="d-flex justify-content-between signIn-nav">
-      <a class="signIn_text" href="">234Spaces<span class="signIn_dash">|</span></a>
-      <a style="font-size: 1.5rem;" [routerLink]="['/']" routerLinkActive="router-link-active" >234Spaces<span style="font-size: 1rem; margin-left: 2rem;">|</span></a>
-
-      <a href="">Favorites</a>
-      <a href="">Sign In</a>
-      <a href="">Sign Up</a>
+      <a style="font-size: 1.5rem;" [routerLink]="['/']" routerLinkActive="router-link-active" >234Spaces<span class="signIn_dash">|</span></a>
+      <a [routerLink]="['/sign-in']">Sign In <span class="signIn_dash"> | </span></a>
+      <a [routerLink]="['/sign-up']">Sign Up</a>
     </div>
   </div>
   <div class="col-5 signIn_col">

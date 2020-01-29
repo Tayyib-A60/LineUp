@@ -12,7 +12,7 @@
           <ng-template *ngFor='let photo of thisSpace.photos' ngbSlide>
             <img class='img_banner' [src]="photo?.fileName" alt="Random first slide">
             <div class="caption_container">
-                <h4 class="caption_text">NGN {{thisSpace?.pricePH?.price + ' per Hr' || thisSpace?.pricePD?.price + ' per Day' || thisSpace?.pricePW?.price + ' per Wk'}}</h4>
+                <h4 class="caption_text">NGN {{thisSpace?.price}}</h4>
                 <i class="fa fa-users"></i>
                 <span>&nbsp;{{thisSpace?.size}} People</span>
             </div>
@@ -23,7 +23,7 @@
         <div class="row">
             <div class="col-md-7 mb-2">
               <p class="space_head">{{thisSpace?.name}}</p>
-              <button class="btn btn-outline-secondary mt-4 mb-4"><i class="fa fa-upload"></i>&nbsp; {{thisSpace?.type?.type}}</button>
+              <!-- <button class="btn btn-outline-secondary mt-4 mb-4"><i class="fa fa-upload"></i>&nbsp; {{thisSpace?.typ}}</button> -->
               <div class="d-flex justify-content-between space_content">
                 <div class="space_content_wrapper">
                   <div class="pb-3 space_content_wrapper-1">Capacity</div>
@@ -33,7 +33,7 @@
                 <div class="space_content_wrapper">
                   <div class="pb-3 space_content_wrapper-1">Space type</div>
                   <i class="fa fa-users fa-2x space_content_wrapper-2"></i>
-                  <div class="pt-3 space_content_wrapper-3"><span>&nbsp; {{thisSpace?.type?.type}}</span></div>
+                  <div class="pt-3 space_content_wrapper-3"><span>&nbsp; {{thisSpace?.typeId}}</span></div>
                 </div>
                 <div class="space_content_wrapper">
                   <div class="pb-3 space_content_wrapper-1">Availability</div>
@@ -42,7 +42,7 @@
                 </div>
               </div>
               <div class="mt-4 mb-4">
-                  <h4 class="text-bold-500">{{thisSpace?.location?.name}}</h4>
+                  <h4 class="text-bold-500">{{thisSpace?.locationAddress}}</h4>
               </div>
               <div class="mt-4">
                 <h4 class="text-bold-500">Description</h4>
@@ -288,13 +288,14 @@
                   </div>
                   <div class="space_content">
                       <h4 class="space_form-input-field text-bold-500 mt-3 pb-1">Duration</h4>
-                      <p class="space_form-input-data space_right-cursor mb-0">Minimum term: &nbsp; <span class="text-bold-500">1 hour</span></p>
+                      <p class="space_form-input-data space_right-cursor mb-0">Minimum term: &nbsp; <span class="text-bold-500">{{thisSpace?.minimumTerm}}</span>
+                      </p>
                   </div>
                   <div class="space_content">
                       <h4 class="space_form-input-field text-bold-500 mt-3 pb-1">Pricing options</h4>
-                      <p class="space_form-input-data space_right-cursor mb-0">Per Hour: &nbsp;<span class="text-bold-500">{{thisSpace?.pricePH?.price | currency : 'NGN' : 'symbol-narrow'}}</span></p>
-                      <p class="space_form-input-data space_right-cursor mb-0">Per Day: &nbsp;<span class="text-bold-500">{{thisSpace?.pricePD?.price | currency : 'NGN' : 'symbol-narrow'}}</span></p>
-                      <p class="space_form-input-data space_right-cursor mb-0">Per Week: &nbsp;<span class="text-bold-500">{{thisSpace?.pricePW?.price | currency : 'NGN' : 'symbol-narrow'}}</span></p>
+                      <!-- <p *ngIf='thisSpace?.selectedPricingOption?.option == "Per Hour"' class="space_form-input-data space_right-cursor mb-0">Per Hour: &nbsp;<span class="text-bold-500">{{thisSpace?.pricePH?.price | currency : 'NGN' : 'symbol-narrow'}}</span></p>
+                      <p *ngIf='thisSpace?.selectedPricingOption?.option == "Per Day"' class="space_form-input-data space_right-cursor mb-0">Per Day: &nbsp;<span class="text-bold-500">{{thisSpace?.pricePD?.price | currency : 'NGN' : 'symbol-narrow'}}</span></p>
+                      <p *ngIf='thisSpace?.selectedPricingOption?.option == "Per Week"' class="space_form-input-data space_right-cursor mb-0">Per Week: &nbsp;<span class="text-bold-500">{{thisSpace?.pricePW?.price | currency : 'NGN' : 'symbol-narrow'}}</span></p> -->
                   </div>
                 </div>
             </div>
@@ -302,7 +303,7 @@
 </div>
 <div id="location" class="jumbotron">
     <agm-map [latitude]='latitude' [longitude]='longitude'>
-          <agm-marker [latitude]='thisSpace?.location?.lat' [longitude]='thisSpace?.location?.long'></agm-marker>
+          <agm-marker [latitude]='thisSpace?.lat' [longitude]='thisSpace?.long'></agm-marker>
     </agm-map>
 </div>
 <div id="similar" class="space_container">

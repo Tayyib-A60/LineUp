@@ -24,13 +24,6 @@ namespace API.Persistence
         }
         public void Update<T>(T entity) where T : class
         {
-            // if(entity is Space) {
-            //     var space = entity as Space;
-            //     foreach (var item in space.Amenities)
-            //     {
-            //         _context.Entry<Amenity>(item).State = EntityState.Added;
-            //     }
-            // }
             _context.Entry(entity).State = EntityState.Modified;
         }
         public void UpdateSpace(Space space) {
@@ -76,13 +69,14 @@ namespace API.Persistence
                     return true;
                 }
                 return false;
-            } else if(entityName is PricingOption) {
-                var pricingOption = entityName as PricingOption;
-                if(await _context.PricingOptions.AnyAsync(po => po.Id == pricingOption.Id || po.Option.ToLower() == pricingOption.Option.ToLower())) {
-                    return true;
-                }
-                return false;
-            }
+            } 
+            // else if(entityName is PricingOption) {
+            //     var pricingOption = entityName as PricingOption;
+            //     if(await _context.PricingOptions.AnyAsync(po => po.Id == pricingOption.Id || po.Option.ToLower() == pricingOption.Option.ToLower())) {
+            //         return true;
+            //     }
+            //     return false;
+            // }
             return false;
         }
         public async Task<Enquiry> GetEnquiry(int enquiryId)
@@ -99,25 +93,15 @@ namespace API.Persistence
         public async Task<Space> GetSpace(int spaceId)
         {
             return await _context.Spaces
-                            .Include(space => space.Type)
                             .Include(space => space.Amenities)
-                            .Include(space => space.Location)
-                            .Include(space => space.SelectedPricingOption)
-                            .Include(space => space.PricePH)
-                            .Include(space => space.PricePD)
-                            .Include(space => space.PricePW)
                             .Include(space => space.Photos)
                             .FirstOrDefaultAsync(s => s.Id == spaceId);
         }
         public async Task<QueryResult<Space>> GetSpaces(SpaceQuery query)
         {
             var spaces =  _context.Spaces
-                                    // .Where(sp => sp.UserId == query.UserId)
-                                    .Include(sp => sp.Type)
-                                    .Include(space => space.Location)
-                                    .Include(space => space.PricePH)
-                                    .Include(space => space.PricePD)
-                                    .Include(space => space.PricePW)
+                                    .Where(sp => sp.User.Id == query.UserId)
+                                    .Include(sp => sp.User)
                                     .AsQueryable();
             spaces = FilterSpaces(query, spaces);
             int count = spaces.Count();
@@ -131,13 +115,8 @@ namespace API.Persistence
         public async Task<QueryResult<Space>> GetMerchantSpaces(SpaceQuery query)
         {
             var spaces =  _context.Spaces
-                                    .Where(sp => sp.UserId == query.UserId)
-                                    // .Where(sp => sp.Type.Type.ToLower().Contains(query.SpaceType.ToLower()))
-                                    .Include(sp => sp.Type)
-                                    .Include(space => space.Location)
-                                    .Include(space => space.PricePH)
-                                    .Include(space => space.PricePD)
-                                    .Include(space => space.PricePW)
+                                    .Where(sp => sp.User.Id == query.UserId)
+                                    // .Include(sp => sp.User)
                                     .Include(sp => sp.Photos)
                                     .AsQueryable();
             spaces = FilterSpaces(query, spaces);
@@ -196,17 +175,17 @@ namespace API.Persistence
         private IQueryable<Space> FilterSpaces(SpaceQuery query, IQueryable<Space> spaces)
         {
             if(query.Price > 0)
-                spaces = spaces.Where(sp => (sp.PricePH.Price <= query.Price || sp.PricePD.Price <= query.Price || sp.PricePW.Price <= query.Price));
+                spaces = spaces.Where(sp => (sp.Price <= query.Price));
             if(query.Price > 500000)
-                spaces = spaces.Where(sp => (sp.PricePH.Price >= query.Price || sp.PricePD.Price >= query.Price || sp.PricePW.Price >= query.Price));
+                spaces = spaces.Where(sp => (sp.Price >= query.Price));
             if(!string.IsNullOrWhiteSpace(query.Location))
-                spaces = spaces.Where(sp => sp.Location.Name.ToLower().Contains(query.Location));
+                spaces = spaces.Where(sp => sp.LocationAddress.ToLower().Contains(query.Location));
             if(!string.IsNullOrWhiteSpace(query.SearchString))
-                spaces = spaces.Where(sp => sp.Location.Name.ToLower().StartsWith(query.SearchString) || sp.Location.Name.ToLower().Contains(query.SearchString) || sp.Name.StartsWith(query.SearchString) || sp.Name.ToLower().Contains(query.SearchString) || sp.Description.Contains(query.SearchString));
+                spaces = spaces.Where(sp => sp.LocationAddress.ToLower().StartsWith(query.SearchString) || sp.LocationAddress.ToLower().Contains(query.SearchString) || sp.Name.StartsWith(query.SearchString) || sp.Name.ToLower().Contains(query.SearchString) || sp.Description.Contains(query.SearchString));
             if(query.Size > 0)
                 spaces = spaces.Where(sp => Convert.ToInt64(sp.Size) >= query.Size);
-            if(!string.IsNullOrWhiteSpace(query.SpaceType) && query.SpaceType.Length > 0) 
-                spaces = spaces.Where(sp => sp.Type.Type.ToLower().Contains(query.SpaceType.ToLower()));
+            // if(!string.IsNullOrWhiteSpace(query.SpaceType) && query.SpaceType.Length > 0) 
+            //     spaces = spaces.Where(sp => sp.Type.Type.ToLower().Contains(query.SpaceType.ToLower()));
             return spaces;            
         }
         private IQueryable<Booking> FilterBookings(BookingQuery query, IQueryable<Booking> booking)
@@ -227,10 +206,10 @@ namespace API.Persistence
         {
             return await _context.SpaceTypes.ToListAsync();
         }
-        public async Task<IEnumerable<PricingOption>> GetPricingOptions()
-        {
-            return await _context.PricingOptions.ToListAsync();
-        }
+        // public async Task<IEnumerable<PricingOption>> GetPricingOptions()
+        // {
+        //     return await _context.PricingOptions.ToListAsync();
+        // }
         public async Task<Amenity> GetAmenity(int amenityId)
         {
             return await _context.Amenities

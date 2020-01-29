@@ -6,5 +6,6 @@ namespace API.Controllers.DTOs
         public string Name { get; set; }
         public string Long { get; set; }
         public string  Lat { get; set; }
+        public int LocationId { get; set; }
     }
 }

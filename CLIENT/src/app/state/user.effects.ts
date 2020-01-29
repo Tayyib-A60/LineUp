@@ -29,7 +29,7 @@ export class UserEffects {
                     return new userActions.CreateUserSuccess(response);
                 }),
                 catchError(err => {
-                    this.notification.typeError('Sign up failed', 'Sign up failed');
+                    this.notification.typeError('Sign up failed', `${err.message}`);
                     return of(new userActions.CreateUserFailure(err));
                 })
             )

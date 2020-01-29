@@ -17,5 +17,7 @@ namespace API.Controllers.DTOs
         public int BookedById { get; set; }
         public double TotalPrice { get; set; }
         public ChatDTO Chat { get; set; }
+        public User BookedBy { get; set; }
+        public int SpaceBookedId { get; set; }
     }
 }

@@ -14,6 +14,7 @@ import { SpaceQueryResult } from '../models/spaceQueryResult';
 import { NotificationService } from '../../services/notification.service';
 import { QueryResult } from '../models/queryResult.model';
 import { CreatePricingOptionFailure, GetPricingOptionsFailure } from './space.actions';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Injectable()
 export class SpaceEffects {
@@ -30,7 +31,9 @@ export class SpaceEffects {
     constructor(private actions$: Actions,
                 private spaceService: SpaceService,
                 private notification: NotificationService,
-                private merchantService: ManageMerchantsService) {}
+                private merchantService: ManageMerchantsService,
+                private router: Router,
+                private route: ActivatedRoute) {}
 
     // @Effect()
     // successNotification$ = this.actions$.pipe(
@@ -56,6 +59,7 @@ export class SpaceEffects {
             this.spaceService.createSpaceType(spaceType).pipe(
                 map(response => {
                     this.notification.typeSuccess('Space type was added successfully', 'Space Type Success');
+                    this.router.navigate(['/admin/add-space'], {relativeTo: this.route});
                     return new spaceActions.CreateSpaceTypeSuccess(response);
                 }),
                 catchError(err => {
@@ -92,6 +96,7 @@ export class SpaceEffects {
             this.spaceService.updateSpace(space.id, space).pipe(
                 map(response => {
                     this.notification.typeSuccess('Space updated', 'Success');
+                    this.router.navigate(['/admin/manage-space'], {relativeTo: this.route});
                     return new spaceActions.UpdateSpaceSuccess(response);
                 }),
                 catchError(err =>{

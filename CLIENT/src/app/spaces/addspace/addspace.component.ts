@@ -8,8 +8,12 @@ import { Params, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { SpaceType } from '../models/spaceType.model';
 import { takeWhile } from 'rxjs/operators';
-import { Space, LocationDetails } from '../models/space.model';
+import { Space, LocationDetails, PricingOption } from '../models/space.model';
 import { HttpClient } from '@angular/common/http';
+import { SpaceService } from '../space.service';
+
+import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NotificationService } from '../../services/notification.service';
 
 @Component({
   selector: 'app-addspace',
@@ -20,44 +24,48 @@ export class AddspaceComponent implements OnInit, AfterViewInit {
 
   amenityItems = [ ];
   someLocation: string;
-  selectedSpaceType = '';
-  spaceForm: FormGroup;
+  selectedSpaceType: number;
+  spaceForm: FormGroup = new FormGroup({});
   id: string;
   editMode = false;
   spaceTypes$: Observable<SpaceType[]>;
   componentActive = true;
   spaceTypes: SpaceType[];
-  selectedPricingOption: string;
+  selectedPricingOption: number;
   pricingOptions: any[];
-  spaceToEdit = <Space>{};
+  spaceToEdit: Space;
   currentUser: any;
   latitude = 0;
   longitude = 0;
   infoWindow: any;
   selectedLocation = '';
-
+  amenities = [];
   address: Object;
   establishmentAddress: Object;
-
+  initForm = false;
   formattedAddress: string;
   formattedEstablishmentAddress: string;
   phone: string;
+  closeResult: string;
 
     constructor(private formBuilder: FormBuilder,
                 private store: Store<spaceReducer.SpaceState>,
                 private route: ActivatedRoute,
                 private httpClient: HttpClient,
-                public zone: NgZone) { }
+                public zone: NgZone,
+                private spaceService: SpaceService,
+                private modalService: NgbModal,
+                private notificationService: NotificationService) { }
                 
     ngOnInit() {
-      // this.pricingOptions = [{id: 1, type: 'PerHour'}, {id: 2, type: 'PerDay'}];
-      if(!this.editMode) {
-        navigator.geolocation.getCurrentPosition((myLocation) => {
-          this.latitude = myLocation.coords.latitude;
-          this.longitude = myLocation.coords.longitude;
+      this.pricingOptions = [{ type: PricingOption.Hourly, label: "Hourly"}, { type: PricingOption.Daily , label: "Daily"}];
+      // if(!this.editMode) {
+      //   navigator.geolocation.getCurrentPosition((myLocation) => {
+      //     this.latitude = myLocation.coords.latitude;
+      //     this.longitude = myLocation.coords.longitude;
 
-        });
-      }
+      //   });
+      // }
 
       this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
 
@@ -67,34 +75,79 @@ export class AddspaceComponent implements OnInit, AfterViewInit {
           this.id = params['id'];
           this.editMode = params['id'] != null;
         });
-      if(this.editMode) {
-        this.store.dispatch(new spaceActions.GetSingleSpace(Number(this.id)));
-        this.store.pipe(select(spaceSelectors.getSingleSpace),
-        takeWhile(() => this.componentActive))
-        .subscribe(space => {
-          this.spaceToEdit = space;
-          if(this.spaceToEdit){
-            this.intializeFormWtValues();
-          }
-        });
-      }
+
+        if(this.editMode) {
+          this.initFormWithValues();
+        }
+
+        if(!this.editMode) {
+          this.initializeForm();
+        }
+
       this.store.dispatch(new spaceActions.GetSpaceTypes());
       this.store.pipe(select(spaceSelectors.getSpaceTypes),
       takeWhile(() => this.componentActive))
-      .subscribe(spaceTypes => {
+      .subscribe(spaceTypes => {        
         this.spaceTypes = spaceTypes;
       });
-      this.store.dispatch(new spaceActions.GetPricingOptions());
-      this.store.pipe(select(spaceSelectors.getPricingOptions),
-      takeWhile(() => this.componentActive))
-      .subscribe(pricingOptions => {
-        this.pricingOptions = pricingOptions;        
-      });
-      if(this.editMode == false)
-        this.initializeForm();
+        
     }
 
-   
+    private initFormWithValues() {
+      this.spaceService.getSpace(Number(this.id)).subscribe((space: Space) => {
+        console.log(space);
+        let amenitiesArray = new FormArray([]);
+        if(space.amenities) {                
+            space.amenities.map(a => {
+              amenitiesArray.push(
+                new FormGroup({
+                  'name': new FormControl(a['name'], Validators.required),
+                  'price': new FormControl(a['price'], Validators.required),
+                  'id': new FormControl(a['id'])
+                })
+              );
+            }); 
+        } 
+        this.selectedSpaceType = space.typeId;
+        this.selectedPricingOption = space.selectedPricingOption;
+        this.spaceForm = new FormGroup({
+          'id': new FormControl(space.id, Validators.required),
+          'name': new FormControl(space.name, [Validators.required,  Validators.minLength(3),
+                                        Validators.maxLength(50)]),
+          'minimumTerm': new FormControl(space.minimumTerm, [Validators.required,  Validators.minLength(3), Validators.maxLength(50)]),
+          'locationAddress': new FormControl(space.locationAddress, Validators.required),
+          'long': new FormControl(space.long, Validators.required),
+          'lat': new FormControl(space.lat, Validators.required),
+          'description': new FormControl(space.description, Validators.required),
+          'size': new FormControl(space.size, Validators.required),
+          'price': new FormControl(space.price, Validators.required),
+          'discount': new FormControl(space.discount, Validators.required),
+          'amenities': amenitiesArray,
+          'userId': new FormControl(this.currentUser['id']),
+          'typeId': new FormControl(space.typeId),
+          'selectedPricingOption': new FormControl(space.selectedPricingOption)
+        });
+        this.spaceToEdit = space;
+      }, (err) => console.log(err.message));
+    }
+
+    open(content) {
+      this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+        this.closeResult = `Closed with: ${result}`;
+      }, (reason) => {
+        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      });
+    }
+  
+    private getDismissReason(reason: any): string {
+      if (reason === ModalDismissReasons.ESC) {
+        return 'by pressing ESC';
+      } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+        return 'by clicking on a backdrop';
+      } else {
+        return  `with: ${reason}`;
+      }
+    }
 
     ngOnDestroy(): void {
       this.componentActive = false;
@@ -105,6 +158,30 @@ export class AddspaceComponent implements OnInit, AfterViewInit {
       //   this.latitude = Number(this.spaceToEdit.location.lat);
       //   this.longitude = Number(this.spaceToEdit.location.long);
       // }
+    }
+
+    saveAmenities() {
+      const amenities = this.spaceForm.get('amenities').value;
+      const amenitiesToCreate = {
+        amenities,
+        spaceId: this.spaceToEdit.id
+      };
+      for(let i = 0; i < amenitiesToCreate.amenities.length; i++) {
+          delete amenitiesToCreate.amenities[i].id;
+      }
+      console.log(amenitiesToCreate);
+      // const spaceObject = this.spaceForm.value;
+      // console.log(spaceObject);
+      // delete spaceObject['amenities'];
+      // console.log(spaceObject);
+      this.spaceService.createAmenities(amenitiesToCreate).subscribe((res) => {
+        this.notificationService.typeSuccess('Amenities added', 'Success');
+      },(err) => {
+        this.notificationService.typeError(`${err.message}`, 'Failed');
+      },() => {
+        this.initFormWithValues();
+      });
+      
     }
 
     getAddress(place: object) {
@@ -120,9 +197,9 @@ export class AddspaceComponent implements OnInit, AfterViewInit {
       this.latitude = Number(lat);
       this.longitude = Number(long);
       this.zone.run(() => {
-        this.spaceForm.get('locationLong').patchValue(long);
-        this.spaceForm.get('locationLat').patchValue(lat);
-        this.spaceForm.get('locationName').patchValue(locationName);
+        this.spaceForm.get('long').patchValue(long);
+        this.spaceForm.get('lat').patchValue(lat);
+        this.spaceForm.get('locationAddress').patchValue(locationName);
       });
     }
 
@@ -180,152 +257,101 @@ export class AddspaceComponent implements OnInit, AfterViewInit {
       let locationLat = '';
       let size = null;
       let type = {type: '', id: null};
-      let st = '';
-      let stid = null;
+      let stid = 0;
       let description =  '';
-      let pricePH = null;
-      let discountPH = null;
-      let pricePD = null;
-      let discountPD = null;
-      let pricePW = null;
-      let discountPW = null;
+      let price = null;
+      let discount = null;
       let currentUserId = this.currentUser['id'];
-
-      this.spaceForm = new FormGroup({
-        'name': new FormControl(name, [Validators.required,  Validators.minLength(3),
-                                      Validators.maxLength(50)]),
-        'minimumTerm': new FormControl(minimumTerm, [Validators.required,  Validators.minLength(3),
-                                      Validators.maxLength(50)]),
-        'pricingOption': new FormControl(pricingOption, Validators.required),
-        'description': new FormControl(description, Validators.required),
-        'size': new FormControl(size, Validators.required),
-        // 'pricePH': new FormControl(pricePH, Validators.required),
-        // 'discountPH': new FormControl(discountPH, Validators.required),
-        // 'pricePD': new FormControl(pricePD, Validators.required),
-        // 'discountPD': new FormControl(discountPD, Validators.required),
-        // 'pricePW': new FormControl(pricePW, Validators.required),
-        // 'discountPW': new FormControl(discountPW, Validators.required),
-        // 'amenities': amenitiesArray,
-        'userId': new FormControl(currentUserId),
-        'type': new FormGroup({
-          'type': new FormControl(null),
-          'id': new FormControl(null)
-        })
-      });
-    }
-
-    private intializeFormWtValues() {
-      // console.log(this.spaceToEdit);
+      let selectedPricingOption = this.selectedPricingOption;
       
-      if(this.editMode) { // && this.spaceToEdit
-        // fetch the space to edit nd initialize the form to contain it's properties here.
-        let amenitiesArray = new FormArray([]);
-        let name = '';
-        let minimumTerm = '';
-        let locationName = this.selectedLocation;
-        let locationLong = this.longitude.toString();
-        let locationLat = this.latitude.toString();
-        let size = null;
-        let type = {type: '', id: null};
-        let st = '';
-        let stid = null;
-        let sPriceOption = '';
-        let sPriceOptionId = null;
-        let sPriceOptionDesc = '';
-        let description =  '';
-        let pricePH = null;
-        let discountPH = null;
-        let pricePD = null;
-        let discountPD = null;
-        let pricePW = null;
-        let discountPW = null;
-        let currentUserId = this.currentUser['id'];
-        name = this.spaceToEdit.name;
-        minimumTerm = this.spaceToEdit.minimumTerm;      
-        
-        if(this.spaceToEdit.location) {
-          locationName = this.spaceToEdit.location.name;
-          locationLong = this.spaceToEdit.location.long;
-          locationLat = this.spaceToEdit.location.lat;
-        }
-        if(this.spaceToEdit.pricePD) {
-          pricePH = this.spaceToEdit.pricePH.price;
-          discountPH = this.spaceToEdit.pricePH.discount;
-          pricePD = this.spaceToEdit.pricePD.price;
-          discountPD = this.spaceToEdit.pricePD.discount;
-          pricePW = this.spaceToEdit.pricePW.price;
-          discountPW = this.spaceToEdit.pricePW.discount;
-        }
-        description = this.spaceToEdit.description;
-        size = this.spaceToEdit.size;
-        type = this.spaceToEdit.type;
-        if(this.spaceToEdit.type) {
-          st = this.spaceToEdit.type.type;
-          stid = this.spaceToEdit.type.id;
-        }
-        if(this.spaceToEdit.selectedPricingOption) {
-          sPriceOption = this.spaceToEdit.selectedPricingOption.option;
-          sPriceOptionId = this.spaceToEdit.selectedPricingOption.id;
-        }
-        // this.selectedPricingOption = pricingOption;
-        this.selectedSpaceType = st;
-        this.selectedPricingOption = sPriceOption;
-        const amenities = this.spaceToEdit.amenities;
-          
-        if(amenities) {                
-            amenities.map(a => {
-              amenitiesArray.push(
-                new FormGroup({
-                  'name': new FormControl(a['name'], Validators.required),
-                  'price': new FormControl(a['price'], Validators.required),
-                  // 'id': new FormControl(a['id'])
-                })
-              );
-            }); 
-        } 
-            
-        this.spaceForm = new FormGroup({
+      this.spaceForm = new FormGroup({
           'id': new FormControl(this.id, Validators.required),
           'name': new FormControl(name, [Validators.required,  Validators.minLength(3),
                                         Validators.maxLength(50)]),
           'minimumTerm': new FormControl(minimumTerm, [Validators.required,  Validators.minLength(3),
                                         Validators.maxLength(50)]),
-          // 'pricingOption': new FormControl(pricingOption, Validators.required),
-          'locationName': new FormControl(locationName, Validators.required),
-          'locationLong': new FormControl(locationLong, Validators.required),
-          'locationLat': new FormControl(locationLat, Validators.required),
+          'locationAddress': new FormControl(locationName, Validators.required),
+          'long': new FormControl(locationLong, Validators.required),
+          'lat': new FormControl(locationLat, Validators.required),
           'description': new FormControl(description, Validators.required),
           'size': new FormControl(size, Validators.required),
-          'pricePH': new FormControl(pricePH, Validators.required),
-          'discountPH': new FormControl(discountPH, Validators.required),
-          'pricePD': new FormControl(pricePD, Validators.required),
-          'discountPD': new FormControl(discountPD, Validators.required),
-          'pricePW': new FormControl(pricePW, Validators.required),
-          'discountPW': new FormControl(discountPW, Validators.required),
+          'price': new FormControl(price, Validators.required),
+          'discount': new FormControl(discount, Validators.required),
           'amenities': amenitiesArray,
-          'userId': new FormControl(currentUserId),
-          'type': new FormGroup({
-            'type': new FormControl(st),
-            'id': new FormControl(stid)
-          }),
-          'selectedPricingOption': new FormGroup({
-            'id': new FormControl(sPriceOptionId),
-            'option': new FormControl(sPriceOption),
-            'description': new FormControl(sPriceOptionDesc)
-          })
-        });        
-      }
-      // this.spaceForm = this.formBuilder.group({
-      //   spaceName: ['', [Validators.required,
-      //         Validators.minLength(3),
-      //         Validators.maxLength(50)]],
-      //   location: ['', Validators.required],
-      //   size: '',
-      //   description: '',
-      //   price: '',
-      //   amenities
-      // });
+          // 'userId': new FormControl(currentUserId, Validators.required),
+          'typeId': new FormControl(stid),
+          'selectedPricingOption': new FormControl(selectedPricingOption, Validators.required)
+        });
     }
+
+    // private intializeFormWtValues() {
+      
+    //   // if(this.editMode) {
+    //     // fetch the space to edit nd initialize the form to contain it's properties here.
+    //     let amenitiesArray = new FormArray([]);
+    //     let name = '';
+    //     let minimumTerm = '';
+    //     let locationLong = '';
+    //     let locationLat = '';
+    //     let locationName = '';
+    //     let size = null;
+    //     let description =  '';
+    //     let spaceType = null;
+    //     let selectedPricingOption = null;
+    //     let pricing = null;
+    //     let discount = null;
+    //     let amenities = null;
+    //     let currentUserId = this.currentUser['id'];
+
+    //     if(this.spaceToEdit) {
+    //         locationLong = this.spaceToEdit.long;
+    //         locationLat = this.spaceToEdit.lat;
+    //         locationName = this.spaceToEdit.locationAddress;
+    //         name = this.spaceToEdit.name;
+    //         minimumTerm = this.spaceToEdit.minimumTerm;      
+    //         description = this.spaceToEdit.description;
+    //         size = this.spaceToEdit.size;
+    //         pricing = this.spaceToEdit.price;
+    //         discount = this.spaceToEdit.discount;
+    //         this.selectedSpaceType = this.spaceToEdit.typeId;
+    //         this.selectedPricingOption = this.spaceToEdit.selectedPricingOption;
+    //         amenities = this.spaceToEdit.amenities;
+    //     }
+       
+        
+    //     // let amenitiesArray = new FormArray([]);
+    //     if(amenities) {                
+    //         amenities.map(a => {
+    //           amenitiesArray.push(
+    //             new FormGroup({
+    //               'name': new FormControl(a['name'], Validators.required),
+    //               'price': new FormControl(a['price'], Validators.required),
+    //               'id': new FormControl(a['id'])
+    //             })
+    //           );
+    //         }); 
+    //     } 
+            
+    //     this.spaceForm = new FormGroup({
+    //       'id': new FormControl(this.id, Validators.required),
+    //       'name': new FormControl(name, [Validators.required,  Validators.minLength(3),
+    //                                     Validators.maxLength(50)]),
+    //       'minimumTerm': new FormControl(minimumTerm, [Validators.required,  Validators.minLength(3),
+    //                                     Validators.maxLength(50)]),
+    //       'locationAddress': new FormControl(locationName, Validators.required),
+    //       'long': new FormControl(locationLong, Validators.required),
+    //       'lat': new FormControl(locationLat, Validators.required),
+    //       'description': new FormControl(description, Validators.required),
+    //       'size': new FormControl(size, Validators.required),
+    //       'price': new FormControl(pricing, Validators.required),
+    //       'discount': new FormControl(discount, Validators.required),
+    //       'amenities': amenitiesArray,
+    //       'userId': new FormControl(currentUserId),
+    //       'typeId': new FormControl(this.selectedSpaceType),
+    //       'selectedPricingOption': new FormControl(this.selectedPricingOption)
+    //     });        
+    //   // }
+    // }
 
     addAmenity() {
       (<FormArray>this.spaceForm.get('amenities')).push(
@@ -349,109 +375,36 @@ export class AddspaceComponent implements OnInit, AfterViewInit {
     }
 
     createSpace() {
-      const spaceTypeIndex = this.spaceTypes.findIndex(c => c.type === this.selectedSpaceType);
-      const spaceTypeId = this.spaceTypes[spaceTypeIndex].id;
-      const pricingOptionIndex = this.pricingOptions.findIndex(c => c.option === this.selectedPricingOption);
-      const pricingOptionDesc = this.pricingOptions[pricingOptionIndex] ? this.pricingOptions[pricingOptionIndex].description : null;
-      const pricingOptionId = this.pricingOptions[pricingOptionIndex] ? this.pricingOptions[pricingOptionIndex].id : null;
-      const locationId = this.spaceToEdit.location? this.spaceToEdit.location.id : null;
-      this.spaceForm.get('type').patchValue({
-        type: this.selectedSpaceType,
-        id: spaceTypeId
-      });
-      this.spaceForm.get('selectedPricingOption').patchValue({
-        id: pricingOptionId,
-        option: this.selectedPricingOption,
-        description: pricingOptionDesc
-      });
-      // this.spaceForm.get('pricingOption').patchValue(this.selectedPricingOption);
-      // console.log(this.selectedPricingOption);
       
-
       if(this.editMode) {
-        // console.log(this.spaceForm.value);
-        const spaceToUpdate = {
-          id: Number(this.id),
-          userId: this.currentUser.id,
-          // type: {
-          //   type: this.selectedSpaceType,
-          //   id: spaceTypeId
-          // },
-          // selectedPricingOption: {
-          //   id: pricingOptionId,
-          //   option: this.selectedPricingOption
-          // },
-          typeId: spaceTypeId,
-          selectedPricingOptionId: pricingOptionId,
-          locationId: locationId,
-          minimumTerm: this.spaceForm.controls['minimumTerm'].value,
-          name: this.spaceForm.controls['name'].value,
-          location: {
-            id: this.spaceToEdit.location ? this.spaceToEdit.location.id : 0,
-            name: this.spaceForm.controls['locationName'].value,
-            long: this.spaceForm.controls['locationLong'].value,
-            lat: this.spaceForm.controls['locationLat'].value
-          },
-          pricePH: {
-            id: this.spaceToEdit.pricePH? this.spaceToEdit.pricePH.id: 0,
-            price: this.spaceForm.controls['pricePH'].value,
-            discount: this.spaceForm.controls['discountPH'].value
-          },
-          pricePD: {
-            id: this.spaceToEdit.pricePD? this.spaceToEdit.pricePD.id: 0,
-            price: this.spaceForm.controls['pricePD'].value,
-            discount: this.spaceForm.controls['discountPD'].value
-          },
-          pricePW: {
-            id: this.spaceToEdit.pricePW? this.spaceToEdit.pricePW.id : 0,
-            price: this.spaceForm.controls['pricePW'].value,
-            discount: this.spaceForm.controls['discountPW'].value
-          },
-          description: this.spaceForm.controls['description'].value,
-          size: this.spaceForm.controls['size'].value,
-          amenities: [...this.spaceForm.controls['amenities'].value]
+        this.spaceForm.get('selectedPricingOption').patchValue( this.selectedPricingOption);
+        this.spaceForm.get('typeId').patchValue( this.selectedSpaceType);
+        let spaceToUpdate = {
+          ...this.spaceForm.value,
+          userId: this.currentUser['id']
         }
+        delete spaceToUpdate.amenities;
         console.log(spaceToUpdate);
+        
         
         this.store.dispatch(new spaceActions.UpdateSpace(spaceToUpdate));
       }
       else {
+        this.spaceForm.get('selectedPricingOption').patchValue( this.selectedPricingOption);
+        this.spaceForm.get('typeId').patchValue( this.selectedSpaceType);
         const spaceToCreate = {
-          userId: this.currentUser.id,
-          type: {
-            type: this.selectedSpaceType,
-            id: spaceTypeId
-          },
-          typeId: spaceTypeId,
-          name: this.spaceForm.controls['name'].value,
-          // location: {
-          //   name: this.spaceForm.controls['locationName'].value,
-          //   long: this.spaceForm.controls['locationLong'].value,
-          //   lat: this.spaceForm.controls['locationLat'].value
-          // },
-          // pricePH: {
-          //   price: this.spaceForm.controls['pricePH'].value,
-          //   discount: this.spaceForm.controls['discountPH'].value
-          // },
-          // pricePD: {
-          //   price: this.spaceForm.controls['pricePD'].value,
-          //   discount: this.spaceForm.controls['discountPD'].value
-          // },
-          // pricePW: {
-          //   price: this.spaceForm.controls['pricePW'].value,
-          //   discount: this.spaceForm.controls['discountPW'].value
-          // },
-          description: this.spaceForm.controls['description'].value,
-          size: this.spaceForm.controls['size'].value
-
+          ...this.spaceForm.value,
+          user: {
+            id: this.currentUser['id']
+          }
         }
-        console.log(spaceToCreate);
+        console.log(this.spaceForm.value);
         
         this.store.dispatch(new spaceActions.CreateSpace((spaceToCreate)));
       }
-      // console.log(this.spaceForm.value);
-      this.spaceForm.reset();
-      this.selectedSpaceType = '';  
+      // this.spaceForm.reset();
+      // this.selectedPricingOption = null;
+      // this.selectedSpaceType = null;
     }
 
 

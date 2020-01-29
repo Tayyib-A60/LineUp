@@ -14,10 +14,19 @@ namespace API.Persistence
         public DbSet<Amenity> Amenities { get; set; }
         public DbSet<SpaceType> SpaceTypes { get; set; }
 
-        public DbSet<PricingOption> PricingOptions { get; set; }
-
          protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<User>()
+                        .HasMany(u => u.Spaces)
+                        .WithOne(s => s.User)
+                        .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Space>()
+                        .HasOne(s => s.User)
+                        .WithMany(u => u.Spaces)
+                        .OnDelete(DeleteBehavior.Restrict);
+
+            // modelBuilder.Entity<Booking>()
         }
     }
 }

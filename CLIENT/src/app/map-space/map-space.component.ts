@@ -97,9 +97,9 @@ export class MapSpaceComponent implements OnInit {
     .subscribe(spaceQR => {
       this.spaceQueryResult = spaceQR;
       spaceQR.items.forEach(space => {
-        if(space.photos.length > 0 && space.location !== null && (space.pricePD || space.pricePH || space.pricePW)) {
+        // if(space.photos.length > 0 && space.location !== null && (space.pricePD || space.pricePH || space.pricePW)) {
           this.spaces.push(space);
-        }
+        // }
       });
     });
   }
@@ -113,9 +113,9 @@ export class MapSpaceComponent implements OnInit {
     .subscribe(spaceQR => {
       this.spaceQueryResult = spaceQR;
       spaceQR.items.forEach(space => {
-        if(space.photos.length > 0 && space.location !== null && (space.pricePD || space.pricePH || space.pricePW)) {
+        // if(space.photos.length > 0 && space.location !== null && (space.pricePD || space.pricePH || space.pricePW)) {
           this.spaces.push(space);
-        }
+        // }
       });
     });
   }
