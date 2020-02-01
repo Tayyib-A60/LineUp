@@ -34,7 +34,7 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit() {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    this.getCustomerBooking();
+    // this.getCustomerBooking();
   }
 
   private getCustomerBooking() {
