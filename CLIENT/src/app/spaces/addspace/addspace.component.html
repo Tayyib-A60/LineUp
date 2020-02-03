@@ -43,7 +43,7 @@
 								</fieldset>
 							</div>
 						</div>
-                    	<form *ngIf='spaceToEdit' (ngSubmit)='createSpace()' [formGroup]="spaceForm" class="form">
+                    	<form *ngIf='spaceToEdit || !editMode' (ngSubmit)='createSpace()' [formGroup]="spaceForm" class="form">
 							<div class="form-body">
 		                        <div class="row">
 		                            <div class="col-xl-12 col-lg-12 col-md-12 mb-1">
@@ -129,7 +129,7 @@
 								<div class="row">
 									<div class="col-xs-12 col-lg-12 col-md-12 col-sm-12">
 										<button  type="submit" class="btn btn-raised mr-1 btn-round btn-primary btn-large">{{ editMode? 'Update Space' : 'Create Space'}}</button>
-										<button type="button" (click)="open(content)" class="btn btn-raised mr-1 btn-round btn-primary btn-large">Add amenities</button>
+										<button *ngIf='editMode' type="button" (click)="open(content)" class="btn btn-raised mr-1 btn-round btn-primary btn-large">Add amenities</button>
 									</div>
 							</div>
 						<div class="m-auto">

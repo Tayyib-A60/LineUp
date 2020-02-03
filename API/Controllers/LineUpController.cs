@@ -52,10 +52,10 @@ namespace API.Controllers
                 amenity.SpaceId = amenitiesDTO.SpaceId;
 
                 if (amenityToCreate == null)
-                    return BadRequest("Space cannot be null");
+                    return BadRequest("Amenity cannot be null");
 
-                if (await _lineUpRepository.EntityExists(amenityToCreate))
-                    return BadRequest("Space has already been created");
+                // if (await _lineUpRepository.EntityExists(amenityToCreate))
+                //     return BadRequest("Space has already been created");
                 space.Amenities.Add(amenityToCreate);
             }
             await _lineUpRepository.SaveAllChanges();
@@ -248,9 +248,9 @@ namespace API.Controllers
             var bookingToCreateBT = new BookedTimes();
             bookingToCreateBT.From = bookingToCreate.UsingFrom;
             bookingToCreateBT.To = bookingToCreate.UsingTill;
-            var existingBookingTimes = await _lineUpRepository.GetBookedTimes(bookingToCreate.SpaceBooked.Id, bookingToCreateBT);
-            if (existingBookingTimes.Count() > 0)
-                return BadRequest("You can't select from a range of booking that already exists");
+            // var existingBookingTimes = await _lineUpRepository.GetBookedTimes(bookingToCreate.SpaceBookedId, bookingToCreateBT);
+            // if (existingBookingTimes.Count() > 0)
+            //     return BadRequest("You can't select from a range of booking that already exists");
             bookingToCreate.Status = BookingStatus.Reserved;
             bookingToCreate.BookingTime = DateTime.Now;
             _lineUpRepository.Add(bookingToCreate);
@@ -289,13 +289,14 @@ namespace API.Controllers
         public async Task<IActionResult> CreateBooking([FromBody] BookingFromClientDTO bookingFromClientDTO)
         {
             var bookingDTO = new BookingDTO {
-                SpaceBooked = bookingFromClientDTO.SpaceBooked,
-                UserId = bookingFromClientDTO.UserId,
+                // SpaceBookedId = bookingFromClientDTO.SpaceBookedId,
+                // UserId = bookingFromClientDTO.UserId,
                 BookingTime = bookingFromClientDTO.BookingTime,
                 TotalPrice = bookingFromClientDTO.TotalPrice,
                 Chat = bookingFromClientDTO.Chat,
                 BookedById = bookingFromClientDTO.BookedById,
-                Status = bookingFromClientDTO.Status
+                Status = bookingFromClientDTO.Status,
+                NoOfGuests = bookingFromClientDTO.NoOfGuests
             };
             var bookingToCreate = new Booking();
             foreach (var time in bookingFromClientDTO.UsingTimes)
@@ -305,9 +306,9 @@ namespace API.Controllers
                 var bookingToCreateBT = new BookedTimes();
                 bookingToCreateBT.From = bookingToCreate.UsingFrom;
                 bookingToCreateBT.To = bookingToCreate.UsingTill;
-                var existingBookingTimes = await _lineUpRepository.GetBookedTimes(bookingToCreate.SpaceBooked.Id, bookingToCreateBT);
-                if (existingBookingTimes.Count() > 0)
-                    return BadRequest("You can't select from a range of booking that already exists");
+                // var existingBookingTimes = await _lineUpRepository.GetBookedTimes(bookingToCreate.SpaceBookedId, bookingToCreateBT);
+                // if (existingBookingTimes.Count() > 0)
+                //     return BadRequest("You can't select from a range of booking that already exists");
                 if (bookingToCreate == null)
                     return BadRequest("Booking cannot be null");
                 if (bookingToCreate.UsingFrom < DateTime.Now)
@@ -317,6 +318,7 @@ namespace API.Controllers
                 if (await _lineUpRepository.EntityExists(bookingToCreate))
                     return BadRequest("Booking already exists");
                 bookingToCreate.Status = BookingStatus.Booked;
+                bookingToCreate.NoOfGuests = bookingDTO.NoOfGuests;
                 bookingToCreate.BookingTime = DateTime.Now;
                 _lineUpRepository.Add(bookingToCreate);
             }
@@ -352,24 +354,29 @@ namespace API.Controllers
         [HttpPost("createReservation")]
         public async Task<IActionResult> CreateReservation([FromBody] BookingFromClientDTO bookingFromClientDTO)
         {
+            var user = await _userRepository.GetUser(bookingFromClientDTO.BookedById);
+            // var user = await _lineUpRepository.GetUser(bookingFromClientDTO.BookedById);
             var bookingDTO = new BookingDTO {
-                SpaceBooked = bookingFromClientDTO.SpaceBooked,
-                UserId = bookingFromClientDTO.UserId,
+                // SpaceBookedId = bookingFromClientDTO.SpaceBookedId,
+                // UserId = bookingFromClientDTO.UserId,
                 BookingTime = bookingFromClientDTO.BookingTime,
                 TotalPrice = bookingFromClientDTO.TotalPrice,
                 Chat = bookingFromClientDTO.Chat,
+                IdOfSpaceBooked = bookingFromClientDTO.IdOfSpaceBooked,
                 BookedById = bookingFromClientDTO.BookedById,
-                Status = bookingFromClientDTO.Status
+                Status = bookingFromClientDTO.Status,
+                NoOfGuests = bookingFromClientDTO.NoOfGuests
             };
-            var bookingToCreate = new Booking();
+            var timeOfCreation = new DateTime();
             foreach (var time in bookingFromClientDTO.UsingTimes)
             {
+                var bookingToCreate = new Booking();
                 bookingToCreate.UsingFrom = time.UsingFrom;
                 bookingToCreate.UsingTill = time.UsingTill;
                 var bookingToCreateBT = new BookedTimes();
                 bookingToCreateBT.From = bookingToCreate.UsingFrom;
                 bookingToCreateBT.To = bookingToCreate.UsingTill;
-                var existingBookingTimes = await _lineUpRepository.GetBookedTimes(bookingToCreate.SpaceBooked.Id, bookingToCreateBT);
+                // var existingBookingTimes = await _lineUpRepository.GetBookedTimes(bookingToCreate.SpaceBooked.Id, bookingToCreateBT);
                 // if (existingBookingTimes.Count() > 0)
                 //     return BadRequest("You can't select from a range of booking that already exists");
                 if (bookingToCreate == null)
@@ -381,15 +388,21 @@ namespace API.Controllers
                 if (await _lineUpRepository.EntityExists(bookingToCreate))
                     return BadRequest("Booking already exists");
                 bookingToCreate.Status = BookingStatus.Reserved;
+                bookingToCreate.NoOfGuests = bookingDTO.NoOfGuests;
                 bookingToCreate.BookingTime = DateTime.Now;
-                _lineUpRepository.Add(bookingToCreate);
+                bookingToCreate.TotalPrice = bookingDTO.TotalPrice;
+                bookingToCreate.IdOfSpaceBooked = bookingDTO.IdOfSpaceBooked;
+                bookingToCreate.BookedById = bookingDTO.BookedById;
+                timeOfCreation = bookingToCreate.BookingTime;
+
+                user.Bookings.Add(bookingToCreate);
             }
             await _lineUpRepository.SaveAllChanges();
             BookingQuery query = new BookingQuery {
-                TimeBooked = bookingToCreate.BookingTime.Date
+                TimeBooked = timeOfCreation.Date
             };
-            var user = await _userRepository.GetUser(bookingToCreate.BookedById);
-            var bookingDetails = await _lineUpRepository.GetBookingDetails(bookingToCreate.BookedById, query);
+            // var user = await _userRepository.GetUser(bookingToCreate.BookedById);
+            var bookingDetails = await _lineUpRepository.GetBookingDetails(bookingFromClientDTO.BookedById, query);
             Message message = new Message();
             message.Subject = "Booking";
             message.FromEmail = "noreply@234spaces.com";
@@ -421,7 +434,7 @@ namespace API.Controllers
         }
 
         [HttpGet("getCustomerBookings/{userId}")]
-        public async Task<QueryResult<Booking>> GetCustomerBookings(int userId, [FromQuery] BookingQueryDTO queryDTO)
+        public async Task<QueryResult<CustomerBookingsToReturn>> GetCustomerBookings(int userId, [FromQuery] BookingQueryDTO queryDTO)
         {
             var query = _mapper.Map<BookingQuery>(queryDTO);
             return await _lineUpRepository.GetCustomerBookings(userId, query);

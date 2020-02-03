@@ -1,4 +1,4 @@
-<app-navbar></app-navbar>
+<app-new-nav></app-new-nav>
 <div class="booking_container">
   <div class="container-fluid">
     <div class="row">
@@ -18,13 +18,13 @@
                       </ng-template>
                     </ngb-carousel>
                   <!-- <img class="card-img-top img-fluid card-radius" [src]="space?.photos[0]?.fileName" alt="Card image cap"> -->
-                <h4 class="card-title home-card-title"> NGN {{space?.pricePH?.price}} per Hour</h4>
+                <h4 class="card-title home-card-title"> NGN {{space?.price}} </h4>
                   <!-- <a class="btn btn-floating halfway-fab bg-warning"><i class="ft-heart"></i></a> -->
                 </div>
                 <div class="card-body home_body-pad">
                   <div class="row justify-content-between">
                     <div class="col-6">
-                        <h3 class="home-card-text">{{space?.location?.name}}</h3>
+                        <h3 class="home-card-text">{{space?.locationAddress}}</h3>
                     </div>
                   </div>
                   <p class="card-text">{{space?.description}}</p>
@@ -36,7 +36,7 @@
                           </div>
                           <div class="col-7">
                             <i class="fa fa-map-marker"></i>
-                            <span>&nbsp;{{space?.location?.name}}</span>
+                            <span>&nbsp;{{space?.locationAddress}}</span>
                           </div>
                       </div>
                   </div>

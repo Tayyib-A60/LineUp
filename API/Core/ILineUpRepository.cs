@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using API.Controllers.DTOs;
 using API.Core.Models;
 
 namespace API.Core
@@ -15,6 +16,7 @@ namespace API.Core
          Task<Enquiry> GetEnquiry(int enquiryId);
          Task<Space> GetSpace(int spaceId);
          Task<Photo> GetPhoto(int id);
+         Task<User> GetUser(int userId);
          Task<Photo> GetMainPhoto(int id);
          void CreateBookingFromReservation(int id);
          Task<QueryResult<Space>> GetSpaces(SpaceQuery query);
@@ -22,7 +24,7 @@ namespace API.Core
          Task<QueryResult<Booking>> GetBookings(int id, BookingQuery query);
          Task<QueryResult<User>> GetMerchants();
          void VerifyMerchant(int id);
-         Task<QueryResult<Booking>> GetCustomerBookings(int id, BookingQuery query);
+         Task<QueryResult<CustomerBookingsToReturn>> GetCustomerBookings(int id, BookingQuery query);
          Task<SpaceType> GetSpaceType(int spaceTypeId);
          Task<IEnumerable<SpaceType>> GetSpaceTypes();
          Task<IEnumerable<Enquiry>> GetEnquiries(int userId);

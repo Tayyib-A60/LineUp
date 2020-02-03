@@ -1,4 +1,4 @@
-<app-navbar ></app-navbar>
+<app-new-nav></app-new-nav>
 <div *ngIf='loaded' class="space">
     <div>
       <div class="d-flex caption_tab">
@@ -178,7 +178,7 @@
                                             #d3="ngbDatepicker" (click)="d3.toggle()">
                                           </div>
                                           <div class="col-6">
-                                            <input class="form-control" type='number' placeholder="no of persons" name="dp" [(ngModel)]="modalNoOfPersons">
+                                            <input class="form-control" type='number' placeholder="no of persons" name="dp" [(ngModel)]="numberOfGuests">
                                           </div>
                                         </div>
                                       </div>
@@ -461,3 +461,5 @@
 </div>
 </div>
 <app-footer></app-footer>
+
+<!-- <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis quam enim est esse iusto consequatur reiciendis sit pariatur ipsum voluptatum deserunt quos non, voluptatem hic molestias fuga porro sunt quibusdam.lorem Lorem ipsum dolor sit amet, consectetur adipisicing elit. Numquam aliquid vitae beatae nobis repellat officia consequuntur iusto. Perferendis quis, odio repudiandae ad non beatae nam quam a obcaecati ea odit!</p> -->

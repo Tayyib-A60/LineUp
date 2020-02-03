@@ -35,7 +35,7 @@ export class ManagebookingsComponent implements OnInit {
   merchantBookingQuery = {
     userId: this.merchantId,
     currentPage: this.currentPage,
-    pageSize: 1,
+    pageSize: 10,
     searchString: this.searchString,
     status: 'Booked',
     dateStart: '01/01/0001',

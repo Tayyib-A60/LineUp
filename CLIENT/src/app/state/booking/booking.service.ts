@@ -12,6 +12,12 @@ export class BookingService {
 
     createReservation(booking: any) {
         const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        const url = this.url + '/lineUp/createReservation';
+        return this.httpClient.post(url, booking, { headers });
+    }
+
+    createBooking(booking: any) {
+        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         const url = this.url + '/lineUp/createBooking';
         return this.httpClient.post(url, booking, { headers });
     }

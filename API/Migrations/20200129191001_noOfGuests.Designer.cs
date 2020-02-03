@@ -4,14 +4,16 @@ using API.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace api.Migrations
 {
     [DbContext(typeof(LineUpContext))]
-    partial class LineUpContextModelSnapshot : ModelSnapshot
+    [Migration("20200129191001_noOfGuests")]
+    partial class noOfGuests
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,15 +52,15 @@ namespace api.Migrations
 
                     b.Property<int?>("ChatId");
 
-                    b.Property<int>("IdOfSpaceBooked");
-
                     b.Property<int>("NoOfGuests");
+
+                    b.Property<int>("SpaceBookedId");
 
                     b.Property<int>("Status");
 
                     b.Property<double>("TotalPrice");
 
-                    b.Property<int?>("UserId");
+                    b.Property<int>("UserId");
 
                     b.Property<DateTime>("UsingFrom");
 
@@ -67,6 +69,8 @@ namespace api.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ChatId");
+
+                    b.HasIndex("SpaceBookedId");
 
                     b.HasIndex("UserId");
 
@@ -264,9 +268,15 @@ namespace api.Migrations
                         .WithMany()
                         .HasForeignKey("ChatId");
 
+                    b.HasOne("API.Core.Models.Space", "SpaceBooked")
+                        .WithMany()
+                        .HasForeignKey("SpaceBookedId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("API.Core.Models.User")
                         .WithMany("Bookings")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("API.Core.Models.ChatMessage", b =>
@@ -289,7 +299,7 @@ namespace api.Migrations
                     b.HasOne("API.Core.Models.User", "User")
                         .WithMany("Spaces")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 #pragma warning restore 612, 618
         }

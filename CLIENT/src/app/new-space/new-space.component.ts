@@ -15,7 +15,7 @@ import { SpaceState } from '../spaces/state/space.reducers';
 import { takeWhile } from 'rxjs/operators';
 import { UserState } from '../state/user.reducers';
 import { BookingState } from '../state/booking/booking.reducer';
-import { Space, Amenity } from '../spaces/models/space.model';
+import { Space, Amenity, BookingStatus } from '../spaces/models/space.model';
 
 @Component({
   selector: 'app-new-space',
@@ -250,7 +250,7 @@ export class NewSpaceComponent implements OnInit {
         from: this.usingTimeArray[0].from,
         to: this.usingTimeArray[this.usingTimeArray.length-1].to
       },
-      status: 'Booked',
+      status: BookingStatus.Booked,
       bookedById: this.currentUser['id'],
       numberOfGuests: this.numberOfGuests,
       totalPrice: this.thisSpace['price']
@@ -287,35 +287,41 @@ export class NewSpaceComponent implements OnInit {
         const from = new Date(year, month-1, i, hour+1, minute, second);
         const to = new Date(yearTo, monthTo-1, i, hourTo+1, minuteTo, secondTo);
         usingTimes.push({usingFrom: from, usingTill: to});
-        console.log(usingTimes);
+        // console.log(usingTimes);
       }
     }
     if(month < monthTo) {
       let lastDay = new Date(dateFrom.getFullYear(), dateFrom.getMonth() + 1, 0);
-      console.log(lastDay.getDate());
+      // console.log(lastDay.getDate());
       
       for(let i = day; i <= day + (lastDay.getDate() - day) + dayTo; i++) {        
         const from = new Date(year, month-1, i, hour+1, minute, second);
         const to = new Date(yearTo, month-1, i, hourTo+1, minuteTo, secondTo);
         usingTimes.push({usingFrom: from, usingTill: to})
       }
-      console.log(usingTimes);
+      // console.log(usingTimes);
+    }
+    if(usingTimes.length == 0) {
+      usingTimes.push({usingFrom: dateFrom, usingTill: dateTo});
     }
 
     const booking = {
       userId: this.thisSpace['userId'],
-      spaceBooked: {
-        id: this.thisSpace['id']
-      },
+      // spaceBooked: {
+      //   id: this.thisSpace['id']
+      // },
+      // spaceBookedId: this.thisSpace['id'],
+      idOfSpaceBooked: this.thisSpace['id'],
       usingTimes: [
         ...usingTimes
       ],
-      status: 'Reserved',
+      status: BookingStatus.Reserved,
       bookedById: this.currentUser['id'],
-      totalPrice: this.thisSpace['price'] + amenitiesPrice
+      totalPrice: this.thisSpace['price'],
+      noOfGuests: this.numberOfGuests
     };
     console.log(booking);    
-    // this.spaceStore.dispatch(new bookingActions.CreateReservation(booking));
+    this.spaceStore.dispatch(new bookingActions.CreateReservation(booking));
     // this.router.navigate(['/profile'], {relativeTo: this.route});
   }
 

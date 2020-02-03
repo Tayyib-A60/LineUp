@@ -53,3 +53,8 @@ export enum PricingOption {
     Hourly,
     Daily
 }
+export enum BookingStatus {
+    Reserved,
+    Booked,
+    Done
+}
