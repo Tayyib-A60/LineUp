@@ -44,12 +44,13 @@ namespace api
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
             services.Configure<PhotoSettings>(Configuration.GetSection("PhotoSettings"));
             services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
-            services.AddDbContext<LineUpContext>(options => {
-                string connectionString;
-                var environmentVariable = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONEMT");
-                    connectionString = Configuration.GetConnectionString("DefaultConnection");
-                options.UseSqlServer(connectionString);
-            });
+            services.AddDbContext<LineUpContext>(x => x.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
+            // services.AddDbContext<LineUpContext>(options => {
+            //     string connectionString;
+            //     var environmentVariable = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONEMT");
+            //         connectionString = Configuration.GetConnectionString("DefaultConnection");
+            //     options.UseSqlServer(connectionString);
+            // });
             var appSettings = appSettingsSection.Get<AppSettings>();
             var key = Encoding.ASCII.GetBytes(appSettings.Secret);
              services.AddAuthentication(auth => {

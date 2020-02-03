@@ -27,7 +27,12 @@
     background-color: rgba(#aaa, 0.1);
     padding-top: 3rem;
     padding: 3rem;
+    // padding: 1.5rem;
     text-align: center;
+
+    @media only screen and (max-width: 400px) {
+        padding: 1.8rem;
+    }
 
     &_bg-special {
         background-color: #fff;
@@ -38,14 +43,15 @@
         margin-bottom: 1.5rem;
         font-weight: 800;
     }
-    &_sub_head {
-        line-height: .5;
-    }
+    // &_sub_head {
+    //     line-height: .5;
+    // }
     &_dash {
         font-size: 5rem;
     }
     &_content {
         position: relative;
+        text-align: center;
         border-radius: 5px;
         width: 100%;
         height: auto;
@@ -53,18 +59,27 @@
         
     }
     &_img {
-        border-radius: 3px;
+        // border-radius: 3px;
+        width: 100%;
+        // width: 320px;
+        // height: 250px;
     }
     &_text {
         
-        font-size: 2rem;
+        font-size: 1.5rem;
         font-weight: 500;
         display: block;
         color: #fff;
         position: absolute;
-        width: 100%;
-        padding-top: 10rem;
-        text-align: center;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
+    }
+    &_md-small {
+        @media only screen and (max-width: 400px) {
+            margin: 8px 0 !important;
+        }
     }
     &_width_special {
         max-width: 800px;
@@ -80,8 +95,20 @@
             color: #fff;
             padding: .8rem 2rem;
             border-radius: 25px;
+            @media only screen and (max-width: 400px) {
+                border-radius: 20px;
+                padding: .4rem 1rem !important;
+                // padding: ;
+            }
               
         }
+        &-text {
+            @media only screen and (max-width: 400px) {
+                font-size: .7rem;
+            }
+
+        }
+
         &-align {
             text-align: left !important;
         }
@@ -98,6 +125,10 @@
 
         &-pad {
             padding-top: 2.5rem;
+
+            @media only screen and (max-width: 400px) {
+                padding: 2.5rem 1rem 1rem 1rem !important;
+            }
         }
     }
     
