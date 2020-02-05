@@ -1,20 +1,32 @@
 .caption_container {
     background-image: url(../../assets/img/photos/space2.jpg);
     background-position: cover;
-    height: 60vh;
+    height: 300px;
+    padding: 5rem;
+    
 }
 
 .main_caption {
     font-size: 4rem;
     font-weight: 500;
-    padding-top: 8rem;
+    // padding-top: 8rem;
     color: #fff;
     text-align: center;
   
+    @media only screen and (max-width: 1000px) {
+        font-size: 3rem;
+        // font-weight: 400;
+        // padding-top: 3rem;
+    }
     @media only screen and (max-width: 600px) {
-        font-size: 2.7rem;
-        font-weight: 400;
-        padding-top: 3rem;
+        font-size: 2rem;
+        // font-weight: 400;
+        // padding-top: 3rem;
+    }
+    @media only screen and (max-width: 500px) {
+        font-size: 1.8rem;
+        // font-weight: 400;
+        // padding-top: 3rem;
     }
 }
 .sub_caption {
@@ -22,6 +34,15 @@
     font-weight: 200;
     color: #fff;
     text-align: center;
+    letter-spacing: normal;
+    line-height: normal;
+    @media only screen and (max-width: 900px) {
+        font-size: 1.3rem;
+    }
+    @media only screen and (max-width: 600px) {
+        font-size: 1rem;
+        font-weight: 100;
+    }
 }
 .spaces {
     background-color: rgba(#aaa, 0.1);
