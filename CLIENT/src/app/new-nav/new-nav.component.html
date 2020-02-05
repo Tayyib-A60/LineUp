@@ -24,9 +24,14 @@
             Menu
           </button>
           <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" href="#">Action</a>
-            <a class="dropdown-item" href="#">Another action</a>
-            <a class="dropdown-item" href="#">Something else here</a>
+            <a *ngIf='merchantIsAuthenticated()' [routerLink]="['/admin']" class="dropdown-item">{{currentUser['roles'] == 'Merchant'? 'Merchant': 'Admin'}}</a>
+            <a *ngIf='!merchantIsAuthenticated()' [routerLink]="['/sign-up-as-merchant']" class="dropdown-item">List-your-space</a>
+            <a *ngIf='!anyUserIsAuthenticated()' [routerLink]="['/sign-in']" class="dropdown-item">Sign in</a>
+            <a *ngIf='!anyUserIsAuthenticated()' [routerLink]="['/sign-up']" class="dropdown-item">Sign up</a>
+            <a *ngIf='!anyUserIsAuthenticated()' [routerLink]="['/sign-up-as-merchant']" class="dropdown-item">List-your-space</a>
+            <a [routerLink]="['/space-home']" class="dropdown-item">Home</a>
+            <a [routerLink]="['/space-home']" class="dropdown-item">Home</a>
+            <!-- <a class="dropdown-item" href="#">Something else here</a> -->
           </div>
         </div>
       <div class="header_btn">
@@ -52,8 +57,3 @@
     </span>
   </div>
 </div>
-<!-- <div>
-  <button type="button" *ngIf='!anyUserIsAuthenticated()' [routerLink]="['/sign-in']" class="btn btn-raised px-4 mb-0  nav_btn">Login</button>
-  <button type="button" *ngIf='!anyUserIsAuthenticated()' [routerLink]="['/sign-up']" class="btn btn-raised px-4 mb-0  nav_btn">Sign up</button>
-  <button type="button" *ngIf='anyUserIsAuthenticated()' (click)='signOut()' class="btn btn-raised px-4 mb-0  nav_btn">Sign out</button>
-</div> -->

@@ -22,10 +22,12 @@ namespace API.Core.Models
         public DateTime DateCreated { get; set; }
         public ICollection<Photo> Photos { get; set; }
         public ICollection<Amenity> Amenities { get; set; }
+        // public ICollection<Booking> Bookings { get; set; }
         public Space()
         {
             this.Amenities = new Collection<Amenity>();
             this.Photos = new Collection<Photo>();
+            // this.Bookings = new Collection<Booking>();
         }
     }
 }

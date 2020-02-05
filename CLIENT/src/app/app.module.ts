@@ -40,6 +40,7 @@ import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform
 import { PaginationComponent } from './pagination/pagination.component';
 import {CarouselModule} from 'primeng/carousel';
 import { NavigationComponent } from './navigation/navigation.component';
+import { NewNavComponent } from './new-nav/new-nav.component';
 
 
 @NgModule({
@@ -59,7 +60,8 @@ import { NavigationComponent } from './navigation/navigation.component';
     NewSpaceComponent,
     SampleCarouselComponent,
     PaginationComponent,
-    NavigationComponent
+    NavigationComponent,
+    NewNavComponent
   ],
   imports: [
     AppRoutingModule,

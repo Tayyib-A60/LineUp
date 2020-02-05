@@ -6,10 +6,10 @@ namespace API.Core.Models
     {
         public int Id { get; set; }
         public int UserId { get; set; }
+        public int IdOfSpaceBooked { get; set; }
+        public int NoOfGuests { get; set; }
         public int BookedById { get; set; }
         public double TotalPrice { get; set; }
-        public Space SpaceBooked { get; set; }
-        public int SpaceBookedId { get; set; }
         public DateTime BookingTime { get; set; }
         public DateTime UsingFrom { get; set; }
         public DateTime UsingTill { get; set; }

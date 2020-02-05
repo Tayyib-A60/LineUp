@@ -42,6 +42,8 @@ export class ProfileComponent implements OnInit {
     this.bookingStore.pipe(select(bookingSelectors.getCustomerBookings),
     takeWhile(() => this.componentActive))
     .subscribe(bookingQR => {
+      console.log(bookingQR);
+      
       this.reservations = bookingQR['items'];
       
       if(this.reservations) {

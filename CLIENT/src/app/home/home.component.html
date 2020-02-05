@@ -1,4 +1,4 @@
-<app-navbar (toggleHideSidebar)="toggleHideSidebar($event)"></app-navbar>
+<app-new-nav></app-new-nav>
             <div class="">
               <ngb-carousel>
                 <ng-template ngbSlide>
@@ -137,7 +137,7 @@
                             <div class="card-content card-bg">
                               <div class="card-img">
                                 <img class="card-img-top img-fluid card-radius" src="assets/img/photos/14.jpg" alt="Card image cap">
-                                <h4 class="card-title home-card-title">{{ space.pricePD | currency : 'NGN' : 'symbol-narrow'}}</h4>
+                                <h4 class="card-title home-card-title">{{ space.price | currency : 'NGN' : 'symbol-narrow'}}</h4>
                                 <a class="btn btn-floating halfway-fab bg-warning"><i class="ft-heart"></i></a>
                               </div>
                               <div style="padding: 1.8rem .5rem 1rem .5rem;" class="card-body">
@@ -150,23 +150,23 @@
                                       <div class="col-6">
                                           <h3 class="home-card-text">Landmark Towers</h3>
                                       </div>
-                                          <div class="col-3">
+                                          <!-- <div class="col-3">
                                             <ngb-rating max="5" [(rate)]="firstRating"></ngb-rating>
                                           </div>
                                           <div class="col-3">
                                               <p><b>{{firstRating}}</b></p>
-                                          </div>
+                                          </div> -->
                                     </div>
-                                <p class="card-text">{{space.description}}</p>
+                                <p class="card-text">{{space?.description}}</p>
                                 <div style="padding: 1rem 0 0 0;" class="card-footer">
                                     <div class="row">
                                         <div class="col-5">
                                           <i class="fa fa-users"></i>
-                                          <span>&nbsp;Fits {{space.size}} guests</span>
+                                          <span>&nbsp;Fits {{space?.size}} guests</span>
                                         </div>
                                         <div class="col-7">
                                           <i class="fa fa-map-marker"></i>
-                                          <span>&nbsp;{{space.location}}</span>
+                                          <span>&nbsp;{{space?.locationAddress}}</span>
                                         </div>
 
                                       </div>

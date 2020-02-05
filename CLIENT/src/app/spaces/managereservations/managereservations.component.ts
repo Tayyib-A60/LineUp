@@ -34,7 +34,7 @@ export class ManagereservationsComponent implements OnInit {
   merchantBookingQuery = {
     userId: this.merchantId,
     currentPage: this.currentPage,
-    pageSize: 1,
+    pageSize: 10,
     status: 'Reserved',
     searchString: this.searchString,
     dateStart: '01/01/0001',
@@ -84,19 +84,23 @@ export class ManagereservationsComponent implements OnInit {
     this.bookingStore.pipe(select(bookingSelectors.getMerchantBookings),
                       takeWhile(() => this.componentActive))
                       .subscribe(reservations => {
+                        console.log(reservations);
                         this.reservations = reservations['items'];
                         if(this.reservations) {
                           this.upcomingReservations = [];
                           this.previousReservations = [];
                           reservations['items'].forEach(item => {
                             if(item['usingFrom'] > Date()) {
+                              console.log('is prev');
+                              
                               this.upcomingReservations.push(item);
                             } else if(item['usingFrom'] < Date()){
+                              console.log('is upcoming');
                               this.previousReservations.push(item);
                             }
-                          });            
+                          });                                      
                         }             
-    });
+                  });
   }
 
 }

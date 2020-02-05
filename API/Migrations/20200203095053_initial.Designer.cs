@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace api.Migrations
 {
     [DbContext(typeof(LineUpContext))]
-    [Migration("20200202224728_initial")]
+    [Migration("20200203095053_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -48,7 +48,9 @@ namespace api.Migrations
 
                     b.Property<int?>("ChatId");
 
-                    b.Property<int>("SpaceBookedId");
+                    b.Property<int>("IdOfSpaceBooked");
+
+                    b.Property<int>("NoOfGuests");
 
                     b.Property<int>("Status");
 
@@ -63,8 +65,6 @@ namespace api.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ChatId");
-
-                    b.HasIndex("SpaceBookedId");
 
                     b.HasIndex("UserId");
 
@@ -255,11 +255,6 @@ namespace api.Migrations
                         .WithMany()
                         .HasForeignKey("ChatId");
 
-                    b.HasOne("API.Core.Models.Space", "SpaceBooked")
-                        .WithMany()
-                        .HasForeignKey("SpaceBookedId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.HasOne("API.Core.Models.User")
                         .WithMany("Bookings")
                         .HasForeignKey("UserId")
@@ -286,7 +281,7 @@ namespace api.Migrations
                     b.HasOne("API.Core.Models.User", "User")
                         .WithMany("Spaces")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

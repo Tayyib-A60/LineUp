@@ -76,7 +76,7 @@ export class MapSpaceComponent implements OnInit {
       });
     }
     if(!this.route.params['value']['spaceType']) {
-      this.query = { currentPage: 1, pageSize: 5, spaceType: null, searchString: null, size: null, price: null };
+      this.query = { currentPage: 1, pageSize: 10, spaceType: null, searchString: null, size: null, price: null };
       this.store.dispatch(new spaceActions.GetSpaces(this.query));
     }
 
@@ -84,6 +84,8 @@ export class MapSpaceComponent implements OnInit {
     takeWhile(() => this.componentActive))
     .subscribe(spaceQR => {
       this.spaceQueryResult = spaceQR
+      if(spaceQR.items)
+        console.log(spaceQR.items[0].photos.filter(p => p.isMain));
       console.log(spaceQR);      
       });    
   }

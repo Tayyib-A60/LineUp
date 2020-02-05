@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using API.Controllers.DTOs;
 using API.Core;
 using API.Core.Models;
 using Microsoft.EntityFrameworkCore;
@@ -90,6 +91,11 @@ namespace API.Persistence
                                 .Where(e => e.UserId == userId)
                                 .ToListAsync();
         }
+        public async Task<User> GetUser(int userId)
+        {
+            return await _context.Users
+                                .FirstOrDefaultAsync(u => u.Id == userId);
+        }
         public async Task<Space> GetSpace(int spaceId)
         {
             return await _context.Spaces
@@ -100,9 +106,11 @@ namespace API.Persistence
         public async Task<QueryResult<Space>> GetSpaces(SpaceQuery query)
         {
             var spaces =  _context.Spaces
-                                    .Where(sp => sp.User.Id == query.UserId)
-                                    .Include(sp => sp.User)
+                                    // .Where(sp => sp.User.Id == query.UserId)
+                                    // .Include(sp => sp.User)
+                                    .Include(sp => sp.Photos)
                                     .AsQueryable();
+                                    
             spaces = FilterSpaces(query, spaces);
             int count = spaces.Count();
             spaces = spaces.Skip((query.CurrentPage - 1) * query.PageSize)
@@ -131,9 +139,9 @@ namespace API.Persistence
         public async Task<QueryResult<Booking>> GetBookings(int userId, BookingQuery query)
         {
             var bookings =  _context.Bookings
-                            .Where(b => b.UserId == userId)
+                            // .Where(b => b.UserId == userId)
                             .Where(b => b.Status == query.Status)
-                            .Include(b => b.SpaceBooked)
+                            // .Include(b => b.SpaceBooked)
                             .Include(b => b.Chat)
                             .AsQueryable();
             bookings = bookings.OrderByDescending(bp => bp.Id);
@@ -145,21 +153,45 @@ namespace API.Persistence
             queryResult.Items = await bookings.ToListAsync();
             return queryResult;
         }
-        public async Task<QueryResult<Booking>> GetCustomerBookings(int userId, BookingQuery query)
+        public async Task<QueryResult<CustomerBookingsToReturn>> GetCustomerBookings(int userId, BookingQuery query)
         {
             var bookings =  _context.Bookings
                             .Where(b => b.BookedById
                              == userId)
-                            .Include(b => b.SpaceBooked)
+                            // .Include(b => b.SpaceBooked)
                             .Include(b => b.Chat)
                             .AsQueryable();
             bookings = bookings.OrderByDescending(bp => bp.Id);
+
             var queryResult = new QueryResult<Booking>();
             // bookings = bookings.AsQueryable().Skip((query.CurrentPage - 1) * query.PageSize)
             //                         .Take(query.PageSize);
             queryResult.TotalItems = bookings.Count();
             queryResult.Items = await bookings.ToListAsync();
-            return queryResult;
+            var bookingList = new List<CustomerBookingsToReturn>();
+
+            foreach (var item in queryResult.Items)
+            {
+                var space = await _context.Spaces
+                                    .FirstOrDefaultAsync(s => s.Id == item.IdOfSpaceBooked);
+                var  customerBooking = new CustomerBookingsToReturn {
+                    Id = item.Id,
+                    NoOfGuests = item.NoOfGuests,
+                    BookedById = item.BookedById,
+                    BookingTime = item.BookingTime,
+                    UsingFrom = item.UsingFrom,
+                    UsingTill = item.UsingTill,
+                    Status = item.Status,
+                    TotalPrice = item.TotalPrice,
+                    SpaceName = space.Name,
+                    SpaceLocation = space.LocationAddress
+                };
+                bookingList.Add(customerBooking);
+            }
+            var queryToReturn = new QueryResult<CustomerBookingsToReturn>();
+            queryToReturn.TotalItems = bookingList.Count;
+            queryToReturn.Items = bookingList;
+            return queryToReturn;
         }
 
         public async Task<List<Booking>> GetBookingDetails(int bookedById, BookingQuery query)
@@ -168,6 +200,7 @@ namespace API.Persistence
             TimeSpan timeSpan10 = new TimeSpan(0, 10, 0);
             var bookingDetails = await _context.Bookings
                                 .Where(b => b.BookedById == bookedById)
+                                .Where(b => b.BookingTime.Date == query.TimeBooked.Date)
                                 .Where(b => b.BookingTime.TimeOfDay <= query.TimeBooked.TimeOfDay - timeSpan20 || b.BookingTime.TimeOfDay >= query.TimeBooked.TimeOfDay - timeSpan10)
                                 .ToListAsync();
             return bookingDetails;
@@ -190,8 +223,8 @@ namespace API.Persistence
         }
         private IQueryable<Booking> FilterBookings(BookingQuery query, IQueryable<Booking> booking)
         {
-            if(!string.IsNullOrWhiteSpace(query.SearchString))
-                booking = booking.Where(bk => bk.SpaceBooked.Name.ToLower().StartsWith(query.SearchString) || bk.Id.ToString() == query.SearchString);
+            // if(!string.IsNullOrWhiteSpace(query.SearchString))
+            //     booking = booking.Where(bk => bk.SpaceBooked.Name.ToLower().StartsWith(query.SearchString) || bk.Id.ToString() == query.SearchString);
             if(query.DateStart != null && query.DateStart.Date > DateTime.Parse("01/01/0001") && query.DateEnd != null && query.DateStart.Date > DateTime.Parse("01/01/0001"))
                 booking = booking.Where(bk => bk.UsingFrom.Date >= query.DateStart.Date
                 && bk.UsingFrom.Date <= query.DateEnd.Date);
@@ -257,8 +290,8 @@ namespace API.Persistence
         public async Task<List<BookedTimes>> GetBookedTimes(int spaceId, BookedTimes proposedBookingTime)
         {
             var bookings = await _context.Bookings
-                            .Include(bk => bk.SpaceBooked)
-                            .Where(bk => bk.SpaceBooked.Id == spaceId)
+                            // .Include(bk => bk.SpaceBooked)
+                            // .Where(bk => bk.SpaceBookedId == spaceId)
                             .Where(bk => bk.Status == BookingStatus.Booked)
                             .ToListAsync();
         //Check for the existing bookings that UsingFrom or UsingTill falls in between the proposed using from nd to
@@ -292,42 +325,50 @@ namespace API.Persistence
         }
         public async Task<MerchantMetrics> GetMerchantMetrics(int userId)
         {
+            // throw new NotImplementedException();
             var metrics = new MerchantMetrics();
             var bookingsNdReservations = await _context.Bookings
                                             .Where(bk => bk.UserId == userId)
-                                            .Include(bk => bk.SpaceBooked)
-                                            .ToListAsync();
+                                            .Join(
+                                                _context.Spaces,
+                                                booking => booking.UserId,
+                                                space => space.UserId,
+                                                (booking, space) => new {
+                                                    BookingFromDB = booking,
+                                                    SpaceFromDB = space
+                                                }
+                                            ).ToListAsync();
             var bookings = new List<Booking>();
             var reservations = new List<Booking>();
             var bookingOverviewDict = new Dictionary<int, UsageOverview>();
 
             bookingsNdReservations.ForEach(booking => {
-                if(booking.Status == BookingStatus.Booked) {
-                    bookings.Add(booking);
-                    metrics.TotalRevenue += booking.TotalPrice;
+                if(booking.BookingFromDB.Status == BookingStatus.Booked) {
+                    bookings.Add(booking.BookingFromDB);
+                    metrics.TotalRevenue += booking.BookingFromDB.TotalPrice;
                     // bookingOverviewDict.FirstOrDefault(x => x.Key == booking.SpaceBooked.Id);
                     var usageOverview = new UsageOverview {
-                        SpaceId = booking.SpaceBooked.Id,
-                        HoursUsed = (booking.UsingTill - booking.UsingFrom).TotalHours,
-                        RevenueAccumulated = booking.TotalPrice
+                        SpaceId = booking.SpaceFromDB.Id,
+                        HoursUsed = (booking.BookingFromDB.UsingTill - booking.BookingFromDB.UsingFrom).TotalHours,
+                        RevenueAccumulated = booking.BookingFromDB.TotalPrice
                     };
-                    if(bookingOverviewDict.ContainsKey(booking.SpaceBooked.Id)) {
+                    if(bookingOverviewDict.ContainsKey(booking.SpaceFromDB.Id)) {
                         // var index = bookingsDict.Keys.ToList().IndexOf(booking.SpaceBooked.Id);
-                        var previousValue = bookingOverviewDict[booking.SpaceBooked.Id];
+                        var previousValue = bookingOverviewDict[booking.SpaceFromDB.Id];
                         var newValue = new UsageOverview{
                             SpaceId = previousValue.SpaceId,
                             RevenueAccumulated = previousValue.RevenueAccumulated + usageOverview.RevenueAccumulated,
                             HoursUsed = previousValue.HoursUsed + usageOverview.HoursUsed 
                         };
-                        bookingOverviewDict[booking.SpaceBooked.Id] = usageOverview;
+                        bookingOverviewDict[booking.SpaceFromDB.Id] = usageOverview;
                     } 
-                    else if(!bookingOverviewDict.ContainsKey(booking.SpaceBooked.Id)) {
-                        bookingOverviewDict.Add(booking.SpaceBooked.Id, usageOverview);
+                    else if(!bookingOverviewDict.ContainsKey(booking.SpaceFromDB.Id)) {
+                        bookingOverviewDict.Add(booking.SpaceFromDB.Id, usageOverview);
                     }
 
                 } 
-                if(booking.Status == BookingStatus.Reserved){
-                    reservations.Add(booking);
+                if(booking.BookingFromDB.Status == BookingStatus.Reserved){
+                    reservations.Add(booking.BookingFromDB);
                 }
             });
             double maxHours = 0, maxRev = 0;

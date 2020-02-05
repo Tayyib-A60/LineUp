@@ -1,22 +1,21 @@
 using System;
-using System.Collections.Generic;
 using API.Core.Models;
 
 namespace API.Controllers.DTOs
 {
-    public class BookingFromClientDTO
+    public class CustomerBookingsToReturn
     {
         public int Id { get; set; }
         public int NoOfGuests { get; set; }
         public int BookedById { get; set; }
         public int IdOfSpaceBooked { get; set; }
-        // public int UserId { get; set; }
-        // public SpaceDTO SpaceBooked { get; set; }
         public DateTime BookingTime { get; set; }
-        public UsingTime[] UsingTimes { get; set; }
+        public DateTime UsingFrom { get; set; }
+        public DateTime UsingTill { get; set; }
         public BookingStatus Status { get; set; }
         public double TotalPrice { get; set; }
-        public ChatDTO Chat { get; set; }
-        public User BookedBy { get; set; }
+        public string SpaceLocation { get; set; }
+        public string SpaceName { get; set; }
+        // public Space SpaceBooked { get; set; }
     }
 }

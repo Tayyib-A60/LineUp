@@ -1,4 +1,4 @@
-<app-navbar ></app-navbar>
+<app-new-nav></app-new-nav>
 <div class="map_container">
     <div class="row">
       <div class="col-lg-6">
@@ -34,12 +34,12 @@
                 </div>
                 <div class="row text-left mt-3" matchHeight="card">
                     <div *ngFor='let space of spaceQueryResult.items' class="col-lg-6 col-md-6 col-sm-12 col-xs-8">
-                        <div *ngIf='space?.location' class="card" style="cursor: pointer;" [routerLink]="['/new-space/' + space.id]">
+                        <div *ngIf='space?.photos' class="card" style="cursor: pointer;" [routerLink]="['/new-space/' + space.id]">
                           <div class="card-content card-bg hct">
                             <div class="card-img">
-                              <img class="card-img-top img-fluid card-radius" src="assets/img/photos/14.jpg" alt="Card image cap">
-                              <h4 *ngIf='space.selectedPricingOption.option === "Per Hour"' class="card-title home-card-title">{{space?.pricePH?.price | currency : 'NGN' : 'symbol-narrow'}} per hour</h4>
-                              <h4 *ngIf='space.selectedPricingOption.option === "Per Day"' class="card-title home-card-title">{{space?.pricePD?.price | currency : 'NGN' : 'symbol-narrow'}} per day</h4>
+                              <img *ngIf='space.photos.length>0' class="card-img-top img_fit img-fluid card-radius" [src]="space.photos[0].fileName" [alt]="space.photos[0].fileName">
+                              <h4 class="card-title home-card-title">{{space?.price | currency : 'NGN' : 'symbol-narrow'}}</h4>
+                              <!-- <h4 *ngIf='space.selectedPricingOption.option === "Per Day"' class="card-title home-card-title">{{space?.pricePD?.price | currency : 'NGN' : 'symbol-narrow'}} per day</h4> -->
                             </div>
                             <div class="card-body card-body-pad">
                               <div class="row justify-content-between">
@@ -49,7 +49,7 @@
                               </div>
                               <p class="card-text">{{space?.description.length > 23? (space?.description | slice:0:23) + '...' : space?.description}}</p>
                               <div class="card-footer card-footer-pad">
-                                  <p class="space_text"><i class="fa fa-map-marker"></i> {{space?.location?.name.length > 37? (space?.location?.name | slice:0:32) + '...' : space?.location?.name}}</p>
+                                  <p class="space_text"><i class="fa fa-map-marker"></i> {{space?.location?.name.length > 37? (space?.locationAddress | slice:0:32) + '...' : space?.locationAddress}}</p>
                                   <br>
                                   <p class="space_text">{{space?.size}} people</p>
                               </div>
@@ -66,7 +66,7 @@
       <div class="col-lg-6 col-md-11 m-md-auto col-sm-12 col-12">
           <agm-map [latitude]='latitude' [longitude]='longitude'>
             <div *ngFor='let space of spaceQueryResult.items'>
-              <agm-marker [latitude]='space?.location?.lat' [longitude]='space?.location?.long'></agm-marker>
+              <agm-marker [latitude]='space?.lat' [longitude]='space?.long'></agm-marker>
             </div>
           </agm-map>
       </div>
