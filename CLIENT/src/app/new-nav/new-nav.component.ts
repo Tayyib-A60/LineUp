@@ -28,6 +28,7 @@ export class NewNavComponent implements OnInit {
 
   signOut() {
     localStorage.removeItem('currentUser');
+    this.currentUser = null;
     this.store.dispatch(new userActions.SignOutUser());
     this.router.navigate(['']);
   }

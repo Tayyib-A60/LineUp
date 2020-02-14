@@ -42,13 +42,13 @@ export class BookingRequestComponent implements OnInit {
         .subscribe(space => {
           this.space = space;
           this.loaded = true;
-          if(space) {
-            space.amenities.forEach((amenity) => {
-              if(amenity.price == 0) {
-                this.freeAmenities.push(amenity);
-              }
-            });
-          } 
+          // if(space) {
+          //   space.amenities.forEach((amenity) => {
+          //     if(amenity.price == 0) {
+          //       this.freeAmenities.push(amenity);
+          //     }
+          //   });
+          // } 
     });
 
     // this.bookingStore.pipe(select(bookingSelector.getBookingToCreate),

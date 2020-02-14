@@ -44,11 +44,17 @@ namespace api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("AmenitiesSelected");
+
                     b.Property<int>("BookedById");
+
+                    b.Property<string>("BookingRef");
 
                     b.Property<DateTime>("BookingTime");
 
                     b.Property<int?>("ChatId");
+
+                    b.Property<bool>("CreatedByOwner");
 
                     b.Property<int>("IdOfSpaceBooked");
 
@@ -58,7 +64,7 @@ namespace api.Migrations
 
                     b.Property<double>("TotalPrice");
 
-                    b.Property<int?>("UserId");
+                    b.Property<int>("UserId");
 
                     b.Property<DateTime>("UsingFrom");
 
@@ -192,6 +198,10 @@ namespace api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Description");
+
+                    b.Property<string>("ImageUrl");
+
                     b.Property<string>("Type");
 
                     b.HasKey("Id");
@@ -266,7 +276,8 @@ namespace api.Migrations
 
                     b.HasOne("API.Core.Models.User")
                         .WithMany("Bookings")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("API.Core.Models.ChatMessage", b =>

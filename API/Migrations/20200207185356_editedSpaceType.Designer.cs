@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace api.Migrations
 {
     [DbContext(typeof(LineUpContext))]
-    [Migration("20200127192930_Initial")]
-    partial class Initial
+    [Migration("20200207185356_editedSpaceType")]
+    partial class editedSpaceType
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -46,13 +46,21 @@ namespace api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("AmenitiesSelected");
+
                     b.Property<int>("BookedById");
+
+                    b.Property<string>("BookingRef");
 
                     b.Property<DateTime>("BookingTime");
 
                     b.Property<int?>("ChatId");
 
-                    b.Property<int>("SpaceBookedId");
+                    b.Property<bool>("CreatedByOwner");
+
+                    b.Property<int>("IdOfSpaceBooked");
+
+                    b.Property<int>("NoOfGuests");
 
                     b.Property<int>("Status");
 
@@ -67,8 +75,6 @@ namespace api.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ChatId");
-
-                    b.HasIndex("SpaceBookedId");
 
                     b.HasIndex("UserId");
 
@@ -194,6 +200,10 @@ namespace api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Description");
+
+                    b.Property<string>("ImageUrl");
+
                     b.Property<string>("Type");
 
                     b.HasKey("Id");
@@ -266,11 +276,6 @@ namespace api.Migrations
                         .WithMany()
                         .HasForeignKey("ChatId");
 
-                    b.HasOne("API.Core.Models.Space", "SpaceBooked")
-                        .WithMany()
-                        .HasForeignKey("SpaceBookedId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.HasOne("API.Core.Models.User")
                         .WithMany("Bookings")
                         .HasForeignKey("UserId")
@@ -297,7 +302,7 @@ namespace api.Migrations
                     b.HasOne("API.Core.Models.User", "User")
                         .WithMany("Spaces")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

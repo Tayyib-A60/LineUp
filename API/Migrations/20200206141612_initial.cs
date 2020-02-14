@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace api.Migrations
 {
-    public partial class Initial : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -100,6 +100,43 @@ namespace api.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Bookings",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    BookingRef = table.Column<string>(nullable: false),
+                    UserId = table.Column<int>(nullable: false),
+                    IdOfSpaceBooked = table.Column<int>(nullable: false),
+                    NoOfGuests = table.Column<int>(nullable: false),
+                    BookedById = table.Column<int>(nullable: false),
+                    TotalPrice = table.Column<double>(nullable: false),
+                    AmenitiesSelected = table.Column<string>(nullable: true),
+                    CreatedByOwner = table.Column<bool>(nullable: false),
+                    BookingTime = table.Column<DateTime>(nullable: false),
+                    UsingFrom = table.Column<DateTime>(nullable: false),
+                    UsingTill = table.Column<DateTime>(nullable: false),
+                    Status = table.Column<int>(nullable: false),
+                    ChatId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Bookings", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Bookings_Chat_ChatId",
+                        column: x => x.ChatId,
+                        principalTable: "Chat",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Bookings_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Spaces",
                 columns: table => new
                 {
@@ -127,8 +164,7 @@ namespace api.Migrations
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onUpdate: ReferentialAction.NoAction,
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -148,45 +184,6 @@ namespace api.Migrations
                         name: "FK_Amenities_Spaces_SpaceId",
                         column: x => x.SpaceId,
                         principalTable: "Spaces",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Bookings",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    UserId = table.Column<int>(nullable: false),
-                    BookedById = table.Column<int>(nullable: false),
-                    TotalPrice = table.Column<double>(nullable: false),
-                    SpaceBookedId = table.Column<int>(nullable: false),
-                    BookingTime = table.Column<DateTime>(nullable: false),
-                    UsingFrom = table.Column<DateTime>(nullable: false),
-                    UsingTill = table.Column<DateTime>(nullable: false),
-                    Status = table.Column<int>(nullable: false),
-                    ChatId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Bookings", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Bookings_Chat_ChatId",
-                        column: x => x.ChatId,
-                        principalTable: "Chat",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Bookings_Spaces_SpaceBookedId",
-                        column: x => x.SpaceBookedId,
-                        principalTable: "Spaces",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Bookings_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -223,11 +220,6 @@ namespace api.Migrations
                 name: "IX_Bookings_ChatId",
                 table: "Bookings",
                 column: "ChatId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Bookings_SpaceBookedId",
-                table: "Bookings",
-                column: "SpaceBookedId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Bookings_UserId",

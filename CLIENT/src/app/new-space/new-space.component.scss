@@ -1,3 +1,29 @@
+.booked {
+    background-color: #aa0033;
+    margin-right: .5em;
+    margin-bottom: .7em;
+    padding: .1em .3em .1em .1em;
+    font-size: large;
+    border-radius: .2em;
+}
+.available {
+    padding: .1em .3em .1em .1em;
+    background-color: #00aa33;
+    margin-bottom: .7em;
+    margin-right: .5em;
+    font-size: large;
+    border-radius: .2em;
+}
+
+.day{
+    padding: .3em;
+    margin-bottom: 1em;
+    background-color: #779c9e;
+    font-size: larger;
+    border-radius: .3em;
+    text-transform: capitalize; 
+}
+
 .img_banner {
     height: 70vh !important;
     width: 100%;

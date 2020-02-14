@@ -7,6 +7,10 @@ namespace API.Core
     public interface IUserRepository
     {
         User Authenticate(string email, string password);
+        void EmailSender(Message message);
+        void DeleteUser(User user);
+        Task<bool> ForgotPassword(User user);
+        Task<bool> UserExists(User user);
         Task<IEnumerable<User>> GetUsers();
         Task<User> GetUser(int id);
         Task<User> GetUser(string email);
@@ -14,10 +18,6 @@ namespace API.Core
         void UpdateUser (string newPassword, User userToUpdate);
         void UpdateUserStatus(User userToVerify);
         void VerifyAsMerchant (User user);
-        void EmailSender(Message message);
-        void DeleteUser(User user);
-        Task<bool> UserExists(User user);
-        Task<bool> ForgotPassword(User user);
         string CreateToken(User user);
     }
 }

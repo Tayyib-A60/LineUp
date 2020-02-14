@@ -98,10 +98,11 @@ namespace API.Persistence
         }
         public async Task<Space> GetSpace(int spaceId)
         {
-            return await _context.Spaces
-                            .Include(space => space.Amenities)
-                            .Include(space => space.Photos)
+            var space =  await _context.Spaces
+                            .Include(s => s.Amenities)
+                            .Include(s => s.Photos)
                             .FirstOrDefaultAsync(s => s.Id == spaceId);
+            return space;
         }
         public async Task<QueryResult<Space>> GetSpaces(SpaceQuery query)
         {
@@ -223,8 +224,8 @@ namespace API.Persistence
         }
         private IQueryable<Booking> FilterBookings(BookingQuery query, IQueryable<Booking> booking)
         {
-            // if(!string.IsNullOrWhiteSpace(query.SearchString))
-            //     booking = booking.Where(bk => bk.SpaceBooked.Name.ToLower().StartsWith(query.SearchString) || bk.Id.ToString() == query.SearchString);
+            if(!string.IsNullOrWhiteSpace(query.SearchString))
+                booking = booking.Where(bk => bk.BookingRef.ToLower() == query.SearchString.ToLower());
             if(query.DateStart != null && query.DateStart.Date > DateTime.Parse("01/01/0001") && query.DateEnd != null && query.DateStart.Date > DateTime.Parse("01/01/0001"))
                 booking = booking.Where(bk => bk.UsingFrom.Date >= query.DateStart.Date
                 && bk.UsingFrom.Date <= query.DateEnd.Date);
@@ -291,7 +292,7 @@ namespace API.Persistence
         {
             var bookings = await _context.Bookings
                             // .Include(bk => bk.SpaceBooked)
-                            // .Where(bk => bk.SpaceBookedId == spaceId)
+                            .Where(bk => bk.IdOfSpaceBooked == spaceId)
                             .Where(bk => bk.Status == BookingStatus.Booked)
                             .ToListAsync();
         //Check for the existing bookings that UsingFrom or UsingTill falls in between the proposed using from nd to
@@ -299,8 +300,12 @@ namespace API.Persistence
             foreach (var booking in bookings)
             {
                 var fallsInBtw = ((proposedBookingTime.From >= booking.UsingFrom || proposedBookingTime.From <= booking.UsingFrom) && booking.UsingFrom <= proposedBookingTime.To);
+
                 var alsoInBetween = ((proposedBookingTime.From >= booking.UsingTill || proposedBookingTime.From <= booking.UsingTill) && booking.UsingTill <= proposedBookingTime.To);
-                if(fallsInBtw || alsoInBetween)
+
+                var clashes = ((proposedBookingTime.From < booking.UsingFrom) && (proposedBookingTime.To <= booking.UsingFrom)) || ((proposedBookingTime.From >= booking.UsingTill) && (proposedBookingTime.To > booking.UsingTill));
+
+                if(!clashes)
                     existing.Add(booking);
             };
             var bookingTimes = new List<BookedTimes>();

@@ -62,4 +62,10 @@ export class UserService {
         const url = `${this.url}/lineUp/user/verifyAsMerchant`;
         return this.httpClient.put(url, user, { headers });
     }
+
+    getUserDetails(userId: number) {
+        const headers = new HttpHeaders({'Content-Type': 'application/json' });
+        const url = `${this.url}/lineUp/getUser/${userId}`;
+        return this.httpClient.get(url, { headers });
+    }
 }

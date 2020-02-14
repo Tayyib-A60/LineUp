@@ -75,6 +75,17 @@ namespace API.Controllers
         public async Task<IActionResult> UpdateSpace(int spaceId, [FromBody] SpaceDTO spaceDTO)
         {
             var space = await _lineUpRepository.GetSpace(spaceId);
+            var amenities = new List<Amenity>();
+            var photos = new List<Photo>();
+            foreach (var amenity in space.Amenities)
+            {
+                amenities.Add(amenity);
+            }
+            foreach (var photo in space.Photos)
+            {
+                photos.Add(photo);
+            }
+            // var photos = space.Photos;
             // _lineUpRepository.Delete(space.Amenities);
             var spaceToUpdate = _mapper.Map<SpaceDTO, Space>(spaceDTO, space);
             if (spaceToUpdate == null)
@@ -82,6 +93,8 @@ namespace API.Controllers
             if (await _lineUpRepository.EntityExists(spaceToUpdate))
             {
                 // spaceToUpdate.Amenities.Entr
+                spaceToUpdate.Photos = photos;
+                spaceToUpdate.Amenities = amenities;
                 _lineUpRepository.Update(spaceToUpdate);
                 await _lineUpRepository.SaveAllChanges();
                 return Ok();
@@ -306,9 +319,9 @@ namespace API.Controllers
                 var bookingToCreateBT = new BookedTimes();
                 bookingToCreateBT.From = bookingToCreate.UsingFrom;
                 bookingToCreateBT.To = bookingToCreate.UsingTill;
-                // var existingBookingTimes = await _lineUpRepository.GetBookedTimes(bookingToCreate.SpaceBookedId, bookingToCreateBT);
-                // if (existingBookingTimes.Count() > 0)
-                //     return BadRequest("You can't select from a range of booking that already exists");
+                var existingBookingTimes = await _lineUpRepository.GetBookedTimes(bookingToCreate.IdOfSpaceBooked, bookingToCreateBT);
+                if (existingBookingTimes.Count() > 0)
+                    return BadRequest("You can't select from a range of booking that already exists");
                 if (bookingToCreate == null)
                     return BadRequest("Booking cannot be null");
                 if (bookingToCreate.UsingFrom < DateTime.Now)
@@ -351,6 +364,15 @@ namespace API.Controllers
 
             return Ok();
         }
+        [HttpGet("getUser/{userId}")]
+        public async Task<IActionResult> GetUser(int userId)
+        {
+            var user = await _lineUpRepository.GetUser(userId);
+            var userToReturn  = _mapper.Map<UserToReturnDTO>(user);
+            return Ok(userToReturn);
+        }
+
+
         [HttpPost("createReservation")]
         public async Task<IActionResult> CreateReservation([FromBody] BookingFromClientDTO bookingFromClientDTO)
         {
@@ -393,8 +415,10 @@ namespace API.Controllers
                 bookingToCreate.TotalPrice = bookingDTO.TotalPrice;
                 bookingToCreate.IdOfSpaceBooked = bookingDTO.IdOfSpaceBooked;
                 bookingToCreate.BookedById = bookingDTO.BookedById;
+                bookingToCreate.AmenitiesSelected = bookingDTO.AmenitiesSelected;
+                bookingToCreate.CreatedByOwner = bookingDTO.CreatedByOwner;
                 timeOfCreation = bookingToCreate.BookingTime;
-
+                bookingToCreate.BookingRef = "BKN" + bookingToCreate.BookedById.ToString() + bookingToCreate.IdOfSpaceBooked.ToString() + Guid.NewGuid().ToString().GetHashCode().ToString("x");
                 user.Bookings.Add(bookingToCreate);
             }
             await _lineUpRepository.SaveAllChanges();
@@ -552,6 +576,11 @@ namespace API.Controllers
 
             return first + second + third;
         }
+
+        // private string NewEmailBody(string heading, string body, string buttonLink, string buttonName, bool hasButton)
+        // {
+        //     string first = ""
+        // }
 
         [HttpGet("getMetrics/{userId}")]
         public async Task<IActionResult> GetMerchantMetrics(int userId)

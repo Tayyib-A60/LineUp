@@ -1,7 +1,8 @@
 <div class="header">
   <div class="header_container">
       <div class="header_logo mr-3">
-        <h3 class="header_placeholder">234Spaces</h3>
+        <a [routerLink]="['']"  class='px-5 header-link'><img class='' src='https://res.cloudinary.com/dro0fy3gz/image/upload/v1580739575/Logo/234Spaces_logo_PNG_2_qxc8rn__1_-removebg-preview_usjfwm.png'></a>
+        <!-- <h3 class="header_placeholder">234Spaces</h3> -->
       </div>
       <div class="header_search">
         <input type="text" class="header_input" placeholder="Search location...">
@@ -35,8 +36,9 @@
           </div>
         </div>
       <div class="header_btn">
-          <button type="button"  [routerLink]="['/sign-in']" class="btn btn-primary btn-raised px-4 mx-1 mb-0 bb">Login</button>
-          <button type="button"  [routerLink]="['/sign-up']" class="btn btn-primary btn-raised px-4 mx-1 mb-0 bb">Sign up</button>
+          <button type="button" *ngIf='!currentUser'  [routerLink]="['/sign-in']" class="btn btn-primary btn-raised px-4 mx-1 mb-0 bb">Login</button>
+          <button type="button" *ngIf='currentUser' (click)='signOut()' class="btn btn-primary btn-raised px-4 mx-1 mb-0 bb">Sign out</button>
+          <button type="button" *ngIf='!currentUser' [routerLink]="['/sign-up']" class="btn btn-primary btn-raised px-4 mx-1 mb-0 bb">Sign up</button>
           <!-- <button type="button" *ngIf='anyUserIsAuthenticated()' (click)='signOut()' class="btn btn-primary btn-raised px-4 mx-1 mb-0 bb">Sign out</button> -->
       </div>
   </div>

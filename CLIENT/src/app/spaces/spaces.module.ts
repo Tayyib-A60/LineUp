@@ -34,6 +34,7 @@ import { FileUploadModule } from 'ng2-file-upload';
 import { NguCarouselModule } from '@ngu/carousel';
 import { AdminPaginationComponent } from './admin-pagination/admin-pagination.component';
 import { AutocompleteComponent } from '../autocomplete/autocomplete.component';
+import { ManageAvailabilityComponent } from './manage-availability/manage-availability.component';
 
 @NgModule({
   declarations: [
@@ -55,6 +56,7 @@ import { AutocompleteComponent } from '../autocomplete/autocomplete.component';
     ImageEditorComponent,
     AdminPaginationComponent,
     AutocompleteComponent,
+    ManageAvailabilityComponent,
     // PaginationComponent
   ],
   imports: [
