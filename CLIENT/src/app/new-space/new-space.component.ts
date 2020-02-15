@@ -364,12 +364,17 @@ export class NewSpaceComponent implements OnInit {
     // this.router.navigate(['/profile'], {relativeTo: this.route});
   }
 
-  checkForAvailablity(event) {   
-      if(event.target.checked) {
-        this.checkAvailability();
-      }
+  check() {
+    // this.checkAvailability();
   }
-  private checkAvailability() {
+
+  // checkForAvailablity(event) {   
+      // if(event.target.checked) {
+      //   this.checkAvailability();
+      // }
+  // }
+  checkAvailability(event) {
+    if(event.target.checked) {
     this.timeToDisplayArray = [];
     this.timesAlreadyTaken = new Map();
     this.timesMap = new Map();
@@ -392,13 +397,17 @@ export class NewSpaceComponent implements OnInit {
       To: dateTo
     };
     
+    let items = [];
+
     this.spaceStore.dispatch(new bookingActions.GetBookingTimes(requestBody));
+
     this.spaceStore.pipe(select(bookingSelectors.getBookingTimes),
       takeWhile(() => this.componentActive))
       .subscribe(bookingTimes => {
+
         this.bookingTimes = bookingTimes? bookingTimes: [];
-        // console.log(bookingTimes);
         let timesMap = new Map();
+
         if(bookingTimes) {
           for(let i = 0; i < bookingTimes.length; i++) {
 
@@ -414,68 +423,54 @@ export class NewSpaceComponent implements OnInit {
               timesMap.set(date, [{from, to, available: false}]);
             }
           }
-          console.log(timesMap);
           this.timesAlreadyTaken.clear();
-          // this.timeToDisplayArray.
           this.timesAlreadyTaken = timesMap;
-          let timesToDisplay = new Map();
+          // console.log(this.timesAlreadyTaken);
 
-          this.timesAlreadyTaken.forEach((day,key) => {
-            
+          this.timesAlreadyTaken.forEach((time,day) => {
             let missingTimes = [];
-            day.sort(d => d.from);
+            
+            time.sort(d => d.from);
 
-            if(day.length === 1) {
+            if(time.length === 1) {
 
-              if(day[0].from > 0) {
-                missingTimes.push({from: 0, to: day[0].from, available: true})
+              if(time[0].from > 0) {
+                missingTimes.push({from: 0, to: time[0].from, available: true});
               }
 
-              if(day[0].to < 24) {
-                missingTimes.push({from: day[0].to, to: 24, available: true})
+              if(time[0].to < 24) {
+                missingTimes.push({from: time[0].to, to: 24, available: true});
               }
 
             }
 
-            if(day.length > 1) {
-
-              if(day[0].from < 1) {
-                missingTimes.push({from: 0, to: day[0].from, available: true})
+            if(time.length > 1) {
+              console.log('Day length is now more than 1');
+              
+              if(time[0].from < 1) {
+                missingTimes.push({from: 0, to: time[0].from, available: true});
               }
 
-              for(let i = 1; i < day.length; i++) {
-                missingTimes.push({from: day[i-1].to, to: day[i].from, available: true})
+              for(let i = 1; i < time.length; i++) {
+                missingTimes.push({from: time[i-1].to, to: time[i].from, available: true});
               }
 
-              if(day[0].to < 24) {
-                missingTimes.push({from: day[0].to, to: 24, available: true})
+              if(time[0].to < 24) {
+                missingTimes.push({from: time[0].to, to: 24, available: true});
               }
             }
-            day = [...day,...missingTimes];
-            day.sort((a,b) => a.from - b.from);
-            // timesToDisplay.set(key, day);
-            let item = [];
-            item.push(key);
-            item.push(day);
-            this.timeToDisplayArray.push(item);
+            time = [...time,...missingTimes];            
+            time.sort((a,b) => a.from - b.from);
+
+            items.push({day: day,times: time});
 
           });
-          // console.log(this.timesAlreadyTaken);
+          console.log(items);
           
-          // this.timesToDisplay = timesToDisplay;
-          // let item = [];
-          // this.timesToDisplay.forEach((val, key) => {
-          //   console.log('passing');
-            
-          //   item.push(key);
-          //   item.push(val);
-            
-          //   this.timeToDisplayArray.push(item);
-          // });
-          // console.log(this.timeToDisplayArray);
           
         }
     });
+  }
   }
 
   getCustomerBooking() {

@@ -33,6 +33,7 @@ export class BookingRequestComponent implements OnInit {
       this.id = params['id'];
     });
     this.booking = JSON.parse(localStorage.getItem('bookingToCreate'));
+    this.amenitiesSelected = JSON.parse(localStorage.getItem('amenitiesSelected'));
     console.log(this.booking);
     
     this.spaceStore.dispatch(new spaceActions.GetSingleSpace(Number(this.id)));

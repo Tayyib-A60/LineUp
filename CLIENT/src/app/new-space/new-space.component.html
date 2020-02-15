@@ -146,8 +146,15 @@
                       <div class="d-flex justify-content-between">
                           <div class="d-flex">
                             <div class="custom-control custom-checkbox pr-4 space_content">
-                                <input value='' (click)='checkForAvailablity($event)' type="checkbox" class="custom-control-input" id="checkAvailability">
+                                <input value='' (click)='checkAvailability($event)' type="checkbox" class="custom-control-input" id="checkAvailability">
                                 <label class="custom-control-label" for="checkAvailability">Check availablity</label>
+                            </div>
+                          </div>
+                      </div>
+                      <div class="d-flex justify-content-between">
+                          <div class="d-flex">
+                            <div class="custom-control custom-checkbox pr-4 space_content">
+                                <button (click)='check()'>Check</button>
                             </div>
                           </div>
                       </div>
@@ -230,13 +237,13 @@
                                   <div class="mb-3 mt-4">
                                     <p class="space_text" *ngIf='bookingTimes.length>0'>Other Clients booking for this space</p>
                                     <div class="d-flex justify-content-between">
-                                      <div *ngFor='let day of timesToDisplay'>
+                                      <!-- <div *ngFor='let day of timesToDisplay'>
                                         <div *ngFor='let time of day'>
                                           <i class="fas fa-clock"></i>
                                         <span class="">&nbsp; {{time}}</span>
                                           <br>
                                         </div>
-                                      </div>
+                                      </div> -->
                                     </div>
                                     <!-- <div class="d-flex justify-content-between">
                                       <div *ngIf='bookingTimes.length>0'>
@@ -251,7 +258,7 @@
                                   <div class="d-flex justify-content-between">
                                       <div class="d-flex">
                                         <div class="custom-control custom-checkbox pr-4 space_content">
-                                            <input value='' (click)='checkForAvailablity($event)' type="checkbox" class="custom-control-input" id="checkAvailability">
+                                            <!-- <input value='' (click)='checkForAvailablity($event)' type="checkbox" class="custom-control-input" id="checkAvailability"> -->
                                             <label class="custom-control-label" for="checkAvailability">Check availablity</label>
                                         </div>
                                       </div>
