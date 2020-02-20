@@ -34,20 +34,19 @@ export class AutocompleteComponent implements OnInit, AfterViewInit {
     }
 
     private getPlaceAutocomplete() {
-        const autocomplete = new google.maps.places.Autocomplete(this.addressText.nativeElement,
-            {
-                componentRestrictions: { country: 'NG' },
-                types: [this.adressType]  // 'establishment' / 'address' / 'geocode'
-            });
-        google.maps.event.addListener(autocomplete, 'place_changed', () => {
-            const place = autocomplete.getPlace();
-            const lat = place.geometry.location.lat();  
-            const locationName = place.formatted_address;         
-            // const locationName = place.name + place.formatted_address;         
-            const long = place.geometry.location.lng();
-            this.invokeLocationEvent({ locationName, lat, long });           
-            this.invokeEvent(place);
-        });
+        // const autocomplete = new google.maps.places.Autocomplete(this.addressText.nativeElement,
+        //     {
+        //         componentRestrictions: { country: 'NG' },
+        //         types: [this.adressType]  // 'establishment' / 'address' / 'geocode'
+        //     });
+        // google.maps.event.addListener(autocomplete, 'place_changed', () => {
+        //     const place = autocomplete.getPlace();
+        //     const lat = place.geometry.location.lat();  
+        //     const locationName = place.name + place.formatted_address;         
+        //     const long = place.geometry.location.lng();
+        //     this.invokeLocationEvent({ locationName, lat, long });           
+        //     this.invokeEvent(place);
+        // });
     }
 
     invokeEvent(place: Object) {

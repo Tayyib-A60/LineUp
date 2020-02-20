@@ -24,14 +24,31 @@
         color: #fff;
         padding: .8rem 2rem;
         border-radius: 25px;
+        float: right;
+        @media only screen and (max-width: 600px) {
+            padding: .4rem 1rem;
+            border-radius: 20px;
+            span {
+                font-size: .8rem;
+            }  
+        }
+        @media only screen and (max-width: 400px) {
+            padding: .2rem .6rem;
+            span {
+                font-size: .6rem;
+            }  
+        }
     }
-    &-sub-head {
-        line-height: .5;
-    }
+    // &-sub-head {
+    //     line-height: .5;
+    // }
     &_border_top {
         border-top: 1px solid #aaa;
     }
+
 }
+
+
 // To change the card properties
 .card .btn-floating {
     background-color: #fff !important;
@@ -61,6 +78,15 @@
       left: 15px !important;
       padding: 10px !important;
       font-size: .9rem !important;
+      
+      @media only screen and (max-width: 500px) {
+          font-size: .7rem !important;
+          padding: 8px !important;
+      }
+      @media only screen and (max-width: 400px) {
+          font-size: .6rem !important;
+          padding: 6px !important;
+      }
     
     }
   
@@ -109,9 +135,17 @@
     }
 
     &-footer {
+        padding: 1rem 0 0 0;
+
         &-pad {
-            padding: 1rem 0 0 0;
+
+            @media only screen and (max-width: 766px) {
+                // span {
+                  padding-top: .5rem;
+                // }
+            }
         }
+
     }
 }
 

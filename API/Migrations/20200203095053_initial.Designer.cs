@@ -3,14 +3,16 @@ using System;
 using API.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace api.Migrations
 {
     [DbContext(typeof(LineUpContext))]
-    partial class LineUpContextModelSnapshot : ModelSnapshot
+    [Migration("20200203095053_initial")]
+    partial class initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -40,17 +42,11 @@ namespace api.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("AmenitiesSelected");
-
                     b.Property<int>("BookedById");
-
-                    b.Property<string>("BookingRef");
 
                     b.Property<DateTime>("BookingTime");
 
                     b.Property<int?>("ChatId");
-
-                    b.Property<bool>("CreatedByOwner");
 
                     b.Property<int>("IdOfSpaceBooked");
 
@@ -187,10 +183,6 @@ namespace api.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Description");
-
-                    b.Property<string>("ImageUrl");
 
                     b.Property<string>("Type");
 
