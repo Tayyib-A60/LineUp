@@ -11,11 +11,13 @@ import { Router } from '@angular/router';
 
 @Injectable()
 export class BookingEffects {
-
+    currentUser: any;
     constructor(private actions$: Actions,
                 private bookingService: BookingService,
                 private notification: NotificationService,
-                private router: Router) { }
+                private router: Router) {
+                    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+                }
 
     // @Effect()
     // successNotification$ = this.actions$.pipe(
@@ -41,11 +43,11 @@ export class BookingEffects {
             this.bookingService.createReservation(booking).pipe(
                 map(res => {
                     this.notification.typeSuccess('Your reservation was added', 'Success');
-                    this.router.navigate(['profile']);
+                    this.currentUser['roles'] === 'Merchant'? this.router.navigate(['/admin/manage-space']):  this.router.navigate(['profile']);
                     return new bookingActions.CreateReservationSuccess(res);
                 }),
                 catchError(err => {
-                    this.notification.typeError("We're unable to add your reservation at the moment, please try again", 'Failed');
+                    this.notification.typeError(`${err.message}`, 'Failed');
                     return of(new bookingActions.CreateReservationFailure(err));
                 })
             )

@@ -25,6 +25,7 @@ import { SpaceHomeComponent } from './space-home/space-home.component';
 import { NewSpaceComponent } from './new-space/new-space.component';
 import { SampleCarouselComponent } from './sample-carousel/sample-carousel.component';
 import { DashboardComponent } from './spaces/dashboard/dashboard.component';
+import { ManageAvailabilityComponent } from './spaces/manage-availability/manage-availability.component';
 
 
 const routes: Routes = [
@@ -32,6 +33,7 @@ const routes: Routes = [
     { path: 'add-space', component: AddspaceComponent },
     { path: 'edit-space/:id', component: AddspaceComponent },
     { path: 'manage-space', component: ManagespacesComponent },
+    { path: 'manage-availability/:id', component: ManageAvailabilityComponent },
     { path: 'upload-images/:id', component: ImageEditorComponent},
     { path: 'manage-reservations', component: ManagereservationsComponent },
     { path: 'manage-bookings', component: ManagebookingsComponent },

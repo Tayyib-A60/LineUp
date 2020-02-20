@@ -9,6 +9,7 @@ import { SignInComponent } from '../sign-in/sign-in.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from '../app-routing.module';
 import { ResetPasswordComponent } from '../reset-password/reset-password.component';
+import { RouterModule } from '@angular/router';
  
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { ResetPasswordComponent } from '../reset-password/reset-password.compone
   imports: [
     AppRoutingModule,
     ReactiveFormsModule,
+    RouterModule,
     CommonModule,
     StoreModule.forFeature('user', reducer),
     EffectsModule.forFeature([UserEffects]),

@@ -26,7 +26,7 @@ namespace API.Controllers
             _cloudinaryConfig = cloudinaryConfig;
             _repository = repository;
             _mapper = mapper;
-             _photoSettings = options.Value;
+            _photoSettings = options.Value;
 
             Account acc = new Account(
                 _cloudinaryConfig.Value.CloudName,

@@ -4,6 +4,67 @@
     </div>
     <div class="card-content">
       <div class="card-body">
+        <div class="m-auto">
+          <div class="card-content">
+            <ng-template #content let-c="close" let-d="dismiss">
+              <div class="modal-header">
+              <h4 class="modal-title">Booking Details</h4>
+              <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+                <span aria-hidden="true">&times;</span>
+              </button>
+              </div>
+              <div class="modal-body">
+                  <div>
+                    <div class="row">
+                      <div class="col-lg-12 col-md-12 col-sm-12">
+                        <div class="card">
+                          <div class="card-content card-bg">
+                            <div class="card-img">
+                              <img class="card-img-top img-fluid card-radius" [src]="space?.photos[0].fileName" alt="assets/img/photos/14.jpg">
+                              <h4 class="card-title home-card-title">{{ space?.name }}</h4>
+                            </div>
+                            <div class="card-body card-body-pad">
+                              <div class="row justify-content-between">
+                                <div class="col-6">
+                                  <h5>{{reservation['usingFrom'] | date: 'MMM, d, h:mm a'}} - {{reservation['usingTill'] | date: 'MMM, d, y h:mm a'}}</h5>
+                                </div>
+                                <div class="col-6">
+                                  <h5>Amenities </h5>
+                                  <div *ngFor='let amenity of amenities'>
+                                  <p>{{amenities}}</p>
+                                  </div>
+                                </div>
+                              </div>
+                              <h5 class="card-text">Booked by: {{user?.name}}</h5>
+                              <h5 class="home-card-text">{{user?.email}}</h5>
+                              <h5 class="home-card-text">{{user?.contactNo}}</h5>
+                              <h5 class="home-card-text">{{user?.dateRegistered | date}}</h5>
+                              <div class="card-footer card-footer-pad">
+                                  <div class="row">
+                                      <div class="col-6">
+                                        <span>
+                                          <!-- {{user?.email}} -->
+                                        </span>
+                                      </div>
+                                      <div class="col-7">
+                                        <i class="fa fa-map-marker"></i>
+                                        <span>&nbsp;{{space?.locationAddress}}</span>
+                                      </div>
+                                    </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+              <div class="modal-footer">
+              <button type="button" class="btn btn-secondary btn-raised" (click)="c('Close click')">Close</button>
+              </div>
+            </ng-template>
+          </div>
+        </div>
         <ngb-tabset [orientation]="currentOrientation">
             <ngb-tab title="Upcoming Bookings">
                 <ng-template ngbTabContent>
@@ -63,62 +124,23 @@
                                   <table class="table table-responsive-md text-center">
                                     <thead>
                                       <tr>
-                                        <th>Booking</th>
+                                        <th>Booking REF</th>
+                                        <th>Time</th>
                                         <th>Price</th>
                                       </tr>
                                     </thead>
                                     <tbody>
-                                      <tr *ngFor='let reservation of upcomingBookings'>
+                                      <tr (click)='open(content, reservation)' class="booking_details" *ngFor='let reservation of upcomingBookings'>
                                         <td>
-                                          <div class="row text-left" matchHeight="card">
-                                              <div class="col-xl-5 col-lg-12">
-                                                <div class="card horizontal">
-                                                  <div class="card-content d-flex justify-content-between">
-                                                    <div class="card-img">
-                                                        <div class="card-img">
-                                                            <img class="card-img-top img-fluid space-reserved-img" src="assets/img/photos/06.jpg" alt="Card image cap">
-                                                          </div>
-                                                    </div>
-                                                    <div style="margin-left: -6rem" class="card-stacked align-self-center">
-                                                      <div class="px-3">
-                                                        <h5>{{reservation['usingFrom'] | date: 'MMM, d, h:mm a'}} - {{reservation['usingTill'] | date: 'MMM, d, y h:mm a'}}</h5>
-                                                        <!-- <p class="card-text">{{reservation['spaceBooked']['name']}}</p> -->
-                                                      </div>
-                                                    </div>
-                                                  </div>
-                                                </div>
-                                              </div>
-                                              <div class="col-xl-5 col-lg-12">
-                                                <div class="card horizontal">
-                                                  <div class="card-content d-flex justify-content-between">
-                                                    <div class="card-img">
-                                                        <div class="card-img">
-                                                            <img class="card-img-top rounded-circle img-border gradient-summer width-100" src="assets/img/photos/06.jpg" alt="Card image cap">
-                                                          </div>
-                                                    </div>
-                                                    <div style="margin-left: -6rem" class="card-stacked align-self-center">
-                                                      <div class="px-3">
-                                                        <h4 class="card-title">Booked by</h4>
-                                                        <p class="card-text">Jelly-o halvah</p>
-                                                      </div>
-                                                    </div>
-                                                  </div>
-                                                </div>
-                                              </div>
-                                          </div>
+                                          {{reservation?.bookingRef}}
                                         </td>
                                         <td>
-                                          <div class="col-xl-2 col-lg-12">
-                                              <div class="card horizontal">
-                                                <div class="card-content d-flex justify-content-between">
-                                                  <div style="margin-left: -6rem" class="card-stacked align-self-center">
-                                                    <div class="px-3">
-                                                      <h4 class="card-title">{{reservation['totalPrice'] | currency: 'NGN' : 'symbol-narrow'}}</h4>
-                                                    </div>
-                                                  </div>
-                                                </div>
-                                              </div>
-                                          </div>
+                                        <div class="row text-left" matchHeight="card">
+                                              <h5>{{reservation['usingFrom'] | date: 'MMM, d, h:mm a'}} - {{reservation['usingTill'] | date: 'MMM, d, y h:mm a'}}</h5>
+                                        </div>
+                                        </td>
+                                        <td>
+                                            <h4 class="card-title">{{reservation['totalPrice'] | currency: 'NGN' : 'symbol-narrow'}}</h4>
                                         </td>
                                         <hr>
                                       </tr>
@@ -190,62 +212,23 @@
                                   <table class="table table-responsive-md text-center">
                                     <thead>
                                       <tr>
-                                        <th>Booking</th>
+                                        <th>Booking REF</th>
+                                        <th>Time</th>
                                         <th>Price</th>
                                       </tr>
                                     </thead>
                                     <tbody>
-                                      <tr *ngFor='let reservation of previousBookings'>
+                                      <tr (click)='open(content, reservation)' class="booking_details" *ngFor='let reservation of previousBookings'>
                                         <td>
-                                          <div class="row text-left" matchHeight="card">
-                                              <div class="col-xl-5 col-lg-12">
-                                                <div class="card horizontal">
-                                                  <div class="card-content d-flex justify-content-between">
-                                                    <div class="card-img">
-                                                        <div class="card-img">
-                                                            <img class="card-img-top img-fluid space-reserved-img" src="assets/img/photos/06.jpg" alt="Card image cap">
-                                                          </div>
-                                                    </div>
-                                                    <div style="margin-left: -6rem" class="card-stacked align-self-center">
-                                                      <div class="px-3">
-                                                        <h5>{{reservation['usingFrom'] | date: 'MMM, d, h:mm a'}} - {{reservation['usingTill'] | date: 'MMM, d, y h:mm a'}}</h5>
-                                                        <!-- <p class="card-text">{{reservation['spaceBooked']['name']}}</p> -->
-                                                      </div>
-                                                    </div>
-                                                  </div>
-                                                </div>
-                                              </div>
-                                              <div class="col-xl-5 col-lg-12">
-                                                <div class="card horizontal">
-                                                  <div class="card-content d-flex justify-content-between">
-                                                    <!-- <div class="card-img">
-                                                        <div class="card-img">
-                                                            <img class="card-img-top rounded-circle img-border gradient-summer width-100" src="assets/img/photos/06.jpg" alt="Card image cap">
-                                                          </div>
-                                                    </div> -->
-                                                    <!-- <div style="margin-left: -6rem" class="card-stacked align-self-center">
-                                                      <div class="px-3">
-                                                        <h4 class="card-title">Booked by</h4>
-                                                        <p class="card-text">Jelly-o halvah</p>
-                                                      </div>
-                                                    </div> -->
-                                                  </div>
-                                                </div>
-                                              </div>
-                                          </div>
+                                          {{reservation?.bookingRef}}
                                         </td>
                                         <td>
-                                          <div class="col-xl-2 col-lg-12">
-                                              <div class="card horizontal">
-                                                <div class="card-content d-flex justify-content-between">
-                                                  <div style="margin-left: -6rem" class="card-stacked align-self-center">
-                                                    <div class="px-3">
-                                                      <h4 class="card-title">{{reservation['totalPrice'] | currency: 'NGN' : 'symbol-narrow'}}</h4>
-                                                    </div>
-                                                  </div>
-                                                </div>
-                                              </div>
-                                          </div>
+                                        <div class="row text-left" matchHeight="card">
+                                              <h5>{{reservation['usingFrom'] | date: 'MMM, d, h:mm a'}} - {{reservation['usingTill'] | date: 'MMM, d, y h:mm a'}}</h5>
+                                        </div>
+                                        </td>
+                                        <td>
+                                            <h4 class="card-title">{{reservation['totalPrice'] | currency: 'NGN' : 'symbol-narrow'}}</h4>
                                         </td>
                                         <hr>
                                       </tr>

@@ -6,7 +6,7 @@
                 <div class="d-flex justify-content-between">
                   <div>
                       <p>Show me Spaces in</p>
-                      <input type="text" placeholder='e.g. Lagos' [(ngModel)]='searchString' class="lineup_custom_input">
+                      <input type="text" placeholder='e.g. Lagos' [(ngModel)]="searchString" class="lineup_custom_input">
                   </div>
                   <button type="button" class="btn btn-raised px-2 mb-0">
                       <span class="d-lg-inline-block d-none space_btn" (click)='search()'>Search</span>
@@ -34,6 +34,7 @@
                 </div>
                 <div class="row text-left mt-3" matchHeight="card">
                     <div *ngFor='let space of spaceQueryResult.items' class="col-lg-6 col-md-6 col-sm-12 col-xs-8">
+                      <!-- <a > -->
                         <div *ngIf='space?.photos' class="card" style="cursor: pointer;" [routerLink]="['/new-space/' + space.id]">
                           <div class="card-content card-bg hct">
                             <div class="card-img">
@@ -49,17 +50,18 @@
                               </div>
                               <p class="card-text">{{space?.description.length > 23? (space?.description | slice:0:23) + '...' : space?.description}}</p>
                               <div class="card-footer card-footer-pad">
-                                  <p class="space_text"><i class="fa fa-map-marker"></i> {{space?.location?.name.length > 37? (space?.locationAddress | slice:0:32) + '...' : space?.locationAddress}}</p>
+                                  <p class="space_text"><i class="fa fa-map-marker"></i> {{space?.locationAddress.length > 37? (space?.locationAddress | slice:0:32) + '...' : space?.locationAddress}}</p>
                                   <br>
                                   <p class="space_text">{{space?.size}} people</p>
                               </div>
                             </div>
                           </div>
                         </div>
+                        <!-- </a> -->
                     </div>
                 </div>
                 <div *ngIf='spaceQueryResult' class="d-flex justify-content-between mt-5 mb-4">
-                  <app-pagination *ngIf="spaceQueryResult?.totalItems > query?.pageSize" [totalItems]="spaceQueryResult?.totalItems" [pageSize]="query?.pageSize" (pageChanged)="onPageChange($event)"></app-pagination>
+                  <app-space-pagination *ngIf="spaceQueryResult?.totalItems > query?.pageSize" [totalItems]="spaceQueryResult?.totalItems" [pageSize]="query?.pageSize" (pageChanged)="onPageChange($event)"></app-space-pagination>
                 </div>
             </div>
       </div>

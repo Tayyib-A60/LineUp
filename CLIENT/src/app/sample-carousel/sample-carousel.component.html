@@ -42,16 +42,16 @@
     </ul>
   </ngu-carousel> -->
   <!-- <div class="row"> -->
-    <!-- <div  class="col-md-8 col-xs-12 col-lg-10 col-xl-12"> -->
-      <p-carousel [value]="carouselItems"  styleClass="custom-carousel" [numVisible]="4" [numScroll]="1" [circular]="true" [autoplayInterval]="300000" [responsiveOptions]="responsiveOptions">
+    <!-- <div  class="col-md-8 col-xs-12 col-lg-10 col-xl-12"> *ngIf='(spaceTypes?.length > 0)' -->
+      <p-carousel *ngIf='spaceTypes.length > 1'  [value]="spaceTypes"  styleClass="custom-carousel" [numVisible]="4" [numScroll]="1" [circular]="true" [autoplayInterval]="300000" [responsiveOptions]="responsiveOptions">
           <ng-template let-item pTemplate="item">
-              <a [routerLink]="['/map-space/' + item.url]">
+              <a [routerLink]="['/map-space/' + item.id]">
               <div style="padding: .4rem;" class="cardh">
                   <div class="card-content">
-                    <img class="card-img-top img-fluid" src="assets/img/photos/06.jpg" alt="Card image cap">
+                    <img class="card-img-top img-fluid" [src]="item?.imageUrl" alt="Card image cap">
                     <div  class="card-body p-0">
-                      <h4 class="card-title">{{item.type}}</h4>
-                      <p class="card-text p-0">{{item.content}}</p>
+                      <h4 class="card-title">{{item?.type}}</h4>
+                      <p class="card-text p-0">{{item?.description}}</p>
                     </div>
                   </div>
                 </div>

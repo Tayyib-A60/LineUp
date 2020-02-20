@@ -10,6 +10,9 @@ namespace API.Controllers.DTOs
         public int Id { get; set; }
         public int NoOfGuests { get; set; }
         public int BookedById { get; set; }
+        public string BookingRef { get; set; }
+        public string AmenitiesSelected { get; set; }
+        public bool CreatedByOwner { get; set; }
         public int IdOfSpaceBooked { get; set; }
         public DateTime BookingTime { get; set; }
         public DateTime UsingFrom { get; set; }

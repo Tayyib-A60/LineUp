@@ -9,15 +9,16 @@ namespace API.Core
     {
          void Add<T>(T entity) where T : class;
          void Update<T>(T entity) where T : class;
-         void UpdateSpace(Space space);
          void Delete<T>(T entity) where T : class;
          Task<bool> EntityExists<T>(T entityName) where T: class;
          Task<bool> SaveAllChanges();
+         Task<Photo> GetPhoto(int id);
+         Task<Photo> GetMainPhoto(int id);
+         
+         void UpdateSpace(Space space);
          Task<Enquiry> GetEnquiry(int enquiryId);
          Task<Space> GetSpace(int spaceId);
-         Task<Photo> GetPhoto(int id);
          Task<User> GetUser(int userId);
-         Task<Photo> GetMainPhoto(int id);
          void CreateBookingFromReservation(int id);
          Task<QueryResult<Space>> GetSpaces(SpaceQuery query);
          Task<QueryResult<Space>> GetMerchantSpaces(SpaceQuery query);

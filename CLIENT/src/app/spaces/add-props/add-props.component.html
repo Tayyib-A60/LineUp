@@ -11,10 +11,18 @@
 						<form novalidate (ngSubmit)='createSpaceType()' [formGroup]="spaceTypeForm" class="form">
 							<div class="form-body">
 								<div class="row">
-									<div class="col-xl-6 col-lg-6 col-md-12 mb-1">
+									<div class="col-xl-12 col-lg-12 col-md-12 mb-1">
 										<fieldset class="form-group">
 											<label for="spaceTypeName">SpaceType</label>
 											<input formControlName="type" type="text" class="form-control" placeholder="Space type (required)" name="spaceTypeName" id="spaceTypeName" >
+										</fieldset>
+										<fieldset class="form-group">
+											<label for="imageUrl">ImageUrl</label>
+											<input formControlName="imageUrl" type="text" class="form-control" placeholder="ImageUrl (required)" name="imageUrl" id="imageUrl" >
+										</fieldset>
+										<fieldset class="form-group">
+											<label for="description">Description</label>
+											<textarea rows='8' formControlName="description" type="text" class="form-control" placeholder="Description (required)" name="description" id="description" ></textarea>
 										</fieldset>
 										<button [disabled]='!spaceTypeForm.valid || !spaceTypeForm.dirty' type="submit" class="btn btn-raised mr-1 btn-round btn-primary btn-sm">Create Space type</button>
 									</div>
@@ -27,12 +35,12 @@
 		</div>
 	</div>
 <div class="row text-left">
-	<div class="col-sm-12">
+	<!-- <div class="col-sm-12">
 		<div class="content-header">Add Pricing Option</div>
-	</div>
+	</div> -->
 </div>
 <div class="row text-left">
-		<div class="col-md-8">
+		<!-- <div class="col-md-8">
 			<div class="card">
 				<div class="card-content">
 					<div class="px-3">
@@ -58,5 +66,5 @@
 					</div>
 				</div>
 			</div>
-		</div>
+		</div> -->
 	</div>

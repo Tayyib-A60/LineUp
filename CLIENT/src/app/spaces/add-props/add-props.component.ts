@@ -29,7 +29,9 @@ export class AddPropsComponent implements OnInit {
     });
 
     this.spaceTypeForm = this.formBuilder.group({
-      type: ['', Validators.required]
+      type: ['', Validators.required],
+      description: ['', Validators.required],
+      imageUrl: ['', Validators.required]
     });
   }
 

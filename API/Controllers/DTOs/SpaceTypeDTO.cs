@@ -6,6 +6,7 @@ namespace API.Controllers.DTOs
     {
         public int Id { get; set; }
         public string Type { get; set; }
-        public ICollection<SpaceDTO> Spaces { get; set; }
+        public string Description { get; set; }
+        public string ImageUrl { get; set; }
     }
 }

@@ -3,6 +3,7 @@ import { slider } from './hello-slide.animation'
 import { NguCarouselConfig } from '@ngu/carousel';
 import { Observable, interval } from 'rxjs';
 import { startWith, take, map } from 'rxjs/operators';
+import { SpaceService } from '../spaces/space.service';
 
 @Component({
 selector: 'app-sample-carousel',
@@ -14,6 +15,7 @@ changeDetection: ChangeDetectionStrategy.OnPush
 export class SampleCarouselComponent implements OnInit {
 
 @Input() name: string;
+loaded: boolean;
   imgags = [
     'assets/bg.jpg',
     'assets/car.png',
@@ -27,6 +29,50 @@ export class SampleCarouselComponent implements OnInit {
     {type: 'Gym Space', imgUrl: 'https://cdn.pixabay.com/photo/2013/03/02/02/41/city-89197__180.jpg', content: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam quo molestias reiciendis necessitatibus sint nobis quasi', url: 'gym'},
     {type: 'Meeting Space', imgUrl: 'https://cdn.pixabay.com/photo/2019/11/16/18/43/image-4630827_960_720.jpg', content: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam quo molestias reiciendis necessitatibus sint nobis quasi', url: 'shared'},
     {type: 'Chilling Space', imgUrl: 'https://cdn.pixabay.com/photo/2013/03/02/02/41/city-89197__180.jpg', content: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam quo molestias reiciendis necessitatibus sint nobis quasi', url: 'chilling'}
+  ]
+  carItems = [
+    {
+      id: 1,
+      type: "Event Space",
+      description: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Magni nulla illum ullam quod quidem maiores ab atque est repellendus praesentium enim, sit quisquam cupiditate adipisci voluptas. Soluta eligendi omnis distinctio.",
+      imageUrl: "https://res.cloudinary.com/dro0fy3gz/image/upload/v1581102909/Logo/events_ifgoph.jpg"
+  },
+  {
+      id: 2,
+      type: "Office Space",
+      description: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Magni nulla illum ullam quod quidem maiores ab atque est repellendus praesentium enim, sit quisquam cupiditate adipisci voluptas. Soluta eligendi omnis distinctio.",
+      imageUrl: "https://res.cloudinary.com/dro0fy3gz/image/upload/v1581102909/Logo/workspace_zdq6uv.jpg"
+  },
+  {
+      id: 3,
+      type: "Event Space",
+      description: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Magni nulla illum ullam quod quidem maiores ab atque est repellendus praesentium enim, sit quisquam cupiditate adipisci voluptas. Soluta eligendi omnis distinctio.",
+      imageUrl: "https://res.cloudinary.com/dro0fy3gz/image/upload/v1581102909/Logo/events_ifgoph.jpg"
+  },
+  {
+      id: 4,
+      type: "Office Space",
+      description: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Magni nulla illum ullam quod quidem maiores ab atque est repellendus praesentium enim, sit quisquam cupiditate adipisci voluptas. Soluta eligendi omnis distinctio.",
+      imageUrl: "https://res.cloudinary.com/dro0fy3gz/image/upload/v1581102909/Logo/workspace_zdq6uv.jpg"
+  },
+  {
+      id: 5,
+      type: "Office Space",
+      description: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Magni nulla illum ullam quod quidem maiores ab atque est repellendus praesentium enim, sit quisquam cupiditate adipisci voluptas. Soluta eligendi omnis distinctio.",
+      imageUrl: "https://res.cloudinary.com/dro0fy3gz/image/upload/v1581102909/Logo/workspace_zdq6uv.jpg"
+  },
+  {
+      id: 6,
+      type: "Office Space",
+      description: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Magni nulla illum ullam quod quidem maiores ab atque est repellendus praesentium enim, sit quisquam cupiditate adipisci voluptas. Soluta eligendi omnis distinctio.",
+      imageUrl: "https://res.cloudinary.com/dro0fy3gz/image/upload/v1581102909/Logo/workspace_zdq6uv.jpg"
+  },
+  {
+      id: 7,
+      type: "Office Space",
+      description: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Magni nulla illum ullam quod quidem maiores ab atque est repellendus praesentium enim, sit quisquam cupiditate adipisci voluptas. Soluta eligendi omnis distinctio.",
+      imageUrl: "https://res.cloudinary.com/dro0fy3gz/image/upload/v1581102909/Logo/workspace_zdq6uv.jpg"
+  },
   ]
   public carouselTileItems$: Observable<number[]>;
   public carouselTileConfig: NguCarouselConfig = {
@@ -43,8 +89,9 @@ export class SampleCarouselComponent implements OnInit {
   };
   tempData: any[];
   responsiveOptions: { breakpoint: string; numVisible: number; numScroll: number; }[];
+  spaceTypes: any[];
   
-  constructor(private cdr: ChangeDetectorRef) {
+  constructor(private cdr: ChangeDetectorRef, private spaceService: SpaceService) {
     this.responsiveOptions = [
       {
           breakpoint: '1024px',
@@ -55,8 +102,8 @@ export class SampleCarouselComponent implements OnInit {
           breakpoint: '768px',
           numVisible: 4,
           numScroll: 4
-      },
-      {
+        },
+        {
           breakpoint: '560px',
           numVisible: 1,
           numScroll: 1
@@ -76,13 +123,27 @@ export class SampleCarouselComponent implements OnInit {
           ...this.tempData,
           this.imgags[Math.floor(Math.random() * this.imgags.length)]
         ]);
-        
         console.log(data);
         
         return data;
       })
     );
+    this.spaceService.getSpaceTypes().subscribe((spaceTypes: any[]) => {
+      console.log(spaceTypes);
+      
+      this.spaceTypes = spaceTypes;
+      let count = 3;
+      if(spaceTypes.length < 6) {
+        for(let i = 0; i <= count; i++) {
+          this.spaceTypes.push(spaceTypes[0]);
+        }
+        this.loaded = true;
+      } 
+      console.log(spaceTypes);
+    })
   }
+
+
 
 
 }

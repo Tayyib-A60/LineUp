@@ -41,15 +41,18 @@ import { PaginationComponent } from './pagination/pagination.component';
 import {CarouselModule} from 'primeng/carousel';
 import { NavigationComponent } from './navigation/navigation.component';
 import { NewNavComponent } from './new-nav/new-nav.component';
+import { SharedModule } from './shared/shared.module';
+import { RouterModule } from '@angular/router';
+import { SpacePaginationComponent } from './space-pagination/space-pagination.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    NavbarComponent,
+    // NavbarComponent,
     HomeComponent,
     ListYourSpaceComponent,
-    FooterComponent,
+    // FooterComponent,
     ProfileComponent,
     BookingRequestComponent,
     BookingRequestTwoComponent,
@@ -59,17 +62,20 @@ import { NewNavComponent } from './new-nav/new-nav.component';
     SpaceHomeComponent,
     NewSpaceComponent,
     SampleCarouselComponent,
-    PaginationComponent,
+    // PaginationComponent,
     NavigationComponent,
-    NewNavComponent
+    FooterComponent,
+    NewNavComponent,
+    SpacePaginationComponent
   ],
   imports: [
     AppRoutingModule,
     BrowserModule,
+    FormsModule,
     BrowserAnimationsModule,
     CommonModule,
-    FormsModule,
     NguCarouselModule,
+    RouterModule,
     NgSelectModule,
     HttpClientModule,
     CarouselModule,
@@ -82,6 +88,7 @@ import { NewNavComponent } from './new-nav/new-nav.component';
     PerfectScrollbarModule,
     SpacesModule,
     UserModule,
+    SharedModule,
     BookingModule,
     StoreModule.forRoot({}),
     EffectsModule.forRoot([UserEffects, BookingEffects]),

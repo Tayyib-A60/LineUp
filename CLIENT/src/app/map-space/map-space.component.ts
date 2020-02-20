@@ -1,4 +1,8 @@
 import { ActivatedRoute } from '@angular/router';
+import { ViewChild,
+  EventEmitter, Output, 
+   AfterViewInit,
+  Input, ElementRef } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import * as spaceReducer from '../spaces/state/space.reducers';

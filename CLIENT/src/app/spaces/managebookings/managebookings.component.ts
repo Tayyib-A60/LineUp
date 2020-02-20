@@ -5,6 +5,10 @@ import * as bookingSelectors from '../../state/booking/booking.selector';
 import { BookingState } from '../../state/booking/booking.reducer';
 import { State, Store, select } from '@ngrx/store';
 import { Router } from '@angular/router';
+import { Space } from '../models/space.model';
+import { UserService } from '../../state/user.service';
+import { SpaceService } from '../space.service';
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-managebookings',
@@ -43,9 +47,17 @@ export class ManagebookingsComponent implements OnInit {
   };
   upcomingBookings: any[];
   previousBookings: any[];
+  user: any;
+  space: any;
+  reservation: any;
+  closeResult: string;
+  amenities: any[] = [];
 
   constructor(private bookingStore: Store<BookingState>,
-              private router: Router) { }
+              private router: Router,
+              private userService: UserService,
+              private spaceService: SpaceService,
+              private modalService: NgbModal) { }
 
   ngOnInit() {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
@@ -86,6 +98,8 @@ export class ManagebookingsComponent implements OnInit {
                       .subscribe(bookings => {
                         this.bookingQueryResult = <{totalItems: 0, items: []}>bookings;
                         this.bookings = bookings['items'];
+                        console.log(this.bookings);
+                        
                         if(this.bookings) {
                           this.upcomingBookings = [];
                           this.previousBookings = [];
@@ -98,6 +112,41 @@ export class ManagebookingsComponent implements OnInit {
                           });            
                         }
     });
+  }
+
+  private getBookingDetails(booking) {
+    if(booking.amenitiesSelected) {
+      this.amenities = booking.amenitiesSelected.split('&');
+    }
+    this.userService.getUserDetails(booking.bookedById).subscribe((user) => {
+      this.user = user;
+      console.log(this.user)
+    });
+    this.spaceService.getSpace(booking.idOfSpaceBooked).subscribe((space: Space) => {
+      this.space = space;
+      console.log(this.space);
+    },(err) => {}, () => {
+    })
+  }
+
+  open(content, booking) {
+    this.reservation = booking;
+    this.getBookingDetails(booking);
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return  `with: ${reason}`;
+    }
   }
 
 }

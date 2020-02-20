@@ -8,6 +8,8 @@ import * as bookingSelector from '../state/booking/booking.selector';
 import { takeWhile } from 'rxjs/operators';
 import { Space } from '../spaces/models/space.model';
 import { BookingState } from '../state/booking/booking.reducer';
+import { NotificationService } from '../services/notification.service';
+import * as bookingActions from '../state/booking/booking.actions';
 @Component({
   selector: 'app-booking-request',
   templateUrl: './booking-request.component.html',
@@ -22,18 +24,29 @@ export class BookingRequestComponent implements OnInit {
   freeAmenities = [];
   amenitiesSelected = [];
   totalCost: number;
+  timeFrom: Date;
+  timeTo: Date;
+  currentUser: any;
 
   constructor(private route: ActivatedRoute,
               private spaceStore: Store<SpaceState>,
-              private bookingStore: Store<BookingState>) { }
+              private bookingStore: Store<BookingState>,
+              private notification: NotificationService) { }
 
   ngOnInit() {
     this.route.params.subscribe(
       (params: Params) => {
       this.id = params['id'];
     });
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
     this.booking = JSON.parse(localStorage.getItem('bookingToCreate'));
+    this.amenitiesSelected = JSON.parse(localStorage.getItem('amenitiesSelected'));
     console.log(this.booking);
+    this.timeFrom = new Date(this.booking.usingTimes[0].usingFrom.substr(0, this.booking.usingTimes[0].usingFrom.length-2));
+    this.timeTo = new Date(this.booking.usingTimes[this.booking.usingTimes.length-1].usingTill.substr(0, this.booking.usingTimes[0].usingFrom.length-2));
+    
+    console.log(this.amenitiesSelected);
+    
     
     this.spaceStore.dispatch(new spaceActions.GetSingleSpace(Number(this.id)));
 
@@ -42,13 +55,16 @@ export class BookingRequestComponent implements OnInit {
         .subscribe(space => {
           this.space = space;
           this.loaded = true;
-          if(space) {
-            space.amenities.forEach((amenity) => {
-              if(amenity.price == 0) {
-                this.freeAmenities.push(amenity);
-              }
-            });
-          } 
+
+          console.log(space);
+          
+          // if(space) {
+          //   space.amenities.forEach((amenity) => {
+          //     if(amenity.price == 0) {
+          //       this.freeAmenities.push(amenity);
+          //     }
+          //   });
+          // } 
     });
 
     // this.bookingStore.pipe(select(bookingSelector.getBookingToCreate),
@@ -70,6 +86,20 @@ export class BookingRequestComponent implements OnInit {
       this.totalCost -= this.amenitiesSelected[index].price;
       this.amenitiesSelected.splice(index, 1);
     }
+  }
+
+  bookSpace(){
+    if(this.currentUser === null) {
+      this.notification.typeInfo('Please sign in to book this space', 'Info');
+      return;
+    }
+  }
+  reserveSpace(){
+    if(this.currentUser === null) {
+      this.notification.typeInfo('Please sign in to book this space', 'Info');
+      return;
+    }
+    this.spaceStore.dispatch(new bookingActions.CreateReservation(this.booking));
   }
 
 }
