@@ -43,6 +43,7 @@ import { NavigationComponent } from './navigation/navigation.component';
 import { NewNavComponent } from './new-nav/new-nav.component';
 import { SharedModule } from './shared/shared.module';
 import { RouterModule } from '@angular/router';
+import { SpacePaginationComponent } from './space-pagination/space-pagination.component';
 
 
 @NgModule({
@@ -64,7 +65,8 @@ import { RouterModule } from '@angular/router';
     // PaginationComponent,
     NavigationComponent,
     FooterComponent,
-    NewNavComponent
+    NewNavComponent,
+    SpacePaginationComponent
   ],
   imports: [
     AppRoutingModule,

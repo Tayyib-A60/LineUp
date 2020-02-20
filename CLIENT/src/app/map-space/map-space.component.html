@@ -61,7 +61,7 @@
                     </div>
                 </div>
                 <div *ngIf='spaceQueryResult' class="d-flex justify-content-between mt-5 mb-4">
-                  <!-- <app-pagination *ngIf="spaceQueryResult?.totalItems > query?.pageSize" [totalItems]="spaceQueryResult?.totalItems" [pageSize]="query?.pageSize" (pageChanged)="onPageChange($event)"></app-pagination> -->
+                  <app-space-pagination *ngIf="spaceQueryResult?.totalItems > query?.pageSize" [totalItems]="spaceQueryResult?.totalItems" [pageSize]="query?.pageSize" (pageChanged)="onPageChange($event)"></app-space-pagination>
                 </div>
             </div>
       </div>

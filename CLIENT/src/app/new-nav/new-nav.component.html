@@ -45,17 +45,11 @@
   <div class="header_search-1">
     <input type="text" class="header_input" placeholder="Search location...">
     <span class="">
-      <select class="header_select" name="" id="">
-        <option value="All Spaces" selected>
-          <span class="menu-list-item">All Spaces</span>
-        </option>
-        <option value="Space 1">
-          <span class="menu-list-item">Space 1</span>
-        </option>
-        <option value="Space 2">
-          <span class="menu-list-item">Space 2</span>
-        </option>
-      </select>
+      <fieldset class="form-group">
+        <ng-select [items]="spaceTypes" [virtualScroll]="true" bindLabel="type" bindValue="id" placeholder="Select type"
+        [(ngModel)]="selectedType">
+        </ng-select>
+    </fieldset>
     </span>
   </div>
 </div>
