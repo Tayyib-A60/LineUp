@@ -71,7 +71,7 @@ export class SpaceDisplayComponent implements OnInit {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
   }
 
-  bookSpace(id: number) {
+  bookSpace() {
     const { year, month, day } = this.dateFrom;
     let yearTo = this.dateTo['year'];
     let monthTo = this.dateTo['month'];

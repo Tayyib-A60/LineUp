@@ -40,6 +40,12 @@ export class BookingService {
         const url = this.url + `/lineUp/getBookedTimes/${requestBody['id']}`;
         return this.httpClient.post(url,{From, To}, { headers });
     }
+    
+    acceptReservation(id: number) {
+        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        const url = this.url + `/lineUp/acceptBooking/${id}`;
+        return this.httpClient.post(url, { headers });
+    }
 
     private toQueryString(obj) {
         const parts = [];

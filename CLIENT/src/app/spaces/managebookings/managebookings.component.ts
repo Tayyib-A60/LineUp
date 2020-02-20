@@ -51,6 +51,7 @@ export class ManagebookingsComponent implements OnInit {
   space: any;
   reservation: any;
   closeResult: string;
+  amenities: any[] = [];
 
   constructor(private bookingStore: Store<BookingState>,
               private router: Router,
@@ -97,6 +98,8 @@ export class ManagebookingsComponent implements OnInit {
                       .subscribe(bookings => {
                         this.bookingQueryResult = <{totalItems: 0, items: []}>bookings;
                         this.bookings = bookings['items'];
+                        console.log(this.bookings);
+                        
                         if(this.bookings) {
                           this.upcomingBookings = [];
                           this.previousBookings = [];
@@ -112,6 +115,9 @@ export class ManagebookingsComponent implements OnInit {
   }
 
   private getBookingDetails(booking) {
+    if(booking.amenitiesSelected) {
+      this.amenities = booking.amenitiesSelected.split('&');
+    }
     this.userService.getUserDetails(booking.bookedById).subscribe((user) => {
       this.user = user;
       console.log(this.user)

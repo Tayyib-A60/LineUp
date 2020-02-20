@@ -85,6 +85,10 @@ export class NewSpaceComponent implements OnInit {
   timesToDisplay: Map<string, {from: number, to: number, available: boolean}[]>;
   timeToDisplayArray: any[] = [];
   timesMap: any;
+  modalBookingTimes: any;
+  modalTimesAlreadyTaken: Map<string, {from: number, to: number, available: boolean}[]>;
+  modalTimeToDisplayArray: any[] = [];
+  clicked: number = 0;
   
   constructor(private carouselConfig: NgbCarouselConfig,
               private route: ActivatedRoute,
@@ -167,6 +171,8 @@ export class NewSpaceComponent implements OnInit {
     // this.amenitiesSelected.forEach(amenity => {
     //   this.totalCost += amenity.price;
     // });
+    console.log(this.totalCost);
+    
   }
 
   sendEnquiry() {
@@ -342,12 +348,16 @@ export class NewSpaceComponent implements OnInit {
       usingTimes.push({usingFrom: dateFrom, usingTill: dateTo});
     }
 
+    for(let i = 0; i < usingTimes.length; i++) {
+      if(this.thisSpace.selectedPricingOption == 0) {
+        this.totalCost += (usingTimes[i].usingTill.getUTCHours() - usingTimes[i].usingFrom.getUTCHours()) * this.thisSpace.price;
+      } else if (this.thisSpace.selectedPricingOption == 1) {
+        this.totalCost += this.thisSpace.price;
+      }
+  }
+
     const booking = {
       userId: this.thisSpace['userId'],
-      // spaceBooked: {
-      //   id: this.thisSpace['id']
-      // },
-      // spaceBookedId: this.thisSpace['id'],
       amenitiesSelected: amenities,
       idOfSpaceBooked: this.thisSpace['id'],
       usingTimes: [
@@ -355,17 +365,25 @@ export class NewSpaceComponent implements OnInit {
       ],
       status: BookingStatus.Reserved,
       bookedById: this.currentUser['id'],
-      totalPrice: this.thisSpace['price'],
+      totalPrice: this.totalCost,
       noOfGuests: this.numberOfGuests,
       createdByOwner: false
     };
     console.log(booking);    
     // this.spaceStore.dispatch(new bookingActions.CreateReservation(booking));
     // this.router.navigate(['/profile'], {relativeTo: this.route});
+
+    localStorage.setItem('bookingToCreate', JSON.stringify(booking));
+    localStorage.setItem('amenitiesSelected', JSON.stringify(this.amenitiesSelected));
+    this.spaceStore.dispatch(new bookingActions.AddBookingToStore(booking));
+    this.router.navigate([`/booking-request/${this.thisSpace['id']}`]);
   }
 
   check() {
-    // this.checkAvailability();
+    let items = [];
+    items.push('hi there');
+    console.log(items);
+    
   }
 
   // checkForAvailablity(event) {   
@@ -404,7 +422,7 @@ export class NewSpaceComponent implements OnInit {
     this.spaceStore.pipe(select(bookingSelectors.getBookingTimes),
       takeWhile(() => this.componentActive))
       .subscribe(bookingTimes => {
-
+        this.clicked += 1;
         this.bookingTimes = bookingTimes? bookingTimes: [];
         let timesMap = new Map();
 
@@ -425,51 +443,170 @@ export class NewSpaceComponent implements OnInit {
           }
           this.timesAlreadyTaken.clear();
           this.timesAlreadyTaken = timesMap;
-          // console.log(this.timesAlreadyTaken);
-
-          this.timesAlreadyTaken.forEach((time,day) => {
-            let missingTimes = [];
-            
-            time.sort(d => d.from);
-
-            if(time.length === 1) {
-
-              if(time[0].from > 0) {
-                missingTimes.push({from: 0, to: time[0].from, available: true});
-              }
-
-              if(time[0].to < 24) {
-                missingTimes.push({from: time[0].to, to: 24, available: true});
-              }
-
-            }
-
-            if(time.length > 1) {
-              console.log('Day length is now more than 1');
-              
-              if(time[0].from < 1) {
-                missingTimes.push({from: 0, to: time[0].from, available: true});
-              }
-
-              for(let i = 1; i < time.length; i++) {
-                missingTimes.push({from: time[i-1].to, to: time[i].from, available: true});
-              }
-
-              if(time[0].to < 24) {
-                missingTimes.push({from: time[0].to, to: 24, available: true});
-              }
-            }
-            time = [...time,...missingTimes];            
-            time.sort((a,b) => a.from - b.from);
-
-            items.push({day: day,times: time});
-
-          });
-          console.log(items);
-          
           
         }
+    }, (err) => {
+    }, () => {
+            
     });
+    console.log(this.timesAlreadyTaken);
+    
+    // if(this.timesAlreadyTaken) {
+      this.timesAlreadyTaken.forEach((time,day) => {
+        let missingTimes = [];
+        console.log('I got called');
+        
+        time.sort(d => d.from);
+
+        if(time.length === 1) {
+          console.log('I got called too');
+          
+          if(time[0].from > 0) {
+            missingTimes.push({from: 0, to: time[0].from, available: true});
+          }
+
+          if(time[0].to < 24) {
+            missingTimes.push({from: time[0].to, to: 24, available: true});
+          }
+
+        }
+
+        if(time.length > 1) {
+          console.log('Day length is now more than 1');
+          
+          if(time[0].from < 1) {
+            missingTimes.push({from: 0, to: time[0].from, available: true});
+          }
+
+          for(let i = 1; i < time.length; i++) {
+            missingTimes.push({from: time[i-1].to, to: time[i].from, available: true});
+          }
+
+          if(time[0].to < 24) {
+            missingTimes.push({from: time[0].to, to: 24, available: true});
+          }
+        }
+        let times = [...time,...missingTimes];            
+        times.sort((a,b) => a.from - b.from);
+
+        this.timeToDisplayArray.push({day, times});
+
+      });
+      if(this.timeToDisplayArray && this.clicked > 1 && this.timeToDisplayArray.length === 0) {
+        this.notification.typeSuccess('This space is available for the selected time','Available')
+      } else if(this.clicked > 1 && this.timeToDisplayArray.length > 0) {
+        this.notification.typeWarning('Space not available for selected date/time', 'Not Available');
+      } else if(this.clicked < 2 ) {
+        this.notification.typeInfo('Please uncheck and check the checkbox again', 'Info');
+      }
+      console.log(this.timeToDisplayArray);
+    // }
+
+  }
+  }
+  checkModalAvailability(event) {
+    if(event.target.checked) {
+    this.modalTimeToDisplayArray = [];
+    this.modalTimesAlreadyTaken = new Map();
+    this.timesMap = new Map();
+    
+    const { year, month, day } = this.modalDateFrom;
+    let yearTo = this.modalDateTo['year'];
+    let monthTo = this.modalDateTo['month'];
+    let dayTo = this.modalDateTo['day'];
+
+    const {hour, minute, second } = this.modalTimeFrom;
+    let hourTo = this.modalTimeTo['hour'];
+    let minuteTo = this.modalTimeTo['minute'];
+    let secondTo = this.modalTimeTo['second'];
+    const dateFrom = new Date(year, month-1, day, hour+1, minute, second);
+    const dateTo = new Date(yearTo, monthTo-1, dayTo, hourTo+1, minuteTo, secondTo);
+
+    const requestBody = {
+      id: Number(this.id),
+      From: dateFrom,
+      To: dateTo
+    };
+    
+    let items = [];
+
+    this.spaceStore.dispatch(new bookingActions.GetBookingTimes(requestBody));
+
+    this.spaceStore.pipe(select(bookingSelectors.getBookingTimes),
+      takeWhile(() => this.componentActive))
+      .subscribe(bookingTimes => {
+
+        this.modalBookingTimes = bookingTimes? bookingTimes: [];
+        let timesMap = new Map();
+
+        if(bookingTimes) {
+          for(let i = 0; i < bookingTimes.length; i++) {
+
+            const date = bookingTimes[i].from.substr(0,10);
+            const from = new Date(bookingTimes[i].from).getUTCHours() + 1;
+            const to = new Date(bookingTimes[i].to).getUTCHours() + 1;
+
+            if(timesMap.has(date)){
+              let temp = timesMap.get(date);
+              temp.push({from, to, available: false})
+                timesMap.set(date,temp);
+            } else {
+              timesMap.set(date, [{from, to, available: false}]);
+            }
+          }
+          this.modalTimesAlreadyTaken.clear();
+          this.modalTimesAlreadyTaken = timesMap;
+          
+        }
+    }, (err) => {
+    }, () => {
+            
+    });
+    
+    // if(this.timesAlreadyTaken) {
+      this.modalTimesAlreadyTaken.forEach((time,day) => {
+        let missingTimes = [];
+        console.log('I got called');
+        
+        time.sort(d => d.from);
+
+        if(time.length === 1) {
+          console.log('I got called too');
+          
+          if(time[0].from > 0) {
+            missingTimes.push({from: 0, to: time[0].from, available: true});
+          }
+
+          if(time[0].to < 24) {
+            missingTimes.push({from: time[0].to, to: 24, available: true});
+          }
+
+        }
+
+        if(time.length > 1) {
+          console.log('Day length is now more than 1');
+          
+          if(time[0].from < 1) {
+            missingTimes.push({from: 0, to: time[0].from, available: true});
+          }
+
+          for(let i = 1; i < time.length; i++) {
+            missingTimes.push({from: time[i-1].to, to: time[i].from, available: true});
+          }
+
+          if(time[0].to < 24) {
+            missingTimes.push({from: time[0].to, to: 24, available: true});
+          }
+        }
+        let times = [...time,...missingTimes];            
+        times.sort((a,b) => a.from - b.from);
+
+        this.modalTimeToDisplayArray.push({day, times});
+
+      });
+      console.log(this.modalTimeToDisplayArray);
+    // }
+
   }
   }
 

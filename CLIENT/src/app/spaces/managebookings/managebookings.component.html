@@ -29,7 +29,10 @@
                                   <h5>{{reservation['usingFrom'] | date: 'MMM, d, h:mm a'}} - {{reservation['usingTill'] | date: 'MMM, d, y h:mm a'}}</h5>
                                 </div>
                                 <div class="col-6">
-                                  <h5>Amenities: </h5>
+                                  <h5>Amenities </h5>
+                                  <div *ngFor='let amenity of amenities'>
+                                  <p>{{amenities}}</p>
+                                  </div>
                                 </div>
                               </div>
                               <h5 class="card-text">Booked by: {{user?.name}}</h5>

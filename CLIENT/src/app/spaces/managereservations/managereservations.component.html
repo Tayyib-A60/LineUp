@@ -29,7 +29,10 @@
                                 <h5>{{reservation['usingFrom'] | date: 'MMM, d, h:mm a'}} - {{reservation['usingTill'] | date: 'MMM, d, y h:mm a'}}</h5>
                               </div>
                               <div class="col-6">
-                                <h5>Amenities: </h5>
+                                <h5>Amenities </h5>
+                                <div *ngFor='let amenity of amenities'>
+                                <p>{{amenity}}</p>
+                                </div>
                               </div>
                             </div>
                             <h5 class="card-text">Booked by: {{user?.name}}</h5>
@@ -121,13 +124,18 @@
                                 <table class="table table-responsive-md text-center">
                                   <thead>
                                     <tr>
+                                      <th>S/N</th>
                                       <th>Booking REF</th>
                                       <th>Time</th>
                                       <th>Price</th>
+                                      <th>Accept</th>
                                     </tr>
                                   </thead>
                                   <tbody>
-                                    <tr (click)='open(content, reservation)' class="booking_details" *ngFor='let reservation of previousReservations'>
+                                    <tr (click)='open(content, reservation)' class="booking_details" *ngFor='let reservation of previousReservations, let i = index'>
+                                      <td>
+                                        {{i}}
+                                      </td>
                                       <td>
                                         {{reservation?.bookingRef}}
                                       </td>
@@ -138,6 +146,11 @@
                                       </td>
                                       <td>
                                           <h4 class="card-title">{{reservation['totalPrice'] | currency: 'NGN' : 'symbol-narrow'}}</h4>
+                                      </td>
+                                      <td>
+                                        <button (click)='accept(reservation.id)' type="button" class="btn btn-raised px-2 mb-0" style="background-color: #565f73; color: #f3f3f3">
+                                          <span class="d-lg-inline-block space_btn">Accept</span>
+                                        </button>
                                       </td>
                                       <hr>
                                     </tr>
@@ -160,7 +173,7 @@
                             <div class="card-content">
                               <div class="col-md-12 col-12">
                                 <div class="row">
-                                  <!-- <div class="col-md-4 col-12"> -->
+                                 <div class="col-md-4 col-12">
                                     <form class="form-inline">
                                       <div class="form-group">
                                       <div class="col-md-6 col-12">
@@ -187,7 +200,7 @@
                                       </div>
                                       </div>
                                     </form>
-                                    <!-- </div> -->
+                                     </div>
                                 </div>
                                 <div class="row">
                                   <div class="col-md-9 col-12">
@@ -209,12 +222,17 @@
                                 <table class="table table-responsive-md text-center">
                                   <thead>
                                     <tr>
+                                      <th>S/N</th>
+                                      <th>BookingRef</th>
                                       <th>Booking</th>
                                       <th>Price</th>
                                     </tr>
                                   </thead>
                                     <tbody>
-                                      <tr (click)='open(content, reservation)' class="booking_details" *ngFor='let reservation of upcomingReservations'>
+                                      <tr (click)='open(content, reservation)' class="booking_details" *ngFor='let reservation of upcomingReservations, let i = index'>
+                                        <td>
+                                          {{i}}
+                                        </td>
                                         <td>
                                           {{reservation?.bookingRef}}
                                         </td>

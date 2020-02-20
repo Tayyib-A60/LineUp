@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { takeWhile } from 'rxjs/operators';
+// import { FormsModule } from '@angular/forms';
 import * as bookingActions from '../../state/booking/booking.actions';
 import * as bookingSelectors from '../../state/booking/booking.selector';
 import { BookingState } from '../../state/booking/booking.reducer';
@@ -8,6 +9,8 @@ import { UserService } from '../../state/user.service';
 import { SpaceService } from '../space.service';
 import { Space } from '../models/space.model';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { BookingService } from '../../state/booking/booking.service';
+import { NotificationService } from '../../services/notification.service';
 @Component({
   selector: 'app-managereservations',
   templateUrl: './managereservations.component.html',
@@ -51,12 +54,15 @@ export class ManagereservationsComponent implements OnInit {
   closeResult: string;
   user: any;
   space: Space;
+  amenities: any;
   
 
   constructor(private bookingStore: Store<BookingState>,
               private userService: UserService,
               private spaceService: SpaceService,
-              private modalService: NgbModal) { }
+              private modalService: NgbModal,
+              private bookingService: BookingService,
+              private notification: NotificationService) { }
 
   ngOnInit() {
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
@@ -106,7 +112,7 @@ export class ManagereservationsComponent implements OnInit {
     this.bookingStore.pipe(select(bookingSelectors.getMerchantBookings),
                       takeWhile(() => this.componentActive))
                       .subscribe(reservations => {
-                        console.log(Date());
+                        // console.log(Date());
                         this.reservations = reservations['items'];
                         if(this.reservations) {
                           this.upcomingReservations = [];
@@ -123,15 +129,34 @@ export class ManagereservationsComponent implements OnInit {
   }
 
   private getBookingDetails(booking) {
+    if(booking.amenitiesSelected) {
+      this.amenities = booking.amenitiesSelected.split('&');
+    }
       this.userService.getUserDetails(booking.bookedById).subscribe((user) => {
         this.user = user;
-        console.log(this.user)
+        // console.log(this.user)
       });
       this.spaceService.getSpace(booking.idOfSpaceBooked).subscribe((space: Space) => {
         this.space = space;
-        console.log(this.space);
+        // console.log(this.space);
       },(err) => {}, () => {
       })
+  }
+  accept(bookingId) {
+    const indexp = this.previousReservations.findIndex(rsv => rsv.id === bookingId);
+    const indexu = this.upcomingReservations.findIndex(rsv => rsv.id === bookingId);
+
+      this.bookingService.acceptReservation(bookingId).subscribe(() => {
+        this.notification.typeSuccess('Reservation accepted', 'Success')
+        if(indexp > -1) {
+          this.previousReservations.splice(indexp, 1);
+        }
+        if(indexu > -1) {
+          this.upcomingReservations.splice(indexu, 1);
+        }
+      }, (err) => {
+        this.notification.typeError(`Could not accept booking ${err.message}`, 'Not Booked');
+      });
   }
 
   open(content, booking) {

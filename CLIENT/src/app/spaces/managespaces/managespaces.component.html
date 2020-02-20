@@ -59,7 +59,7 @@
           </div>
         </div>
         <div *ngIf="spaceQueryResult">
-          <app-admin-pagination *ngIf="spaceQueryResult?.totalItems > merchantQuery?.pageSize"  [totalItems]="spaceQueryResult?.totalItems" [pageSize]="merchantQuery?.pageSize" (pageChanged)="onPageChange($event)"></app-admin-pagination>
+          <app-pagination *ngIf="spaceQueryResult?.totalItems > merchantQuery?.pageSize"  [totalItems]="spaceQueryResult?.totalItems" [pageSize]="merchantQuery?.pageSize" (pageChanged)="onPageChange($event)"></app-pagination>
         </div>
       </div>
     </div>

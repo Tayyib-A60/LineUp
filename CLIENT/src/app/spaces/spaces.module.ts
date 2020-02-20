@@ -35,6 +35,7 @@ import { NguCarouselModule } from '@ngu/carousel';
 import { AdminPaginationComponent } from './admin-pagination/admin-pagination.component';
 import { AutocompleteComponent } from '../autocomplete/autocomplete.component';
 import { ManageAvailabilityComponent } from './manage-availability/manage-availability.component';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,7 @@ import { ManageAvailabilityComponent } from './manage-availability/manage-availa
     SidebarListDirective,
     SidebarAnchorToggleDirective,
     SidebarToggleDirective,
-    ManagespacesComponent,
+    // ManagespacesComponent,
     ManagereservationsComponent,
     ManagebookingsComponent,
     ManageenquiriesComponent,
@@ -67,6 +68,8 @@ import { ManageAvailabilityComponent } from './manage-availability/manage-availa
     TagInputModule,
     FormsModule,
     FileUploadModule,
+    NgSelectModule,
+    RouterModule,
     NguCarouselModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyDqDa-Jf1KhEOO0FXyJwReGiquRMCaz9Bs'
