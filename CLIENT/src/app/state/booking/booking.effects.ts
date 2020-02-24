@@ -16,7 +16,7 @@ export class BookingEffects {
                 private bookingService: BookingService,
                 private notification: NotificationService,
                 private router: Router) {
-                    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+                    this.currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
                 }
 
     // @Effect()

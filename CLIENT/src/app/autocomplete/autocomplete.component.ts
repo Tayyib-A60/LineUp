@@ -2,7 +2,7 @@ import { Component, ViewChild,
         EventEmitter, Output, 
         OnInit, AfterViewInit,
         Input, ElementRef } from '@angular/core';
-import { } from 'googlemaps';
+// import { } from 'googlemaps';
 
 @Component({
   selector: 'app-autocomplete',

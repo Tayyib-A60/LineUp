@@ -38,9 +38,9 @@ export class BookingRequestComponent implements OnInit {
       (params: Params) => {
       this.id = params['id'];
     });
-    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    this.booking = JSON.parse(localStorage.getItem('bookingToCreate'));
-    this.amenitiesSelected = JSON.parse(localStorage.getItem('amenitiesSelected'));
+    this.currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+    this.booking = JSON.parse(sessionStorage.getItem('bookingToCreate'));
+    this.amenitiesSelected = JSON.parse(sessionStorage.getItem('amenitiesSelected'));
     console.log(this.booking);
     this.timeFrom = new Date(this.booking.usingTimes[0].usingFrom.substr(0, this.booking.usingTimes[0].usingFrom.length-2));
     this.timeTo = new Date(this.booking.usingTimes[this.booking.usingTimes.length-1].usingTill.substr(0, this.booking.usingTimes[0].usingFrom.length-2));

@@ -33,8 +33,8 @@ export class ProfileComponent implements OnInit {
               private bookingStore: Store<BookingState>) { }
 
   ngOnInit() {
-    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    // this.getCustomerBooking();
+    this.currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+    this.getCustomerBooking();
   }
 
   private getCustomerBooking() {

@@ -18,7 +18,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 @Injectable()
 export class SpaceEffects {
-    // merchantId = localStorage.getItem('currentUser')? JSON.parse(localStorage.getItem('currentUser'))['id'] : 0;
+    // merchantId = sessionStorage.getItem('currentUser')? JSON.parse(sessionStorage.getItem('currentUser'))['id'] : 0;
     query = {
         currentPage: 1,
         pageSize: 10
@@ -190,7 +190,10 @@ export class SpaceEffects {
         ofType(SpaceActionTypes.GetSpaces),
         mergeMap((action: spaceActions.GetSpaces) => this.spaceService.getSpaces(action.payload)
             .pipe(
-                map((spaceQueryResult: SpaceQueryResult) => new spaceActions.GetSpacesSuccess(spaceQueryResult)),
+                map((spaceQueryResult: SpaceQueryResult) => {
+                    this.router.navigate(['/map-space']);
+                    return new spaceActions.GetSpacesSuccess(spaceQueryResult)
+                }),
                 catchError(err => {
                     this.notification.typeError(`${err.message}`, 'Error');
                     return of(new spaceActions.GetSpacesFailure(err))

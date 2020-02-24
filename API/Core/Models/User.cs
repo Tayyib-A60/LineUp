@@ -9,14 +9,14 @@ namespace API.Core.Models
     {
         public int Id { get; set; }
         [Required]
-        [StringLength(50)]
+        // [StringLength(50)]
         public string Name { get; set; }
         [Required]
-        [StringLength(50)]
+        // [StringLength(50)]
         public string Email { get; set; }
-        [StringLength(30)]
+        // [StringLength(30)]
         public string ContactNo { get; set; }
-        [StringLength(30)]
+        // [StringLength(30)]
         public string OtherContactNo { get; set; }
         [Required]
         public byte[] PasswordHash { get; set; }

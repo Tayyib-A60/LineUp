@@ -17,7 +17,7 @@ const data = require('../../shared/chartist.json');
 })
 export class DashboardComponent implements OnInit {
 
-  merchantId = localStorage.getItem('currentUser')? JSON.parse(localStorage.getItem('currentUser'))['id'] : 0;
+  merchantId = sessionStorage.getItem('currentUser')? JSON.parse(sessionStorage.getItem('currentUser'))['id'] : 0;
   componentActive = true;
   merchantMetrics: any;
   WidgetlineChart: Chart = {

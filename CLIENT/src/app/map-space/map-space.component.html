@@ -1,7 +1,7 @@
 <app-new-nav></app-new-nav>
 <div class="map_container">
     <div class="row">
-      <div class="col-lg-6">
+      <div class="col-lg-6 col-12">
             <div class="option_input">
                 <div class="d-flex justify-content-between">
                   <div>
@@ -9,7 +9,7 @@
                       <input type="text" placeholder='e.g. Lagos' [(ngModel)]="searchString" class="lineup_custom_input">
                   </div>
                   <button type="button" class="btn btn-raised px-2 mb-0">
-                      <span class="d-lg-inline-block d-none space_btn" (click)='search()'>Search</span>
+                      <span class="d-lg-inline-block space_btn" (click)='search()'>Search</span>
                     </button>
                 </div>
             </div> 
@@ -17,7 +17,7 @@
                 <div class="d-flex mt-4 justify-content-between align-items-baseline">
                   <p class="space_sub_head">Filter by:</p>
                   <fieldset class="form-group">
-                      <ng-select [items]="spaceTypes" [virtualScroll]="true" bindLabel="type" bindValue="url" placeholder="Select type"
+                      <ng-select [items]="spaceTypes" [virtualScroll]="true" bindLabel="type" bindValue="id" placeholder="Select type"
                       [(ngModel)]="selectedType">
                       </ng-select>
                   </fieldset>
@@ -35,7 +35,7 @@
                 <div class="row text-left mt-3" matchHeight="card">
                     <div *ngFor='let space of spaceQueryResult.items' class="col-lg-6 col-md-6 col-sm-12 col-xs-8">
                       <!-- <a > -->
-                        <div *ngIf='space?.photos' class="card" style="cursor: pointer;" [routerLink]="['/new-space/' + space.id]">
+                        <div *ngIf='space?.photos' class="card" style="cursor: pointer;" [routerLink]="['/space/' + space.id]">
                           <div class="card-content card-bg hct">
                             <div class="card-img">
                               <img *ngIf='space.photos.length>0' class="card-img-top img_fit img-fluid card-radius" [src]="space.photos[0].fileName" [alt]="space.photos[0].fileName">

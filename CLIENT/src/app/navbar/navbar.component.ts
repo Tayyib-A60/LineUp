@@ -48,7 +48,7 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit() {
     this.config = this.configService.templateConf;
-    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    this.currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
   }
 
   merchantIsAuthenticated() {
@@ -58,13 +58,13 @@ export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   signOut() {
-    localStorage.removeItem('currentUser');
+    sessionStorage.removeItem('currentUser');
     this.store.dispatch(new userActions.SignOutUser());
     this.router.navigate(['']);
   }
 
   anyUserIsAuthenticated() {
-    return localStorage.getItem('currentUser')? true: false;
+    return sessionStorage.getItem('currentUser')? true: false;
   }
 
   ngAfterViewInit() {

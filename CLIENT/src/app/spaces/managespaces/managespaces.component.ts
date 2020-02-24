@@ -23,8 +23,8 @@ export class ManagespacesComponent implements OnInit {
   currentPage: number;
   spaces = [];
   loaded: boolean;
-  merchantId = localStorage.getItem('currentUser')? 
-  JSON.parse(localStorage.getItem('currentUser'))['id'] : 0;
+  merchantId = sessionStorage.getItem('currentUser')? 
+  JSON.parse(sessionStorage.getItem('currentUser'))['id'] : 0;
   merchantQuery = {
     userId: this.merchantId,
     currentPage: this.currentPage,

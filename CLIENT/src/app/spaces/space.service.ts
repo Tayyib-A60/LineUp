@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { SpaceType } from './models/spaceType.model';
 import { Observable, throwError } from 'rxjs';
-import { tap, catchError, filter } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { Amenity } from './models/amenity.model';
 import { Space } from './models/space.model';
@@ -13,11 +12,12 @@ import { Space } from './models/space.model';
 
 export class SpaceService {
   url = environment.url;
+  id = JSON.parse(sessionStorage.getItem('currentUser'))? JSON.parse(sessionStorage.getItem('currentUser')).id : null;
   constructor(private httpClient: HttpClient) { }
 
   createSpace(space: Space) {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    const url = this.url + '/lineUp/createSpace';
+    const url = this.url + `/lineUp/createSpace/${this.id}`;
     return this.httpClient.post(url, space, { headers });
   }
   
@@ -43,7 +43,7 @@ export class SpaceService {
     console.log('Got to create space type');
     
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    const url = this.url + '/lineUp/createSpaceType';
+    const url = this.url + '/lineUp/createSpaceType/' + this.id;
     return this.httpClient.post(url, spaceType, { headers });
   }
 
@@ -60,7 +60,7 @@ export class SpaceService {
   }
   createAmenities(amenities: any) {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    const url = this.url + '/lineUp/createAmenities';
+    const url = this.url + `/lineUp/createAmenities/${this.id}`;
     return this.httpClient.post(url, amenities, { headers });
   }
 

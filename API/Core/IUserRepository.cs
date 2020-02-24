@@ -13,6 +13,7 @@ namespace API.Core
         Task<bool> UserExists(User user);
         Task<IEnumerable<User>> GetUsers();
         Task<User> GetUser(int id);
+        Task<int> GetNoOfSpaces(int userId);
         Task<User> GetUser(string email);
         Task<User> CreateUser(User user, string password);
         void UpdateUser (string newPassword, User userToUpdate);

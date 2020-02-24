@@ -42,7 +42,7 @@ const routes: Routes = [
     { path: 'merchants', component: ManageMerchantsComponent },
     { path: 'analytics', component: DashboardComponent },
   ]},
-  { path: '', component: HomeComponent },
+  { path: '', component: SpaceHomeComponent },
   { path: 'sign-in', component: SignInComponent },
   { path: 'sign-up', component: SignUpComponent },
   { path: 'sign-up-as-merchant', component: SignUpComponent },
@@ -55,10 +55,10 @@ const routes: Routes = [
   { path: 'booking-request-two', component: BookingRequestTwoComponent },
   { path: 'map-space/:spaceType', component: MapSpaceComponent },
   { path: 'map-space', component: MapSpaceComponent },
-  { path: 'space-home', component: SpaceHomeComponent },
-  { path: 'new-space/:id', component: NewSpaceComponent },
-  { path: 'space-details/:id', component: SpaceDisplayComponent },
-  { path: 'caro', component: SampleCarouselComponent},
+  // { path: 'space-home', component: SpaceHomeComponent },
+  { path: 'space/:id', component: NewSpaceComponent },
+  // { path: 'space-details/:id', component: SpaceDisplayComponent },
+  // { path: 'caro', component: SampleCarouselComponent},
   { path: '**', redirectTo: '' }
 ];
 

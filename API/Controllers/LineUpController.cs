@@ -2,17 +2,20 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using API.Controllers.DTOs;
 using API.Core;
 using API.Core.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
     [Route("api/lineUp")]
     [ApiController]
+    // [Authorize]
     public class LineUpController : ControllerBase
     {
         private IMapper _mapper { get; }
@@ -26,23 +29,33 @@ namespace API.Controllers
             _mapper = mapper;
         }
 
-        [HttpPost("createSpace")]
-        public async Task<IActionResult> CreateSpace([FromBody] SpaceDTO spaceDTO)
+        [HttpPost("createSpace/{userId}")]
+        public async Task<IActionResult> CreateSpace(int userId, [FromBody] SpaceDTO spaceDTO)
         {
+            // if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value) || (User.FindFirst(ClaimTypes.Role).Value != Role.AnySpaces.ToString()) || (User.FindFirst(ClaimTypes.Role).Value != Role.Merchant.ToString())) {
+            //     return Unauthorized();
+            // }
+            var user = await _userRepository.GetUser(spaceDTO.UserId);
+            var noOfSpaces = await _userRepository.GetNoOfSpaces(spaceDTO.UserId);
+            if(noOfSpaces >= 2 && !user.VerifiedAsMerchant) {
+                return BadRequest("Only verified merchants can create more than two spaces, please verify your account");
+            }
             var spaceToCreate = _mapper.Map<Space>(spaceDTO);
             if (spaceToCreate == null)
                 return BadRequest("Space cannot be null");
             if (await _lineUpRepository.EntityExists(spaceToCreate))
                 return BadRequest("Space has already been created");
             spaceToCreate.DateCreated = DateTime.Now;
-            // if(spaceToCreate.pr)
             _lineUpRepository.Add(spaceToCreate);
             await _lineUpRepository.SaveAllChanges();
             return Ok();
         }
-        [HttpPost("createAmenities")]
-        public async Task<IActionResult> CreateAmenities([FromBody] AmenitiesToCreate amenitiesDTO)
+        [HttpPost("createAmenities/{userId}")]
+        public async Task<IActionResult> CreateAmenities(int userId, [FromBody] AmenitiesToCreate amenitiesDTO)
         {
+            // if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value) || (User.FindFirst(ClaimTypes.Role).Value != Role.AnySpaces.ToString()) || (User.FindFirst(ClaimTypes.Role).Value != Role.Merchant.ToString())) {
+            //     return Unauthorized();
+            // }
             var space = await _lineUpRepository.GetSpace(amenitiesDTO.SpaceId);
             space.Amenities = new Collection<Amenity>();
             await _lineUpRepository.SaveAllChanges();
@@ -74,6 +87,9 @@ namespace API.Controllers
         [HttpPut("updateSpace/{spaceId}")]
         public async Task<IActionResult> UpdateSpace(int spaceId, [FromBody] SpaceDTO spaceDTO)
         {
+            // if (spaceDTO.UserId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value) || (User.FindFirst(ClaimTypes.Role).Value != Role.AnySpaces.ToString()) || (User.FindFirst(ClaimTypes.Role).Value != Role.Merchant.ToString())) {
+            //     return Unauthorized();
+            // }
             var space = await _lineUpRepository.GetSpace(spaceId);
             var amenities = new List<Amenity>();
             var photos = new List<Photo>();
@@ -106,6 +122,9 @@ namespace API.Controllers
         public async Task<IActionResult> DeleteSpace(int spaceId)
         {
             var spaceToDispose = await _lineUpRepository.GetSpace(spaceId);
+            // if (spaceToDispose.UserId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value) || (User.FindFirst(ClaimTypes.Role).Value != Role.AnySpaces.ToString()) || (User.FindFirst(ClaimTypes.Role).Value != Role.Merchant.ToString())) {
+            //     return Unauthorized();
+            // }
             if (spaceToDispose != null)
             {
                 _lineUpRepository.Delete(spaceToDispose);
@@ -129,11 +148,14 @@ namespace API.Controllers
             return Ok(bookedTimes);
         }
         [HttpGet("getMerchantSpaces")]
-        public async Task<QueryResult<Space>> GetMerchantSpaces([FromQuery] SpaceQueryDTO queryDTO)
+        public async Task<IActionResult> GetMerchantSpaces([FromQuery] SpaceQueryDTO queryDTO)
         {
+            // if (queryDTO.UserId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value) || (User.FindFirst(ClaimTypes.Role).Value != Role.AnySpaces.ToString()) || (User.FindFirst(ClaimTypes.Role).Value != Role.Merchant.ToString())) {
+            //     return Unauthorized();
+            // }
             var query = _mapper.Map<SpaceQuery>(queryDTO);
             var spacesQueryResult = await _lineUpRepository.GetMerchantSpaces(query);
-            return spacesQueryResult;
+            return Ok(spacesQueryResult);
         }
 
         [HttpGet("getSpaceTypes")]
@@ -148,9 +170,12 @@ namespace API.Controllers
         //     var pricingOptions = await _lineUpRepository.GetPricingOptions();
         //     return pricingOptions;
         // }
-        [HttpPost("createSpaceType")]
-        public async Task<IActionResult> CreateSpaceType([FromBody] SpaceTypeDTO spaceTypeDTO)
+        [HttpPost("createSpaceType/{userId}")]
+        public async Task<IActionResult> CreateSpaceType(int userId, [FromBody] SpaceTypeDTO spaceTypeDTO)
         {
+            // if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value) || (User.FindFirst(ClaimTypes.Role).Value != Role.AnySpaces.ToString()) || (User.FindFirst(ClaimTypes.Role).Value != Role.Merchant.ToString())) {
+            //     return Unauthorized();
+            // }
             var spaceTypeToCreate = _mapper.Map<SpaceType>(spaceTypeDTO);
             if (spaceTypeToCreate == null)
                 return BadRequest("SpaceType cannot be null");
@@ -178,6 +203,9 @@ namespace API.Controllers
         [HttpDelete("deleteSpaceType/{spaceTypeId}")]
         public IActionResult DeleteSpaceType(int spaceTypeId)
         {
+            // if ((User.FindFirst(ClaimTypes.Role).Value != Role.AnySpaces.ToString()) || (User.FindFirst(ClaimTypes.Role).Value != Role.Merchant.ToString())) {
+            //     return Unauthorized();
+            // }
             var spaceTypeToDispose = _lineUpRepository.GetSpaceType(spaceTypeId);
             if (spaceTypeToDispose != null)
             {
@@ -191,6 +219,9 @@ namespace API.Controllers
         [HttpPost("createAmenity")]
         public async Task<IActionResult> CreateAmenity([FromBody] AmenityDTO amenityDTO)
         {
+            // if ((User.FindFirst(ClaimTypes.Role).Value != Role.AnySpaces.ToString()) || (User.FindFirst(ClaimTypes.Role).Value != Role.Merchant.ToString())) {
+            //     return Unauthorized();
+            // }
             var amenityToCreate = _mapper.Map<Amenity>(amenityDTO);
             
             if (amenityToCreate == null)
@@ -221,6 +252,9 @@ namespace API.Controllers
         [HttpPut("updateAmenity/{amenityId}")]
         public async Task<IActionResult> UpdateAmenity(int amenityId, [FromBody] AmenityDTO amenityDTO)
         {
+            // if ((User.FindFirst(ClaimTypes.Role).Value != Role.AnySpaces.ToString()) || (User.FindFirst(ClaimTypes.Role).Value != Role.Merchant.ToString())) {
+            //     return Unauthorized();
+            // }
             var amenity = await _lineUpRepository.GetAmenity(amenityId);
             var amenityToUpdate = _mapper.Map<AmenityDTO, Amenity>(amenityDTO, amenity);
             if (amenityToUpdate == null)
@@ -452,7 +486,7 @@ namespace API.Controllers
         }
         [HttpGet("getBookings/{userId}")]
         public async Task<QueryResult<Booking>> GetBookings(int userId, [FromQuery] BookingQueryDTO queryDTO)
-        {
+        {   
             var query = _mapper.Map<BookingQuery>(queryDTO);
             return await _lineUpRepository.GetBookings(userId, query);
         }
@@ -465,8 +499,11 @@ namespace API.Controllers
         }
 
         [HttpGet("getMerchantBookings/{userId}")]
-        public async Task<QueryResult<Booking>> GetMerchantBookings(int userId, [FromQuery] BookingQueryDTO queryDTO)
+        public async Task<IActionResult> GetMerchantBookings(int userId, [FromQuery] BookingQueryDTO queryDTO)
         {
+            // if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value) || (User.FindFirst(ClaimTypes.Role).Value != Role.AnySpaces.ToString()) || (User.FindFirst(ClaimTypes.Role).Value != Role.Merchant.ToString())) {
+            //     return Unauthorized();
+            // }
             // var query = _mapper.Map<BookingQuery>(queryDTO);
             var dateStart = DateTime.Parse(queryDTO.DateStart);
             var dateEnd = DateTime.Parse(queryDTO.DateEnd);
@@ -482,14 +519,17 @@ namespace API.Controllers
                 DateStart = dateStart,
                 DateEnd = dateEnd
             };
-            return await _lineUpRepository.GetBookings(userId, query);
+            return Ok(await _lineUpRepository.GetBookings(userId, query));
         }
 
         [HttpGet("getMerchantReservations/{userId}")]
-        public async Task<QueryResult<Booking>> GetMerchantReservations(int userId, [FromQuery] BookingQueryDTO queryDTO)
+        public async Task<IActionResult> GetMerchantReservations(int userId, [FromQuery] BookingQueryDTO queryDTO)
         {
+            // if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value) || (User.FindFirst(ClaimTypes.Role).Value != Role.AnySpaces.ToString()) || (User.FindFirst(ClaimTypes.Role).Value != Role.Merchant.ToString())) {
+            //     return Unauthorized();
+            // }
             var query = _mapper.Map<BookingQuery>(queryDTO);
-            return await _lineUpRepository.GetBookings(userId, query);
+            return Ok(await _lineUpRepository.GetBookings(userId, query));
         }
 
         [HttpPost("updateBooking/{bookingId}")]
@@ -549,6 +589,9 @@ namespace API.Controllers
         [HttpPost("acceptBooking/{bookingId}")]
         public async Task<IActionResult> AcceptBooking(int bookingId)
         {
+            // if ((User.FindFirst(ClaimTypes.Role).Value != Role.AnySpaces.ToString()) || (User.FindFirst(ClaimTypes.Role).Value != Role.Merchant.ToString())) {
+            //     return Unauthorized();
+            // }
             var booking = await _lineUpRepository.GetBooking(bookingId);
             if (booking == null)
                 return BadRequest("Booking not found");
@@ -560,6 +603,9 @@ namespace API.Controllers
         [HttpGet("getMerchants")]
         public async Task<IActionResult> GetMerchants()
         {
+            // if (User.FindFirst(ClaimTypes.Role).Value != Role.AnySpaces.ToString()) {
+            //     return Unauthorized();
+            // }
             var merchants = await _lineUpRepository.GetMerchants();
             var queryResultToReturn = new QueryResult<UserToReturnDTO>();
             queryResultToReturn.TotalItems = merchants.TotalItems;
@@ -585,6 +631,9 @@ namespace API.Controllers
         [HttpGet("getMetrics/{userId}")]
         public async Task<IActionResult> GetMerchantMetrics(int userId)
         {
+            // if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value) || (User.FindFirst(ClaimTypes.Role).Value != Role.AnySpaces.ToString()) || (User.FindFirst(ClaimTypes.Role).Value != Role.Merchant.ToString())) {
+            //     return Unauthorized();
+            // }
             var metrics = await _lineUpRepository.GetMerchantMetrics(userId);
             return Ok(metrics);
         }

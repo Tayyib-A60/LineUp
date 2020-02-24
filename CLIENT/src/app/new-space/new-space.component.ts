@@ -136,7 +136,7 @@ export class NewSpaceComponent implements OnInit {
       this.latitude = myLocation.coords.latitude;
       this.longitude = myLocation.coords.longitude;
     });
-    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    this.currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
   }
 
   open(content) {
@@ -292,8 +292,8 @@ export class NewSpaceComponent implements OnInit {
       numberOfGuests: this.numberOfGuests,
       totalPrice: this.totalCost
     };
-    localStorage.setItem('bookingToCreate', JSON.stringify(booking));
-    localStorage.setItem('amenitiesSelected', JSON.stringify(this.amenitiesSelected));
+    sessionStorage.setItem('bookingToCreate', JSON.stringify(booking));
+    sessionStorage.setItem('amenitiesSelected', JSON.stringify(this.amenitiesSelected));
     this.spaceStore.dispatch(new bookingActions.AddBookingToStore(booking));
     this.router.navigate([`/booking-request/${this.thisSpace['id']}`]);
   }
@@ -373,8 +373,8 @@ export class NewSpaceComponent implements OnInit {
     // this.spaceStore.dispatch(new bookingActions.CreateReservation(booking));
     // this.router.navigate(['/profile'], {relativeTo: this.route});
 
-    localStorage.setItem('bookingToCreate', JSON.stringify(booking));
-    localStorage.setItem('amenitiesSelected', JSON.stringify(this.amenitiesSelected));
+    sessionStorage.setItem('bookingToCreate', JSON.stringify(booking));
+    sessionStorage.setItem('amenitiesSelected', JSON.stringify(this.amenitiesSelected));
     this.spaceStore.dispatch(new bookingActions.AddBookingToStore(booking));
     this.router.navigate([`/booking-request/${this.thisSpace['id']}`]);
   }

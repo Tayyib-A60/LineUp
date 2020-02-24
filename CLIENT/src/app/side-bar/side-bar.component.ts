@@ -92,7 +92,7 @@ export class SideBarComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.config = this.configService.templateConf;
-    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    this.currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
     console.log(this.currentUser);
     if(this.currentUser['roles'] === 'AnySpaces'){
       this.isSuperAdmin = true;

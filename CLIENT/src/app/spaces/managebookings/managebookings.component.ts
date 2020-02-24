@@ -32,8 +32,8 @@ export class ManagebookingsComponent implements OnInit {
     {label: 'More than 1000', capacity: 1000}
   ];
   selectedCapacity: any;
-  merchantId = localStorage.getItem('currentUser')? 
-  JSON.parse(localStorage.getItem('currentUser'))['id'] : 0;
+  merchantId = sessionStorage.getItem('currentUser')? 
+  JSON.parse(sessionStorage.getItem('currentUser'))['id'] : 0;
   dateStart: any;
   dateEnd: any;
   merchantBookingQuery = {
@@ -60,7 +60,7 @@ export class ManagebookingsComponent implements OnInit {
               private modalService: NgbModal) { }
 
   ngOnInit() {
-    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    this.currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
     this.fetchBookings();
   }
 

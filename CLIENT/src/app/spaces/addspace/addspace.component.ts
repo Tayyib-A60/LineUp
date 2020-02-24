@@ -67,7 +67,7 @@ export class AddspaceComponent implements OnInit, AfterViewInit {
       //   });
       // }
 
-      this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      this.currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
 
       this.route.params
       .subscribe(

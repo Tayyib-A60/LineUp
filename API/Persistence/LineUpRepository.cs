@@ -52,13 +52,15 @@ namespace API.Persistence
                     return true;
                 }
                 return false;
-            } else if(entityName is Enquiry) {
-                var enquiry = entityName as Enquiry;
-                if(await _context.Enquiries.AnyAsync(e => e.Id == enquiry.Id)) {
-                    return true;
-                }
-                return false;
-            } else if(entityName is Space) {
+            } 
+            // else if(entityName is Enquiry) {
+            //     var enquiry = entityName as Enquiry;
+            //     if(await _context.Enquiries.AnyAsync(e => e.Id == enquiry.Id)) {
+            //         return true;
+            //     }
+            //     return false;
+            // }
+             else if(entityName is Space) {
                 var space = entityName as Space;
                 if(await _context.Spaces.AnyAsync(s => s.Id == space.Id)) {
                     return true;
@@ -82,14 +84,16 @@ namespace API.Persistence
         }
         public async Task<Enquiry> GetEnquiry(int enquiryId)
         {
-            return await _context.Enquiries
-                                .FirstOrDefaultAsync(e => e.Id == enquiryId);
+            throw new NotImplementedException();
+            // return await _context.Enquiries
+            //                     .FirstOrDefaultAsync(e => e.Id == enquiryId);
         }
         public async Task<IEnumerable<Enquiry>> GetEnquiries(int userId)
         {
-            return await _context.Enquiries
-                                .Where(e => e.UserId == userId)
-                                .ToListAsync();
+            throw new NotImplementedException();
+            // return await _context.Enquiries
+            //                     .Where(e => e.UserId == userId)
+            //                     .ToListAsync();
         }
         public async Task<User> GetUser(int userId)
         {
@@ -218,6 +222,8 @@ namespace API.Persistence
                 spaces = spaces.Where(sp => sp.LocationAddress.ToLower().StartsWith(query.SearchString) || sp.LocationAddress.ToLower().Contains(query.SearchString) || sp.Name.StartsWith(query.SearchString) || sp.Name.ToLower().Contains(query.SearchString) || sp.Description.Contains(query.SearchString));
             if(query.Size > 0)
                 spaces = spaces.Where(sp => Convert.ToInt64(sp.Size) >= query.Size);
+            if(!string.IsNullOrWhiteSpace(query.SpaceType))
+                spaces = spaces.Where(sp => (sp.TypeId.ToString() == query.SpaceType));
             // if(!string.IsNullOrWhiteSpace(query.SpaceType) && query.SpaceType.Length > 0) 
             //     spaces = spaces.Where(sp => sp.Type.Type.ToLower().Contains(query.SpaceType.ToLower()));
             return spaces;            

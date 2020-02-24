@@ -28,14 +28,14 @@ export function reducer(state = INITIAL_STATE, action: UserActions) {
                 response: null
             };
         case UserActionTypes.SignInUserSuccess:
-            localStorage.setItem('currentUser', JSON.stringify(action.payload));
+            sessionStorage.setItem('currentUser', JSON.stringify(action.payload));
             return {
                 ...state,
                 currentUser: action.payload,
                 error: ''
             };
         case UserActionTypes.SignOutUser:
-            localStorage.removeItem('currentUser');
+            sessionStorage.removeItem('currentUser');
             return {
                 ...state,
                 currentUser: null,

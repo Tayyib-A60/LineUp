@@ -38,7 +38,7 @@ export class ManageAvailabilityComponent implements OnInit {
               private spaceStore: Store<SpaceState>) { }
 
   ngOnInit() {
-    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    this.currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
     this.route.params
       .subscribe(
         (params: Params) => {

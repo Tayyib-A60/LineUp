@@ -32,8 +32,8 @@ export class ManagereservationsComponent implements OnInit {
   currentUser: any;
   reservations = [];
   componentActive = true;
-  merchantId = localStorage.getItem('currentUser')? 
-  JSON.parse(localStorage.getItem('currentUser'))['id'] : 0;
+  merchantId = sessionStorage.getItem('currentUser')? 
+  JSON.parse(sessionStorage.getItem('currentUser'))['id'] : 0;
   dateStart: any;
   dateEnd: any;
   currentPage = 1;
@@ -65,7 +65,7 @@ export class ManagereservationsComponent implements OnInit {
               private notification: NotificationService) { }
 
   ngOnInit() {
-    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    this.currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
     this.fetchReservations();
     
   }

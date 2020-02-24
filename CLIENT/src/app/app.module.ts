@@ -3,20 +3,17 @@ import { StoreModule } from '@ngrx/store';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { PerfectScrollbarModule } from "ngx-perfect-scrollbar";
-import { CommonModule } from "@angular/common";
+import { CommonModule, JsonPipe } from "@angular/common";
 import { NgSelectModule } from '@ng-select/ng-select';
 import { AgmCoreModule } from '@agm/core';
 import { NguCarouselModule } from '@ngu/carousel';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { NavbarComponent } from './navbar/navbar.component';
-import { SignUpComponent } from './sign-up/sign-up.component';
 import { NgbModule, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SpacesModule } from './spaces/spaces.module';
 import { HomeComponent } from './home/home.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { SignInComponent } from './sign-in/sign-in.component';
 import { ListYourSpaceComponent } from './list-your-space/list-your-space.component';
 import { FooterComponent } from './footer/footer.component';
 import { ProfileComponent } from './profile/profile.component';
@@ -36,23 +33,23 @@ import { SpaceHomeComponent } from './space-home/space-home.component';
 import { NewSpaceComponent } from './new-space/new-space.component';
 import { ToastrModule } from 'ngx-toastr';
 import { SampleCarouselComponent } from './sample-carousel/sample-carousel.component';
-import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { PaginationComponent } from './pagination/pagination.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {CarouselModule} from 'primeng/carousel';
 import { NavigationComponent } from './navigation/navigation.component';
 import { NewNavComponent } from './new-nav/new-nav.component';
 import { SharedModule } from './shared/shared.module';
 import { RouterModule } from '@angular/router';
 import { SpacePaginationComponent } from './space-pagination/space-pagination.component';
+import { JwtModule } from '@auth0/angular-jwt';
 
-
+export function tokenGetter() {
+  return JSON.parse(sessionStorage.getItem("currentUser")).token;
+}
 @NgModule({
   declarations: [
     AppComponent,
-    // NavbarComponent,
     HomeComponent,
     ListYourSpaceComponent,
-    // FooterComponent,
     ProfileComponent,
     BookingRequestComponent,
     BookingRequestTwoComponent,
@@ -62,7 +59,6 @@ import { SpacePaginationComponent } from './space-pagination/space-pagination.co
     SpaceHomeComponent,
     NewSpaceComponent,
     SampleCarouselComponent,
-    // PaginationComponent,
     NavigationComponent,
     FooterComponent,
     NewNavComponent,
@@ -81,6 +77,11 @@ import { SpacePaginationComponent } from './space-pagination/space-pagination.co
     CarouselModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyDqDa-Jf1KhEOO0FXyJwReGiquRMCaz9Bs'
+    }),
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: tokenGetter
+      }
     }),
     ToastrModule.forRoot(),
     ReactiveFormsModule,

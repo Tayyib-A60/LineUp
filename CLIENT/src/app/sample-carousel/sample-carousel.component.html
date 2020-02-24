@@ -43,7 +43,7 @@
   </ngu-carousel> -->
   <!-- <div class="row"> -->
     <!-- <div  class="col-md-8 col-xs-12 col-lg-10 col-xl-12"> *ngIf='(spaceTypes?.length > 0)' -->
-      <p-carousel *ngIf='spaceTypes.length > 1'  [value]="spaceTypes"  styleClass="custom-carousel" [numVisible]="4" [numScroll]="1" [circular]="true" [autoplayInterval]="300000" [responsiveOptions]="responsiveOptions">
+      <p-carousel *ngIf='spaceTypes.length > 1 || this.loaded'  [value]="spaceTypes"  styleClass="custom-carousel" [numVisible]="4" [numScroll]="1" [circular]="true" [autoplayInterval]="300000" [responsiveOptions]="responsiveOptions">
           <ng-template let-item pTemplate="item">
               <a [routerLink]="['/map-space/' + item.id]">
               <div style="padding: .4rem;" class="cardh">

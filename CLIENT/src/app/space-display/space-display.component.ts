@@ -68,7 +68,7 @@ export class SpaceDisplayComponent implements OnInit {
           // console.log(this.thisSpace); 
     });
     
-    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    this.currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
   }
 
   bookSpace() {

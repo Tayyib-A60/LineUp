@@ -16,17 +16,16 @@ export class NewNavComponent implements OnInit {
   currentUser: any;
   spaceTypes: any[];
   loaded: boolean;
-  selectedType: number;
+  selectedType: any;
 
   constructor(private store: Store<userReducer.UserState>,
     private router: Router, private spaceService: SpaceService) { }
 
   ngOnInit() {
-    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    this.currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
     this.spaceService.getSpaceTypes().subscribe((spaceTypes: any[]) => {
       console.log(spaceTypes);
       this.spaceTypes = spaceTypes; 
-      console.log(spaceTypes);
     })
   }
 
@@ -37,14 +36,14 @@ export class NewNavComponent implements OnInit {
   }
 
   signOut() {
-    localStorage.removeItem('currentUser');
+    sessionStorage.removeItem('currentUser');
     this.currentUser = null;
     this.store.dispatch(new userActions.SignOutUser());
     this.router.navigate(['']);
   }
 
   anyUserIsAuthenticated() {
-    return localStorage.getItem('currentUser')? true: false;
+    return sessionStorage.getItem('currentUser')? true: false;
   }
 
 }

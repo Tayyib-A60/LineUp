@@ -32,23 +32,25 @@
 <div class="space_input mx-5">
       <span class="space_highlight">
           <i class="fa fa-search fa-1x space_icon-1"></i>
-          <input type="text" class="space_input-2" placeholder="Search by location">
+          <input type="text" [(ngModel)]='searchString' class="space_input-2" placeholder="Search by location">
       </span>
       <span class="space_highlight">
-        <select name="" id="">
+        <!-- <fieldset class="form-group">
+          <ng-select [items]="spaceTypes" [virtualScroll]="true" bindLabel="type" bindValue="id" placeholder="Select type"
+          [(ngModel)]="selectedType">
+          </ng-select>
+      </fieldset> -->
+        <select name="" id="" [(ngModel)]="selectedType">
           <option value="All Spaces" selected>
             <span class="menu-list-item">All Spaces</span>
           </option>
-          <option value="All Spaces">
-            <span class="menu-list-item">All Spaces</span>
-          </option>
-          <option value="All Spaces">
-            <span class="menu-list-item">All Spaces</span>
+          <option *ngFor='let type of spaceTypes' [ngValue]="type" >
+            <span class="menu-list-item">{{type?.type}}</span>
           </option>
         </select>
       </span>
       <span>
-          <button type="button" class="btn btn-raised mb-0  nav_btn">SEARCH</button>
+          <button type="button" (click)='search()' class="btn btn-raised mb-0  nav_btn">SEARCH</button>
       </span>
 </div>
   <div >

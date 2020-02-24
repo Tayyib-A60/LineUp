@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -34,17 +35,20 @@ namespace api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<LineUpContext>(x => x.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            // .ConfigureWarnings(warnings => warnings.Ignore(CoreEventId.IncludeIgnoredWarning)));
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1).AddJsonOptions(opt => {
+                opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+            });
+            // services.BuildServiceProvider().GetService<LineUpContext>().Database.Migrate();
             var appSettingsSection = Configuration.GetSection("AppSettings");
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ILineUpRepository, LineUpRepository>();
             services.AddScoped<IPhotoRepository, PhotoRepository>();
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
-                    .AddJsonOptions(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddAutoMapper();
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
             services.Configure<PhotoSettings>(Configuration.GetSection("PhotoSettings"));
             services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
-            services.AddDbContext<LineUpContext>(x => x.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
             // services.AddDbContext<LineUpContext>(options => {
             //     string connectionString;
             //     var environmentVariable = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONEMT");
@@ -84,10 +88,10 @@ namespace api
 
             app.UseAuthentication();
             app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin().AllowCredentials());
-            app.UseMvc();
-            app.UseHttpsRedirection();
             app.UseDefaultFiles();
             app.UseStaticFiles();
+            app.UseMvc();
+            // app.UseHttpsRedirection();
         }
     }
 }

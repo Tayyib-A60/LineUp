@@ -11,6 +11,7 @@ import * as spaceSelectors from '../spaces/state/space.selector';
 import { takeWhile } from 'rxjs/operators';
 import { SpaceQueryResult } from '../spaces/models/spaceQueryResult';
 import { Space } from '../spaces/models/space.model';
+import { SpaceService } from '../spaces/space.service';
 @Component({
   selector: 'app-map-space',
   templateUrl: './map-space.component.html',
@@ -33,14 +34,7 @@ export class MapSpaceComponent implements OnInit {
     price: null
   };
   selectedType: string;
-  spaceTypes = [
-    {type: 'Event Space', url: 'event'},
-    {type: 'Office Space', url: 'office'},
-    {type: 'Shared Apartment', url: 'apartment'},
-    {type: 'Gym Space', url: 'gym'},
-    {type: 'Meeting Space', url: 'shared'},
-    {type: 'Chilling Space', url: 'chilling'}
-  ];
+  spaceTypes = [];
   priceFilter = [
     {label: '10,000', value: 10000},
     {label: '<20,000', value: 20000},
@@ -63,7 +57,8 @@ export class MapSpaceComponent implements OnInit {
   longitude: number;
 
   constructor(private store: Store<spaceReducer.SpaceState>,
-              private route: ActivatedRoute){}
+              private route: ActivatedRoute,
+              private spaceService: SpaceService){}
   
   ngOnInit() {
     navigator.geolocation.getCurrentPosition((myLocation) => {
@@ -91,7 +86,12 @@ export class MapSpaceComponent implements OnInit {
       if(spaceQR.items)
         console.log(spaceQR.items[0].photos.filter(p => p.isMain));
       console.log(spaceQR);      
-      });    
+      });
+
+      this.spaceService.getSpaceTypes().subscribe((spaceTypes: any[]) => {
+        // console.log(spaceTypes);
+        this.spaceTypes = spaceTypes;
+      })
   }
 
   onPageChange(page: number) {

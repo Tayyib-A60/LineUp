@@ -13,10 +13,12 @@ using Microsoft.Extensions.Options;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using Microsoft.Extensions.Primitives;
+using System.Security.Claims;
 
 namespace API.Controllers {
-    [Route ("api/lineUp/user")]
+    [Route ("api/lineUp/user/")]
     [ApiController]
+    [Authorize]
     public class UserController : ControllerBase {
         private IUserRepository _userRepository { get; }
         private IConfiguration _configuration { get; }
@@ -204,10 +206,10 @@ namespace API.Controllers {
             return Ok (usersResource);
         }
 
-        [HttpGet ("byId/{id}")]
-        public async Task<IActionResult> GetUser (int id)
+        [HttpGet ("byId")]
+        public async Task<IActionResult> GetUser (int userId)
         {
-            var user = await _userRepository.GetUser (id);
+            var user = await _userRepository.GetUser (userId);
             var userDTO = _mapper.Map<UserDTO> (user);
             return Ok (userDTO);
         }
@@ -223,10 +225,13 @@ namespace API.Controllers {
         }
 
         [HttpPut ("{id}")]
-        public async Task<IActionResult> UpdateUser (int id, [FromBody] UserDTO userResource) {
+        public async Task<IActionResult> UpdateUser ([FromBody] UserDTO userResource) {
+            // if (userResource.Id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value)) {
+            //     return Unauthorized();
+            // }
             if (userResource == null)
                 return BadRequest("User cannot be null");
-            var userToUpdate = await _userRepository.GetUser(id);
+            var userToUpdate = await _userRepository.GetUser(userResource.Id);
             if (userToUpdate == null)
                 return NotFound("User does not exist");
              _mapper.Map<UserDTO, User> (userResource, userToUpdate);
@@ -248,7 +253,10 @@ namespace API.Controllers {
              return Ok();
         }
         [HttpPut("verifyAsMerchant")]
-        public async Task<IActionResult> VerifyAsMerchant([FromBody] UserDTO userResource) {
+        public async Task<IActionResult> VerifyAsMerchant([FromBody] UserDTO userResource)
+        {
+            // if (User.FindFirst(ClaimTypes.Role).Value != Role.AnySpaces.ToString())
+            //     return Unauthorized();
             if (userResource == null)
                 return BadRequest("User cannot be null");
             var userToUpdate = await _userRepository.GetUser(userResource.Id);
@@ -261,6 +269,8 @@ namespace API.Controllers {
 
         [HttpDelete ("{id}")]
         public async Task<IActionResult> Delete (int id) {
+            // if (User.FindFirst(ClaimTypes.Role).Value != Role.AnySpaces.ToString())
+            //     return Unauthorized();
             var user = await _userRepository.GetUser (id);
             _userRepository.DeleteUser (user);
             return Ok (id);

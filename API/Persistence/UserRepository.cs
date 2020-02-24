@@ -41,9 +41,17 @@ namespace API.Persistence
         public async Task<IEnumerable<User>> GetUsers () {
             return await _context.Users.ToListAsync ();
         }
+        public async Task<int> GetNoOfSpaces(int userId) {
+             var merchant =  await _context.Users
+                .Where (u => u.Id == userId)
+                .Include(u => u.Spaces)
+                .SingleOrDefaultAsync ();
+            return merchant.Spaces.Count;
+        }
         public async Task<User> GetUser (int id) {
             return await _context.Users
                 .Where (u => u.Id == id)
+                .Include(u => u.Spaces)
                 .SingleOrDefaultAsync ();
         }
         public async Task<User> GetUser (string email) {
@@ -122,7 +130,7 @@ namespace API.Persistence
             var sub = new ClaimsIdentity ();
             var tokenDescriptor = new SecurityTokenDescriptor {
                 Subject = new ClaimsIdentity (new Claim[] {
-                new Claim (ClaimTypes.NameIdentifier, user.Email),
+                new Claim (ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim (ClaimTypes.Name, user.Name),
                 new Claim (ClaimTypes.Role, user.Role.ToString ()),
                 new Claim (ClaimTypes.GroupSid, user.Id.ToString())

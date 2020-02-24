@@ -132,14 +132,21 @@ loaded: boolean;
       console.log(spaceTypes);
       
       this.spaceTypes = spaceTypes;
-      let count = 3;
+      let count = spaceTypes.length;
       if(spaceTypes.length < 6) {
-        for(let i = 0; i <= count; i++) {
-          this.spaceTypes.push(spaceTypes[0]);
+        if(spaceTypes.length < 3) {
+            for(let i = 0; i < 2; i++) {
+              this.spaceTypes = [...this.spaceTypes, ...spaceTypes];
+            }
+        }
+        if(spaceTypes.length >= 3) {
+            for(let i = 0; i < 1; i++) {
+              this.spaceTypes = [...this.spaceTypes, ...spaceTypes];
+            }
         }
         this.loaded = true;
       } 
-      console.log(spaceTypes);
+      console.log(this.spaceTypes);
     })
   }
 

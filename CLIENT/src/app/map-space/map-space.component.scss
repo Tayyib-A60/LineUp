@@ -38,19 +38,21 @@ agm-map {
 
 .lineup_custom_input {
     font-size: 1rem !important;
-    // font-family: inherit;
     font-weight: bold !important;
-    // color: #000 !important;
     padding-bottom: .5rem !important;
-    // padding: .5rem .7rem;
     border-radius: 2px;
     border: none;
-    // background-color: #F5F7FA;
     border-bottom: 1px solid #234234 !important;
-    // width: 100%;
     width: 300% !important;
     display: block;
     transition: all .3s;
+
+    @media only screen and (max-width: 40em) {
+        width: 150% !important;
+      }
+    @media only screen and (max-width: 32em) {
+        width: 100% !important;
+      }
 }
 .space {
 
