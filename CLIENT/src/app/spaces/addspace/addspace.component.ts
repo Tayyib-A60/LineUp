@@ -95,7 +95,7 @@ export class AddspaceComponent implements OnInit, AfterViewInit {
 
     private initFormWithValues() {
       this.spaceService.getSpace(Number(this.id)).subscribe((space: Space) => {
-        console.log(space);
+        //console.log(space);
         let amenitiesArray = new FormArray([]);
         if(space.amenities) {                
             space.amenities.map(a => {
@@ -128,7 +128,8 @@ export class AddspaceComponent implements OnInit, AfterViewInit {
           'selectedPricingOption': new FormControl(space.selectedPricingOption)
         });
         this.spaceToEdit = space;
-      }, (err) => console.log(err.message));
+      }, (err) => {//console.log(err.message));
+      });
     }
 
     open(content) {
@@ -169,11 +170,11 @@ export class AddspaceComponent implements OnInit, AfterViewInit {
       for(let i = 0; i < amenitiesToCreate.amenities.length; i++) {
           delete amenitiesToCreate.amenities[i].id;
       }
-      console.log(amenitiesToCreate);
+      //console.log(amenitiesToCreate);
       // const spaceObject = this.spaceForm.value;
-      // console.log(spaceObject);
+      // //console.log(spaceObject);
       // delete spaceObject['amenities'];
-      // console.log(spaceObject);
+      // //console.log(spaceObject);
       this.spaceService.createAmenities(amenitiesToCreate).subscribe((res) => {
         this.notificationService.typeSuccess('Amenities added', 'Success');
       },(err) => {
@@ -230,15 +231,15 @@ export class AddspaceComponent implements OnInit, AfterViewInit {
       // this.httpClient.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${event.coords.lat},
       // ${event.coords.lng}&key=AIzaSyDqDa-Jf1KhEOO0FXyJwReGiquRMCaz9Bs`).subscribe(res => {
       //   const { formatted_address } = res['results'][0];
-      //   console.log(res);
+      //   //console.log(res);
       //   this.spaceForm.get('locationName').patchValue(formatted_address);
       //   this.selectedLocation = formatted_address;
-      //   console.log(this.selectedLocation);
+      //   //console.log(this.selectedLocation);
       // })      
     }
 
     onPinSelect(event) {
-      // console.log('Marker clicked', event);
+      // //console.log('Marker clicked', event);
       // let myCenter =new google.maps.LatLng(this.latitude, this.longitude);
 
       // let marker = new google.maps.Marker({
@@ -384,7 +385,7 @@ export class AddspaceComponent implements OnInit, AfterViewInit {
           userId: this.currentUser['id']
         }
         delete spaceToUpdate.amenities;
-        console.log(spaceToUpdate);
+        //console.log(spaceToUpdate);
         
         
         this.store.dispatch(new spaceActions.UpdateSpace(spaceToUpdate));
@@ -398,7 +399,7 @@ export class AddspaceComponent implements OnInit, AfterViewInit {
             id: this.currentUser['id']
           }
         }
-        console.log(this.spaceForm.value);
+        //console.log(this.spaceForm.value);
         
         this.store.dispatch(new spaceActions.CreateSpace((spaceToCreate)));
       }

@@ -18,7 +18,7 @@
 <div class="sidebar-content">
     <div class="nav-container">
         <ul class="navigation" appSidebarList>
-            <li *ngIf='isSuperAdmin' appSidebarlink level="{{depth + 1}}" (toggleEmit)="handleToggle($event)" (click)="toggleSlideInOut()" routePath="" title="Dashboard"   >
+            <li *ngIf='isSuperAdmin' appSidebarlink level="{{depth + 1}}" (toggleEmit)="handleToggle($event)" (click)="toggleSlideInOut()" routePath="" title="Dashboard">
                     <a appSidebarAnchorToggle [routerLink]="['/admin/dashboard']">
                         <i [ngClass]="[menuItems[0].icon]"></i>
                         <span class="menu-title">Dashboard</span>
@@ -31,9 +31,9 @@
                     </a>
             </li>
             <li *ngIf='isSuperAdmin' appSidebarlink level="{{depth + 1}}" (toggleEmit)="handleToggle($event)" (click)="toggleSlideInOut()" routePath="" title="Others"   >
-                    <a appSidebarAnchorToggle [routerLink]="['/admin/others']">
+                    <a appSidebarAnchorToggle [routerLink]="['/admin/create-addons']">
                         <i [ngClass]="[menuItems[0].icon]"></i>
-                        <span class="menu-title">Others</span>
+                        <span class="menu-title">Add Space Types</span>
                     </a>
             </li>
              <li appSidebarlink level="{{depth + 1}}" (toggleEmit)="handleToggle($event)" (click)="toggleSlideInOut()" [routePath]="menuItem.path" [title]="menuItem.title"  [parent]="" *ngFor="let menuItem of menuItems"   [ngClass]="{'has-sub': menuItem.class === 'has-sub' ? true: false, 'open': activeTitles.includes(menuItem.title) && !nav_collapsed_open ? true : false, 'nav-collapsed-open': nav_collapsed_open && activeTitles.includes(menuItem.title)}" >

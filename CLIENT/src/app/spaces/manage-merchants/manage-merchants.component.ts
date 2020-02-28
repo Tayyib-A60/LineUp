@@ -22,7 +22,7 @@ export class ManageMerchantsComponent implements OnInit {
     this.spaceStore.pipe(select(spaceSelector.getMerchantsQueryResult),
                         takeWhile(() => this.componentActive))
                         .subscribe(merchants => {
-                          console.log(merchants);
+                          //console.log(merchants);
                           
                           this.merchants = merchants['items']
                         });

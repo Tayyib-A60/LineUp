@@ -65,7 +65,7 @@ export class MapSpaceComponent implements OnInit {
       this.latitude = myLocation.coords.latitude;
       this.longitude = myLocation.coords.longitude;
     });
-    console.log(this.route.params['value']['spaceType']? 'true': 'false');
+    //console.log(this.route.params['value']['spaceType']? 'true': 'false');
 
     if(this.route.params['value']['spaceType']){
       this.route.params.subscribe(params => {
@@ -83,13 +83,13 @@ export class MapSpaceComponent implements OnInit {
     takeWhile(() => this.componentActive))
     .subscribe(spaceQR => {
       this.spaceQueryResult = spaceQR
-      if(spaceQR.items)
-        console.log(spaceQR.items[0].photos.filter(p => p.isMain));
-      console.log(spaceQR);      
+      // if(spaceQR.items)
+        //console.log(spaceQR.items[0].photos.filter(p => p.isMain));
+      //console.log(spaceQR);      
       });
 
       this.spaceService.getSpaceTypes().subscribe((spaceTypes: any[]) => {
-        // console.log(spaceTypes);
+        // //console.log(spaceTypes);
         this.spaceTypes = spaceTypes;
       })
   }

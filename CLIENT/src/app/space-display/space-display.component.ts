@@ -62,10 +62,10 @@ export class SpaceDisplayComponent implements OnInit {
     this.spaceStore.pipe(select(spaceSelectors.getSingleSpace),
         takeWhile(() => this.componentActive))
         .subscribe(space => {
-          console.log(space);
+          //console.log(space);
           
           this.thisSpace = space;
-          // console.log(this.thisSpace); 
+          // //console.log(this.thisSpace); 
     });
     
     this.currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
@@ -76,7 +76,7 @@ export class SpaceDisplayComponent implements OnInit {
     let yearTo = this.dateTo['year'];
     let monthTo = this.dateTo['month'];
     let dayTo = this.dateTo['day'];
-    console.log(this.timeFrom);
+    //console.log(this.timeFrom);
     
     const {hour, minute, second } = this.timeFrom;
     let hourTo = this.timeTo['hour'];
@@ -95,7 +95,7 @@ export class SpaceDisplayComponent implements OnInit {
       bookedById: this.currentUser['id'],
       totalPrice: this.thisSpace['price']
     };
-    console.log(booking);    
+    //console.log(booking);    
     this.spaceStore.dispatch(new bookingActions.CreateReservation(booking));
     // this.router.navigate(['/profile'], {relativeTo: this.route});
   }
@@ -106,7 +106,7 @@ export class SpaceDisplayComponent implements OnInit {
     let monthTo = this.dateTo['month'];
     let dayTo = this.dateTo['day'];
     const {hour, minute, second } = this.timeFrom;
-    console.log(this.timeFrom);
+    //console.log(this.timeFrom);
     
     let hourTo = this.timeTo['hour'];
     let minuteTo = this.timeTo['minute'];
@@ -118,24 +118,24 @@ export class SpaceDisplayComponent implements OnInit {
       From: dateFrom,
       To: dateTo
     };
-    // console.log(requestBody);
+    // //console.log(requestBody);
     
     this.spaceStore.dispatch(new bookingActions.GetBookingTimes(requestBody));
     this.spaceStore.pipe(select(bookingSelectors.getBookingTimes),
       takeWhile(() => this.componentActive))
       .subscribe(bookingTimes => {
         this.bookingTimes = bookingTimes? bookingTimes: [];
-        console.log(bookingTimes);
+        //console.log(bookingTimes);
     });
   }
 
   getCustomerBooking() {
-    console.log(this.timeFrom, this.timeTo);
+    //console.log(this.timeFrom, this.timeTo);
     // this.bookingStore.dispatch(new bookingActions.GetCustomerBookings(this.currentUser['id']));
     // this.bookingStore.pipe(select(bookingSelectors.getCustomerBookings),
     // takeWhile(() => this.componentActive))
     // .subscribe(bookingQR => {
-    //   console.log(bookingQR);
+    //   //console.log(bookingQR);
     // });
   }
 

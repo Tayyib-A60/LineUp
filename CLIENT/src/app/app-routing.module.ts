@@ -26,6 +26,8 @@ import { NewSpaceComponent } from './new-space/new-space.component';
 import { SampleCarouselComponent } from './sample-carousel/sample-carousel.component';
 import { DashboardComponent } from './spaces/dashboard/dashboard.component';
 import { ManageAvailabilityComponent } from './spaces/manage-availability/manage-availability.component';
+import { SuperAdminAuthGuardService } from './services/super-admin-auth-guard.service';
+import { BookForClientComponent } from './spaces/book-for-client/book-for-client.component';
 
 
 const routes: Routes = [
@@ -37,9 +39,9 @@ const routes: Routes = [
     { path: 'upload-images/:id', component: ImageEditorComponent},
     { path: 'manage-reservations', component: ManagereservationsComponent },
     { path: 'manage-bookings', component: ManagebookingsComponent },
-    { path: 'manage-enquiries', component: ManageenquiriesComponent },
-    { path: 'create-addons', component: AddPropsComponent },
-    { path: 'merchants', component: ManageMerchantsComponent },
+    { path: 'create-booking-for-client', component: BookForClientComponent },
+    { path: 'create-addons', component: AddPropsComponent, canActivate: [ SuperAdminAuthGuardService ] },
+    { path: 'merchants', component: ManageMerchantsComponent,  canActivate: [ SuperAdminAuthGuardService ] },
     { path: 'analytics', component: DashboardComponent },
   ]},
   { path: '', component: SpaceHomeComponent },
@@ -59,7 +61,7 @@ const routes: Routes = [
   { path: 'space/:id', component: NewSpaceComponent },
   // { path: 'space-details/:id', component: SpaceDisplayComponent },
   // { path: 'caro', component: SampleCarouselComponent},
-  { path: '**', redirectTo: '' }
+  { path: '**', redirectTo: '', pathMatch: 'full' }
 ];
 
 @NgModule({

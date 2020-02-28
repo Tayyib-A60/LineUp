@@ -16,6 +16,9 @@ namespace API.Controllers.DTOs
         public DateTime BookingTime { get; set; }
         public UsingTime[] UsingTimes { get; set; }
         public BookingStatus Status { get; set; }
+        public string BookedForName { get; set; }
+        public string BookedForEmail { get; set; }
+        public string BookedForPhone { get; set; }
         public double TotalPrice { get; set; }
         public ChatDTO Chat { get; set; }
         public User BookedBy { get; set; }

@@ -36,13 +36,13 @@ export class AddPropsComponent implements OnInit {
   }
 
   createSpaceType() {
-    // console.log(this.spaceTypeForm.value);
+    // //console.log(this.spaceTypeForm.value);
     this.store.dispatch(new spaceActions.CreateSpaceType(this.spaceTypeForm.value));
     this.spaceTypeForm.reset();
   }
 
   // createAmenity() {
-  //   // console.log(this.amenityForm.value);
+  //   // //console.log(this.amenityForm.value);
   //   this.store.dispatch(new spaceActions.CreateAmenity(this.pricingOptionForm.value));
   //   this.pricingOptionForm.reset();
   // }

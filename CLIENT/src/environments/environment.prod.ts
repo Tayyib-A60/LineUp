@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  url: 'https://spacesapp.herokuapp.com/api'
+  url: 'https://myspaces.herokuapp.com/api'
 };

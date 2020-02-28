@@ -81,16 +81,21 @@ namespace api
             {
                 app.UseDeveloperExceptionPage();
             }
-            else
-            {
-                app.UseHsts();
-            }
+            // else
+            // {
+            //     app.UseHsts();
+            // }
 
             app.UseAuthentication();
             app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin().AllowCredentials());
             app.UseDefaultFiles();
             app.UseStaticFiles();
-            app.UseMvc();
+            app.UseMvc(routes => {
+                routes.MapSpaFallbackRoute(
+                    name: "spa-fallback",
+                    defaults: new { controller = "Fallback", action = "Index"}
+                );
+            });
             // app.UseHttpsRedirection();
         }
     }

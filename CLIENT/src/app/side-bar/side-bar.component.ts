@@ -27,9 +27,11 @@ export class SideBarComponent implements OnInit, OnDestroy {
   @ViewChild('toggleIcon', {static: false}) toggleIcon: ElementRef;
   public menuItems =  [{
     path: '', title: 'Add Space', route: '/admin/add-space', icon: 'ft-home', badgeClass: 'badge badge-pill badge-danger float-right mr-1 mt-1', isExternalLink: false
-  },{
-    path: '', title: 'Add ons', route: '/admin/create-addons', icon: 'ft-home', badgeClass: 'badge badge-pill badge-danger float-right mr-1 mt-1', isExternalLink: false
-  },{
+  },
+  // {
+  //   path: '', title: 'Add ons', route: '/admin/create-addons', icon: 'ft-home', badgeClass: 'badge badge-pill badge-danger float-right mr-1 mt-1', isExternalLink: false
+  // }
+  {
     path: '', title: 'Manage Space', route: '/admin/manage-space', icon: 'ft-home', badgeClass: 'badge badge-pill badge-danger float-right mr-1 mt-1', isExternalLink: false
   }, {
     path: '', title: 'Manage Reservations', route: '/admin/manage-reservations', icon: 'ft-home', badgeClass: 'badge badge-pill badge-danger float-right mr-1 mt-1', isExternalLink: false
@@ -93,7 +95,7 @@ export class SideBarComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.config = this.configService.templateConf;
     this.currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
-    console.log(this.currentUser);
+    //console.log(this.currentUser);
     if(this.currentUser['roles'] === 'AnySpaces'){
       this.isSuperAdmin = true;
     }

@@ -25,7 +25,7 @@
                                               <div class="card">
                                                 <div class="card-content card-bg">
                                                   <div class="card-img">
-                                                    <img class="card-img-top img-fluid card-radius" src="assets/img/photos/14.jpg" alt="Card image cap">
+                                                    <img class="card-img-top img-fluid card-radius" [src]="booking?.spaceImageUrl" alt="Card image cap">
                                                     <h4 class="card-title home-card-title">{{ booking.totalPrice | currency : 'NGN' : 'symbol-narrow'}} per day</h4>
                                                   </div>
                                                   <div class="card-body card-body-pad">
@@ -34,7 +34,19 @@
                                                           <h3 class="home-card-text">{{booking.spaceBooked.name}}</h3>
                                                       </div>
                                                     </div>
-                                                    <p class="card-text">{{booking.spaceBooked.description}}</p>
+                                                    <p class="card-text">{{booking?.bookingRef}}</p>
+                                                    <div class="card-footer card-footer-pad">
+                                                      <div class="row">
+                                                          <div class="col-5">
+                                                            <i class="fa fa-users"></i>
+                                                            <span>&nbsp;For {{booking?.noOfGuests}} Guests</span>
+                                                          </div>
+                                                          <div class="col-7">
+                                                            <i class="fa fa-map-marker"></i>
+                                                            <span>&nbsp;{{booking?.spaceLocation}}</span>
+                                                          </div>
+                                                        </div>
+                                                    </div>
                                                     <div class="card-footer card-footer-pad">
                                                         <div class="row">
                                                             <div class="col-6">
@@ -47,10 +59,6 @@
                                                                 {{booking.usingTill | date}}
                                                               </span>
                                                             </div>
-                                                            <!-- <div class="col-7">
-                                                              <i class="fa fa-map-marker"></i>
-                                                              <span>&nbsp;Lekki Admiralty road</span>
-                                                            </div> -->
                                                           </div>
                                                     </div>
                                                   </div>
@@ -75,26 +83,40 @@
                                           <div class="card">
                                             <div class="card-content card-bg">
                                               <div class="card-img">
-                                                <img class="card-img-top img-fluid card-radius" src="assets/img/photos/14.jpg" alt="Card image cap">
+                                                <img class="card-img-top img-fluid card-radius" [src]="booking?.spaceImageUrl" alt="Card image cap">
                                                 <h4 class="card-title home-card-title">NGN {{booking.totalPrice}}</h4>
                                               </div>
                                               <div class="card-body card-body-pad">
                                                 <div class="row justify-content-between">
                                                   <div class="col-6">
-                                                      <h3 class="home-card-text">Landmark Towers</h3>
+                                                      <h3 class="home-card-text">{{booking?.spaceName}}</h3>
                                                   </div>
                                                 </div>
-                                                <p class="card-text">Creative workspace in Lekki overlooking the atlantic ocean.</p>
+                                                <p class="card-text">{{booking?.bookingRef}}</p>
                                                 <div class="card-footer card-footer-pad">
                                                     <div class="row">
                                                         <div class="col-5">
                                                           <i class="fa fa-users"></i>
-                                                          <span>&nbsp;Fits 25 guests</span>
+                                                          <span>&nbsp;For {{booking?.noOfGuests}} Guests</span>
                                                         </div>
                                                         <div class="col-7">
                                                           <i class="fa fa-map-marker"></i>
-                                                          <span>&nbsp;Lekki Admiralty road</span>
+                                                          <span>&nbsp;{{booking?.spaceLocation}}</span>
                                                         </div>
+                                                      </div>
+                                                </div>
+                                                <div class="card-footer card-footer-pad">
+                                                    <div class="row">
+                                                      <div class="col-6">
+                                                        <span>
+                                                          {{booking.usingFrom | date}}
+                                                        </span>
+                                                      </div>
+                                                      <div class="col-6">
+                                                        <span>
+                                                          {{booking.usingTill | date}}
+                                                        </span>
+                                                      </div>
                                                       </div>
                                                 </div>
                                               </div>

@@ -48,7 +48,7 @@ export class DashboardComponent implements OnInit {
     this.store.pipe(select(spaceSelectors.getMerchantMetrics),
     takeWhile(() => this.componentActive))
     .subscribe(metrics => {
-      console.log(metrics);
+      //console.log(metrics);
       this.merchantMetrics = metrics
     });
   }

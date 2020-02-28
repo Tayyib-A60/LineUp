@@ -24,7 +24,7 @@ export class NewNavComponent implements OnInit {
   ngOnInit() {
     this.currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
     this.spaceService.getSpaceTypes().subscribe((spaceTypes: any[]) => {
-      console.log(spaceTypes);
+      //console.log(spaceTypes);
       this.spaceTypes = spaceTypes; 
     })
   }

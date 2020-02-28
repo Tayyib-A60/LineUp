@@ -36,6 +36,7 @@ import { AdminPaginationComponent } from './admin-pagination/admin-pagination.co
 import { AutocompleteComponent } from '../autocomplete/autocomplete.component';
 import { ManageAvailabilityComponent } from './manage-availability/manage-availability.component';
 import { RouterModule } from '@angular/router';
+import { BookForClientComponent } from './book-for-client/book-for-client.component';
 
 @NgModule({
   declarations: [
@@ -58,6 +59,7 @@ import { RouterModule } from '@angular/router';
     AdminPaginationComponent,
     AutocompleteComponent,
     ManageAvailabilityComponent,
+    BookForClientComponent,
     // PaginationComponent
   ],
   imports: [

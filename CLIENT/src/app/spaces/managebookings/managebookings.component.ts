@@ -86,7 +86,7 @@ export class ManagebookingsComponent implements OnInit {
     
     const dateFrom = new Date(year, month-1, day);
     const dateTo = new Date(yearTo, monthTo-1, dayTo);
-    console.log(dateFrom, dateTo);
+    //console.log(dateFrom, dateTo);
     
     return { dateStart: dateFrom, dateEnd: dateTo };  
   }
@@ -98,7 +98,7 @@ export class ManagebookingsComponent implements OnInit {
                       .subscribe(bookings => {
                         this.bookingQueryResult = <{totalItems: 0, items: []}>bookings;
                         this.bookings = bookings['items'];
-                        console.log(this.bookings);
+                        //console.log(this.bookings);
                         
                         if(this.bookings) {
                           this.upcomingBookings = [];
@@ -120,11 +120,11 @@ export class ManagebookingsComponent implements OnInit {
     }
     this.userService.getUserDetails(booking.bookedById).subscribe((user) => {
       this.user = user;
-      console.log(this.user)
+      //console.log(this.user)
     });
     this.spaceService.getSpace(booking.idOfSpaceBooked).subscribe((space: Space) => {
       this.space = space;
-      console.log(this.space);
+      //console.log(this.space);
     },(err) => {}, () => {
     })
   }

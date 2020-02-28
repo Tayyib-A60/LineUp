@@ -16,6 +16,8 @@ import { takeWhile } from 'rxjs/operators';
 import { UserState } from '../state/user.reducers';
 import { BookingState } from '../state/booking/booking.reducer';
 import { Space, Amenity, BookingStatus } from '../spaces/models/space.model';
+import { SpaceService } from '../spaces/space.service';
+import { BookingService } from '../state/booking/booking.service';
 
 @Component({
   selector: 'app-new-space',
@@ -98,6 +100,8 @@ export class NewSpaceComponent implements OnInit {
               private router: Router,
               private notification: NotificationService,
               private sharedService: SharedService,
+              private spaceService: SpaceService,
+              private bookingService: BookingService,
               private modalService: NgbModal) {
     carouselConfig.showNavigationArrows = true;
     carouselConfig.interval = 0;
@@ -112,24 +116,24 @@ export class NewSpaceComponent implements OnInit {
     this.spaceStore.pipe(select(spaceSelectors.getSingleSpace),
         takeWhile(() => this.componentActive))
         .subscribe(space => {
-          console.log(space.selectedPricingOption);
+          //console.log(space.selectedPricingOption);
           this.thisSpace = space;
           this.loaded = true; 
     });
     // var dated = new Date("2020-02-08T18:00:00");
-    // console.log(new Date(dated.getFullYear(), dated.getMonth(), dated.getDate()));
+    // //console.log(new Date(dated.getFullYear(), dated.getMonth(), dated.getDate()));
     // let timesMap = new Map();
     // timesMap.set(1,['hello']);
     // timesMap.set(2,'hell');
     // timesMap.set(3,'hel');
     // timesMap.set(4,'he');
-    // console.log();
+    // //console.log();
     // if(timesMap.has(1)){
     //   let temp = timesMap.get(1);
     //   temp.push('I added u')
     //     timesMap.set(1,temp);
     // }
-    // console.log(timesMap);
+    // //console.log(timesMap);
     
     
     navigator.geolocation.getCurrentPosition((myLocation) => {
@@ -168,10 +172,6 @@ export class NewSpaceComponent implements OnInit {
       this.totalCost -= this.amenitiesSelected[index].price;
       this.amenitiesSelected.splice(index, 1);
     }
-    // this.amenitiesSelected.forEach(amenity => {
-    //   this.totalCost += amenity.price;
-    // });
-    console.log(this.totalCost);
     
   }
 
@@ -184,7 +184,7 @@ export class NewSpaceComponent implements OnInit {
     }, (err) => {
       this.notification.typeError('Failed', `${err.message}`);
     })
-    // console.log(this.contactUsForm);
+    // //console.log(this.contactUsForm);
     
   }
 
@@ -219,7 +219,7 @@ export class NewSpaceComponent implements OnInit {
         this.usingTimes.push({usingFrom: from, usingTill: to})
       }
     }
-    // console.log(this.usingTimes);
+    // //console.log(this.usingTimes);
   }
 
   bookSpace() {
@@ -321,7 +321,7 @@ export class NewSpaceComponent implements OnInit {
       amenities += amenity.name + "&";
     });
     amenities = amenities.substr(0, amenities.length-1);
-    // console.log(amenities);
+    // //console.log(amenities);
     
     let usingTimes = [];
 
@@ -330,19 +330,19 @@ export class NewSpaceComponent implements OnInit {
         const from = new Date(year, month-1, i, hour+1, minute, second);
         const to = new Date(yearTo, monthTo-1, i, hourTo+1, minuteTo, secondTo);
         usingTimes.push({usingFrom: from, usingTill: to});
-        // console.log(usingTimes);
+        // //console.log(usingTimes);
       }
     }
     if(month < monthTo) {
       let lastDay = new Date(dateFrom.getFullYear(), dateFrom.getMonth() + 1, 0);
-      // console.log(lastDay.getDate());
+      // //console.log(lastDay.getDate());
       
       for(let i = day; i <= day + (lastDay.getDate() - day) + dayTo; i++) {        
         const from = new Date(year, month-1, i, hour+1, minute, second);
         const to = new Date(yearTo, month-1, i, hourTo+1, minuteTo, secondTo);
         usingTimes.push({usingFrom: from, usingTill: to})
       }
-      // console.log(usingTimes);
+      // //console.log(usingTimes);
     }
     if(usingTimes.length == 0) {
       usingTimes.push({usingFrom: dateFrom, usingTill: dateTo});
@@ -369,7 +369,7 @@ export class NewSpaceComponent implements OnInit {
       noOfGuests: this.numberOfGuests,
       createdByOwner: false
     };
-    console.log(booking);    
+    //console.log(booking);    
     // this.spaceStore.dispatch(new bookingActions.CreateReservation(booking));
     // this.router.navigate(['/profile'], {relativeTo: this.route});
 
@@ -382,7 +382,7 @@ export class NewSpaceComponent implements OnInit {
   check() {
     let items = [];
     items.push('hi there');
-    console.log(items);
+    //console.log(items);
     
   }
 
@@ -417,49 +417,36 @@ export class NewSpaceComponent implements OnInit {
     
     let items = [];
 
-    this.spaceStore.dispatch(new bookingActions.GetBookingTimes(requestBody));
+    this.bookingService.getBookingTimes(requestBody).subscribe((bookingTimes: any[])  => {
+      this.clicked += 1;
+      this.bookingTimes = bookingTimes? bookingTimes: [];
+      let timesMap = new Map();
 
-    this.spaceStore.pipe(select(bookingSelectors.getBookingTimes),
-      takeWhile(() => this.componentActive))
-      .subscribe(bookingTimes => {
-        this.clicked += 1;
-        this.bookingTimes = bookingTimes? bookingTimes: [];
-        let timesMap = new Map();
+      if(bookingTimes) {
+        for(let i = 0; i < bookingTimes.length; i++) {
 
-        if(bookingTimes) {
-          for(let i = 0; i < bookingTimes.length; i++) {
+          const date = bookingTimes[i].from.substr(0,10);
+          const from = new Date(bookingTimes[i].from).getUTCHours() + 1;
+          const to = new Date(bookingTimes[i].to).getUTCHours() + 1;
 
-            const date = bookingTimes[i].from.substr(0,10);
-            const from = new Date(bookingTimes[i].from).getUTCHours() + 1;
-            const to = new Date(bookingTimes[i].to).getUTCHours() + 1;
-
-            if(timesMap.has(date)){
-              let temp = timesMap.get(date);
-              temp.push({from, to, available: false})
-                timesMap.set(date,temp);
-            } else {
-              timesMap.set(date, [{from, to, available: false}]);
-            }
+          if(timesMap.has(date)){
+            let temp = timesMap.get(date);
+            temp.push({from, to, available: false})
+              timesMap.set(date,temp);
+          } else {
+            timesMap.set(date, [{from, to, available: false}]);
           }
-          this.timesAlreadyTaken.clear();
-          this.timesAlreadyTaken = timesMap;
-          
         }
-    }, (err) => {
-    }, () => {
-            
-    });
-    console.log(this.timesAlreadyTaken);
+        this.timesAlreadyTaken.clear();
+        this.timesAlreadyTaken = timesMap;
     
     // if(this.timesAlreadyTaken) {
       this.timesAlreadyTaken.forEach((time,day) => {
         let missingTimes = [];
-        console.log('I got called');
         
         time.sort(d => d.from);
 
         if(time.length === 1) {
-          console.log('I got called too');
           
           if(time[0].from > 0) {
             missingTimes.push({from: 0, to: time[0].from, available: true});
@@ -472,7 +459,6 @@ export class NewSpaceComponent implements OnInit {
         }
 
         if(time.length > 1) {
-          console.log('Day length is now more than 1');
           
           if(time[0].from < 1) {
             missingTimes.push({from: 0, to: time[0].from, available: true});
@@ -492,16 +478,18 @@ export class NewSpaceComponent implements OnInit {
         this.timeToDisplayArray.push({day, times});
 
       });
-      if(this.timeToDisplayArray && this.clicked > 1 && this.timeToDisplayArray.length === 0) {
+      if(this.timeToDisplayArray.length === 0) {
         this.notification.typeSuccess('This space is available for the selected time','Available')
-      } else if(this.clicked > 1 && this.timeToDisplayArray.length > 0) {
+      } else if(this.timeToDisplayArray.length > 0) {
         this.notification.typeWarning('Space not available for selected date/time', 'Not Available');
-      } else if(this.clicked < 2 ) {
-        this.notification.typeInfo('Please uncheck and check the checkbox again', 'Info');
-      }
-      console.log(this.timeToDisplayArray);
+      } 
+      // else if(this.clicked < 2 ) {
+      //   this.notification.typeInfo('Please uncheck and check the checkbox again', 'Info');
+      // }
+      //console.log(this.timeToDisplayArray);
     // }
-
+      }
+    });
   }
   }
   checkModalAvailability(event) {
@@ -532,9 +520,7 @@ export class NewSpaceComponent implements OnInit {
 
     this.spaceStore.dispatch(new bookingActions.GetBookingTimes(requestBody));
 
-    this.spaceStore.pipe(select(bookingSelectors.getBookingTimes),
-      takeWhile(() => this.componentActive))
-      .subscribe(bookingTimes => {
+    this.bookingService.getBookingTimes(requestBody).subscribe((bookingTimes: any[]) => {
 
         this.modalBookingTimes = bookingTimes? bookingTimes: [];
         let timesMap = new Map();
@@ -566,12 +552,12 @@ export class NewSpaceComponent implements OnInit {
     // if(this.timesAlreadyTaken) {
       this.modalTimesAlreadyTaken.forEach((time,day) => {
         let missingTimes = [];
-        console.log('I got called');
+        //console.log('I got called');
         
         time.sort(d => d.from);
 
         if(time.length === 1) {
-          console.log('I got called too');
+          //console.log('I got called too');
           
           if(time[0].from > 0) {
             missingTimes.push({from: 0, to: time[0].from, available: true});
@@ -584,7 +570,7 @@ export class NewSpaceComponent implements OnInit {
         }
 
         if(time.length > 1) {
-          console.log('Day length is now more than 1');
+          //console.log('Day length is now more than 1');
           
           if(time[0].from < 1) {
             missingTimes.push({from: 0, to: time[0].from, available: true});
@@ -604,19 +590,19 @@ export class NewSpaceComponent implements OnInit {
         this.modalTimeToDisplayArray.push({day, times});
 
       });
-      console.log(this.modalTimeToDisplayArray);
+      //console.log(this.modalTimeToDisplayArray);
     // }
 
   }
   }
 
   getCustomerBooking() {
-    console.log(this.timeFrom, this.timeTo);
+    //console.log(this.timeFrom, this.timeTo);
     // this.bookingStore.dispatch(new bookingActions.GetCustomerBookings(this.currentUser['id']));
     // this.bookingStore.pipe(select(bookingSelectors.getCustomerBookings),
     // takeWhile(() => this.componentActive))
     // .subscribe(bookingQR => {
-    //   console.log(bookingQR);
+    //   //console.log(bookingQR);
     // });
   }
 

@@ -11,7 +11,7 @@ export class UserService {
     constructor(private httpClient: HttpClient) { }
 
     createUserAsCustomer(user: User) {
-        console.log('User service clicked');
+        //console.log('User service clicked');
         const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         const url = this.url + '/lineUp/user/createCustomer';
         return this.httpClient.post(url, user, { headers });

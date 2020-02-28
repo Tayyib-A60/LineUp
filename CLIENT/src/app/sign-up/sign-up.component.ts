@@ -48,7 +48,7 @@ export class SignUpComponent implements OnInit {
     // this.store.pipe(select(userSelectors.getResponse),
     // takeWhile(() => this.componentActive))
     // .subscribe(response => {
-    //   console.log(response);
+    //   //console.log(response);
     //   this.response = response
     // });
   }

@@ -117,19 +117,19 @@ loaded: boolean;
       startWith(0),
       take(10),
       map(val => {
-        // console.log(val);
+        // //console.log(val);
         
         const data = (this.tempData = [
           ...this.tempData,
           this.imgags[Math.floor(Math.random() * this.imgags.length)]
         ]);
-        console.log(data);
+        //console.log(data);
         
         return data;
       })
     );
     this.spaceService.getSpaceTypes().subscribe((spaceTypes: any[]) => {
-      console.log(spaceTypes);
+      //console.log(spaceTypes);
       
       this.spaceTypes = spaceTypes;
       let count = spaceTypes.length;
@@ -146,7 +146,7 @@ loaded: boolean;
         }
         this.loaded = true;
       } 
-      console.log(this.spaceTypes);
+      //console.log(this.spaceTypes);
     })
   }
 

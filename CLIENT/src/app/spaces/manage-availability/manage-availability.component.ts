@@ -6,6 +6,8 @@ import { Store } from '@ngrx/store';
 import * as bookingActions from '../../state/booking/booking.actions';
 import * as bookingSelectors from '../../state/booking/booking.selector';
 import { SpaceState } from '../state/space.reducers';
+import { NotificationService } from '../../services/notification.service';
+import { BookingService } from '../../state/booking/booking.service';
 
 @Component({
   selector: 'app-manage-availability',
@@ -32,10 +34,18 @@ export class ManageAvailabilityComponent implements OnInit {
   space: Space;
   currentUser: any;
   numberOfGuests: number;
+  timeToDisplayArray: any;
+  clicked: number;
+  bookingTimes: any[];
+  timesAlreadyTaken: any;
+  timesMap: Map<any, any>;
+  bookEnabled: boolean;
 
   constructor(private route: ActivatedRoute,
               private spaceService: SpaceService,
-              private spaceStore: Store<SpaceState>) { }
+              private spaceStore: Store<SpaceState>,
+              private notification: NotificationService,
+              private bookingService: BookingService) { }
 
   ngOnInit() {
     this.currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
@@ -47,9 +57,110 @@ export class ManageAvailabilityComponent implements OnInit {
         });
         this.spaceService.getSpace(Number(this.id)).subscribe((space: Space) => {
           this.space = space;
-          console.log(space);
+          //console.log(space);
         });
   }
+  
+
+  checkAvailability(event) {
+    if(event.target.checked) {
+    this.timeToDisplayArray = [];
+    this.timesAlreadyTaken = new Map();
+    this.timesMap = new Map();
+    
+    const { year, month, day } = this.dateStart;
+    let yearTo = this.dateEnd['year'];
+    let monthTo = this.dateEnd['month'];
+    let dayTo = this.dateEnd['day'];
+
+    const {hour, minute, second } = this.timeStart;
+    let hourTo = this.timeEnd['hour'];
+    let minuteTo = this.timeEnd['minute'];
+    let secondTo = this.timeEnd['second'];
+    const dateFrom = new Date(year, month-1, day, hour+1, minute, second);
+    const dateTo = new Date(yearTo, monthTo-1, dayTo, hourTo+1, minuteTo, secondTo);
+
+    const requestBody = {
+      id: Number(this.id),
+      From: dateFrom,
+      To: dateTo
+    };
+    
+    let items = [];
+
+    this.bookingService.getBookingTimes(requestBody).subscribe((bookingTimes: any[])  => {
+      this.clicked += 1;
+      this.bookingTimes = bookingTimes? bookingTimes: [];
+      this.bookEnabled = bookingTimes.length > 0 ? true : false;
+      let timesMap = new Map();
+
+      if(bookingTimes) {
+        for(let i = 0; i < bookingTimes.length; i++) {
+
+          const date = bookingTimes[i].from.substr(0,10);
+          const from = new Date(bookingTimes[i].from).getUTCHours() + 1;
+          const to = new Date(bookingTimes[i].to).getUTCHours() + 1;
+
+          if(timesMap.has(date)){
+            let temp = timesMap.get(date);
+            temp.push({from, to, available: false})
+              timesMap.set(date,temp);
+          } else {
+            timesMap.set(date, [{from, to, available: false}]);
+          }
+        }
+        this.timesAlreadyTaken.clear();
+        this.timesAlreadyTaken = timesMap;
+    
+    // if(this.timesAlreadyTaken) {
+      this.timesAlreadyTaken.forEach((time,day) => {
+        let missingTimes = [];
+        
+        time.sort(d => d.from);
+
+        if(time.length === 1) {
+          
+          if(time[0].from > 0) {
+            missingTimes.push({from: 0, to: time[0].from, available: true});
+          }
+
+          if(time[0].to < 24) {
+            missingTimes.push({from: time[0].to, to: 24, available: true});
+          }
+
+        }
+
+        if(time.length > 1) {
+          
+          if(time[0].from < 1) {
+            missingTimes.push({from: 0, to: time[0].from, available: true});
+          }
+
+          for(let i = 1; i < time.length; i++) {
+            missingTimes.push({from: time[i-1].to, to: time[i].from, available: true});
+          }
+
+          if(time[0].to < 24) {
+            missingTimes.push({from: time[0].to, to: 24, available: true});
+          }
+        }
+        let times = [...time,...missingTimes];            
+        times.sort((a,b) => a.from - b.from);
+
+        this.timeToDisplayArray.push({day, times});
+
+      });
+      if(this.timeToDisplayArray.length === 0) {
+
+        this.notification.typeSuccess('This space is available for the selected time','Available')
+      } else if(this.timeToDisplayArray.length > 0) {
+        this.notification.typeWarning('Space not available for selected date/time', 'Not Available');
+      }
+      }
+    });
+  }
+  }
+
 
   bookSpace() {
     if(this.currentUser === null) {
@@ -70,8 +181,8 @@ export class ManageAvailabilityComponent implements OnInit {
     const dateTo = new Date(yearTo, monthTo-1, dayTo, hourTo+1, minuteTo, secondTo);
 
     let amenitiesPrice = 0;
-    console.log(this.dateStart, this.dateEnd);
-    console.log(dateFrom, dateTo);
+    //console.log(this.dateStart, this.dateEnd);
+    //console.log(dateFrom, dateTo);
     
     // this.amenitiesSelected.forEach(amenity => {
     //   amenitiesPrice += amenity.price;
@@ -110,9 +221,7 @@ export class ManageAvailabilityComponent implements OnInit {
       noOfGuests: 0,
       createdByOwner: true
     };
-    console.log(booking);    
     this.spaceStore.dispatch(new bookingActions.CreateReservation(booking));
-    // this.router.navigate(['/profile'], {relativeTo: this.route});
   }
 
 }

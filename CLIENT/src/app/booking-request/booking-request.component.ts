@@ -41,11 +41,11 @@ export class BookingRequestComponent implements OnInit {
     this.currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
     this.booking = JSON.parse(sessionStorage.getItem('bookingToCreate'));
     this.amenitiesSelected = JSON.parse(sessionStorage.getItem('amenitiesSelected'));
-    console.log(this.booking);
+    //console.log(this.booking);
     this.timeFrom = new Date(this.booking.usingTimes[0].usingFrom.substr(0, this.booking.usingTimes[0].usingFrom.length-2));
     this.timeTo = new Date(this.booking.usingTimes[this.booking.usingTimes.length-1].usingTill.substr(0, this.booking.usingTimes[0].usingFrom.length-2));
     
-    console.log(this.amenitiesSelected);
+    //console.log(this.amenitiesSelected);
     
     
     this.spaceStore.dispatch(new spaceActions.GetSingleSpace(Number(this.id)));
@@ -56,7 +56,7 @@ export class BookingRequestComponent implements OnInit {
           this.space = space;
           this.loaded = true;
 
-          console.log(space);
+          //console.log(space);
           
           // if(space) {
           //   space.amenities.forEach((amenity) => {

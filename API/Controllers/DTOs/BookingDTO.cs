@@ -18,6 +18,9 @@ namespace API.Controllers.DTOs
         public DateTime UsingFrom { get; set; }
         public DateTime UsingTill { get; set; }
         public BookingStatus Status { get; set; }
+        public string BookedForName { get; set; }
+        public string BookedForEmail { get; set; }
+        public string BookedForPhone { get; set; }
         public double TotalPrice { get; set; }
         public ChatDTO Chat { get; set; }
     }

@@ -6,6 +6,8 @@ namespace API.Controllers.DTOs
     public class CustomerBookingsToReturn
     {
         public int Id { get; set; }
+        public string SpaceImageUrl { get; set; }
+        public string BookingRef { get; set; }
         public int NoOfGuests { get; set; }
         public int BookedById { get; set; }
         public int IdOfSpaceBooked { get; set; }

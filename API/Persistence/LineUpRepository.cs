@@ -178,9 +178,12 @@ namespace API.Persistence
             foreach (var item in queryResult.Items)
             {
                 var space = await _context.Spaces
+                                    .Include(sp => sp.Photos)
                                     .FirstOrDefaultAsync(s => s.Id == item.IdOfSpaceBooked);
                 var  customerBooking = new CustomerBookingsToReturn {
                     Id = item.Id,
+                    SpaceImageUrl = space.Photos.Count > 0 ? space.Photos.ToArray()[0].FileName : "",
+                    BookingRef = item.BookingRef,
                     NoOfGuests = item.NoOfGuests,
                     BookedById = item.BookedById,
                     BookingTime = item.BookingTime,

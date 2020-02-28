@@ -28,7 +28,7 @@ export class SpaceHomeComponent implements OnInit {
 
   ngOnInit() {
     this.spaceService.getSpaceTypes().subscribe((spaceTypes: any[]) => {
-      // console.log(spaceTypes);
+      // //console.log(spaceTypes);
       this.spaceTypes = spaceTypes;
     })
   }

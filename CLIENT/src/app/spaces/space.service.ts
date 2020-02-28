@@ -13,7 +13,9 @@ import { Space } from './models/space.model';
 export class SpaceService {
   url = environment.url;
   id = JSON.parse(sessionStorage.getItem('currentUser'))? JSON.parse(sessionStorage.getItem('currentUser')).id : null;
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient) {
+    this.id = sessionStorage.getItem('currentUser')? JSON.parse(sessionStorage.getItem('currentUser')).id : null;
+  }
 
   createSpace(space: Space) {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
@@ -40,7 +42,7 @@ export class SpaceService {
   }
 
   createSpaceType(spaceType: SpaceType) {
-    console.log('Got to create space type');
+    //console.log('Got to create space type');
     
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     const url = this.url + '/lineUp/createSpaceType/' + this.id;

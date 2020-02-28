@@ -50,7 +50,7 @@ export class ImageEditorComponent implements OnInit {
           takeWhile(() => this.componentActive))
           .subscribe(space => {
             this.space = space;
-            console.log(space);
+            //console.log(space);
           });
         });
   }
@@ -97,10 +97,10 @@ export class ImageEditorComponent implements OnInit {
 
   setMainPhoto(id: number) {
     const currentMain = this.space.photos.find(p => p.isMain === true);
-    console.log(currentMain);
+    //console.log(currentMain);
     
     const currentMainId = currentMain !== undefined ? currentMain['id'] : 0;
-    console.log({ newMainId: Number(id), currentMainId });
+    //console.log({ newMainId: Number(id), currentMainId });
     
     this.store.dispatch(new spaceActions.SetMainPhoto({ newMainId: Number(id), currentMainId }));
     this.store.pipe(select(spaceSelectors.getSingleSpace),

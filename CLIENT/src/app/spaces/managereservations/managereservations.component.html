@@ -1,6 +1,16 @@
 <div class="card">
   <div class="card-header">
-    <h4 class="card-title">Reservations</h4>
+    <div class="row">
+      <div class="col-md-10 col-lg-8">
+        <h4 class="card-title">Reservations</h4>
+      </div>
+      <div class="col-md-2 col-lg-4">
+        <div class="form-group">
+          <button [routerLink]="['/admin/create-booking-for-client']" class="btn button_success">Add Reservations</button>
+        </div>
+      </div>
+    </div>
+    <!-- <h4 class="card-title"></h4> -->
   </div>
   <div class="card-content">
     <div class="card-body">

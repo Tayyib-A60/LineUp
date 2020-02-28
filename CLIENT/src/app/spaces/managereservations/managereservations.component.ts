@@ -112,7 +112,7 @@ export class ManagereservationsComponent implements OnInit {
     this.bookingStore.pipe(select(bookingSelectors.getMerchantBookings),
                       takeWhile(() => this.componentActive))
                       .subscribe(reservations => {
-                        // console.log(Date());
+                        // //console.log(Date());
                         this.reservations = reservations['items'];
                         if(this.reservations) {
                           this.upcomingReservations = [];
@@ -134,11 +134,11 @@ export class ManagereservationsComponent implements OnInit {
     }
       this.userService.getUserDetails(booking.bookedById).subscribe((user) => {
         this.user = user;
-        // console.log(this.user)
+        // //console.log(this.user)
       });
       this.spaceService.getSpace(booking.idOfSpaceBooked).subscribe((space: Space) => {
         this.space = space;
-        // console.log(this.space);
+        // //console.log(this.space);
       },(err) => {}, () => {
       })
   }

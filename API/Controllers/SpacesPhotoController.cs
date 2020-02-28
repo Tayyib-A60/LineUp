@@ -12,15 +12,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
 namespace API.Controllers {
-    [Route ("api/photos/{userId}")]
+    [Route ("api/photos")]
     [ApiController]
     public class SpacesPhotoController : ControllerBase {
-        public SpacesPhotoController (PhotoSettings _photoSettings, IMapper _mapper, ILineUpRepository _repository) {
-            this._photoSettings = _photoSettings;
-            this._mapper = _mapper;
-            this._repository = _repository;
+        // public SpacesPhotoController (PhotoSettings _photoSettings, IMapper _mapper, ILineUpRepository _repository) {
+        //     this._photoSettings = _photoSettings;
+        //     this._mapper = _mapper;
+        //     this._repository = _repository;
 
-        }
+        // }
         private PhotoSettings _photoSettings { get; }
         private IMapper _mapper { get; }
         private ILineUpRepository _repository { get; }
@@ -54,10 +54,10 @@ namespace API.Controllers {
         }
 
         [HttpPost ("{id}")]
-        public async Task<IActionResult> AddPhoto (int userId, int id, [FromForm] PhotoForCreationDTO photoForCreationDTO) {
-            if (userId != int.Parse (User.FindFirst (ClaimTypes.NameIdentifier).Value)) {
-                return Unauthorized ();
-            }
+        public async Task<IActionResult> AddPhoto ( int id, [FromForm] PhotoForCreationDTO photoForCreationDTO) {
+            // if (userId != int.Parse (User.FindFirst (ClaimTypes.NameIdentifier).Value)) {
+            //     return Unauthorized ();
+            // }
             var space = await _repository.GetSpace (id);
             if (space == null)
                 return BadRequest ("Cannot upload photo for unexisting entity");
@@ -96,10 +96,10 @@ namespace API.Controllers {
         }
 
         [HttpPost ("setMain")]
-        public async Task<IActionResult> SetMain (int userId, SetMainPhotoId setMainPhoto) {
-            if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value)) {
-                return Unauthorized();
-            }
+        public async Task<IActionResult> SetMain (SetMainPhotoId setMainPhoto) {
+            // if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value)) {
+            //     return Unauthorized();
+            // }
             var photo = await _repository.GetPhoto (setMainPhoto.NewMainId);
 
             if (photo == null)
@@ -123,10 +123,10 @@ namespace API.Controllers {
         }
 
         [HttpDelete ("{id}")]
-        public async Task<IActionResult> DeletePhoto (int userId, int id) {
-            if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value)) {
-                return Unauthorized();
-            }
+        public async Task<IActionResult> DeletePhoto (int id) {
+            // if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value)) {
+            //     return Unauthorized();
+            // }
             var photoToDelete = await _repository.GetPhoto (id);
 
             if (photoToDelete.IsMain)
